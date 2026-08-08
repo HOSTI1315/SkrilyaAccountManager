@@ -118,13 +118,32 @@ namespace RBX_Alt_Manager.Classes
         {
             if (!Enabled) return;
 
+            if (!Destination(account, out long PlaceId, out string JobId))
+            {
+                Program.Logger.Info($"[Relaunch] {account.Username}: nowhere to send it back to");
+
+                return;
+            }
+
+            await Request(account, PlaceId, JobId, Why);
+        }
+
+        /// <summary>
+        /// The one automatic-relaunch gate used by the log supervisor and the legacy Nexus presence/ping
+        /// detector. Detection stays independent, but budget, retry exclusions and failure accounting live here
+        /// so two timers can never turn one outage into two launch storms.
+        /// </summary>
+        public static async Task<bool> Request(Account account, long PlaceId, string JobId, string Why)
+        {
+            if (account == null || PlaceId <= 0) return false;
+
             // Some failures are not worth a retry, and retrying them is actively harmful: a challenge needs a
             // person, and a rate limit needs time and a different address, not another attempt.
             if (account.LastAuthFailure == "CAPTCHA" || account.LastAuthFailure == "RATE LIMITED")
             {
                 Program.Logger.Warn($"[Relaunch] {account.Username}: not retrying — {account.LastAuthFailure}");
 
-                return;
+                return false;
             }
 
             BudgetVerdict Verdict = Budget.Check(account.Username);
@@ -133,14 +152,7 @@ namespace RBX_Alt_Manager.Classes
             {
                 Program.Logger.Info($"[Relaunch] {account.Username}: skipped — {Budget.Explain(Verdict, account.Username)}");
 
-                return;
-            }
-
-            if (!Destination(account, out long PlaceId, out string JobId))
-            {
-                Program.Logger.Info($"[Relaunch] {account.Username}: nowhere to send it back to");
-
-                return;
+                return false;
             }
 
             Budget.Note(account.Username);
@@ -157,19 +169,23 @@ namespace RBX_Alt_Manager.Classes
                     // it is what clears or increments the streak.
                     Program.Logger.Info($"[Relaunch] {account.Username}: client started");
 
-                    return;
+                    return true;
                 }
 
                 if (Budget.Failed(account.Username))
                     Program.Logger.Warn($"[Relaunch] {account.Username}: giving up after {Budget.GiveUpAfter} failures — {Result}");
                 else
                     Program.Logger.Warn($"[Relaunch] {account.Username}: failed — {Result}");
+
+                return false;
             }
             catch (Exception x)
             {
                 Budget.Failed(account.Username);
 
                 Program.Logger.Error($"[Relaunch] {account.Username}: {x.Message}");
+
+                return false;
             }
         }
 

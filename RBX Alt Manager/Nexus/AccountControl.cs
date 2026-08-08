@@ -554,11 +554,11 @@ namespace RBX_Alt_Manager.Forms
 
                             account.RelaunchDelay = RelaunchDelay;
 
-                            string RelaunchResult = await account.LinkedAccount.JoinServer(account.PlaceId, account.JobId);
+                            bool RelaunchStarted = await Relauncher.Request(account.LinkedAccount, account.PlaceId, account.JobId, "Nexus presence/ping watchdog");
 
                             // Only mark it freshly-relaunched if the launch actually started. Bumping LastPing
                             // before knowing the outcome hid failed launches for a full RelaunchDelay.
-                            if (RelaunchResult != null && RelaunchResult.StartsWith("Success"))
+                            if (RelaunchStarted)
                                 account.LastPing = DateTime.Now;
 
                             break;
