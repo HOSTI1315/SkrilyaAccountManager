@@ -172,6 +172,12 @@ namespace RBX_Alt_Manager
             General.Seed("PerfTrimOnMinimize", "false");
             General.Seed("PerfAutoMinimizeAlts", "false");
             General.Seed("PerfLowGraphics", "false");
+            // Anti-AFK is opt-in and never activates a client window. It posts a key message directly to each
+            // Roblox window, which means the user's mouse/keyboard focus stays exactly where it was.
+            General.Seed("AfkEnabled", "false", "Periodically send a key to every Roblox client so ordinary idle detection does not disconnect it. Some experiences using raw input can ignore synthetic messages.");
+            General.Seed("AfkIntervalSeconds", "300", "Seconds between anti-AFK pulses. Values below 60 are clamped to 60.");
+            General.Seed("AfkKey", "Space", "Virtual key sent by Anti-AFK, for example Space, W, A, S or D.");
+            General.Seed("AfkInterWindowDelayMs", "150", "Delay in milliseconds between clients during one Anti-AFK pulse.");
 
             // Free item collection. Defaults are deliberately slow: the catalog endpoints 429 far earlier than
             // their documented limits, and a limit earned here applies to the whole IP, including running clients.
@@ -253,6 +259,7 @@ namespace RBX_Alt_Manager
             AccountControl.Seed("NexusPort", "5242");
 
             Classes.AccountProxies.LoadSettings();
+            Classes.AntiAfk.Start();
 
             // From here on the logic layer has a user interface to talk to. Until this line (and in any host
             // that never sets it) Shell stays headless: messages are logged and questions answer themselves
