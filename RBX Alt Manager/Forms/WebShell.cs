@@ -363,6 +363,9 @@ namespace RBX_Alt_Manager.Forms
         /// <summary>How a paced batch launch is going: "progress" per account, "batch" when it ends.</summary>
         public static void NotifyLaunch(string What, object Data) => Instance?.Bridge?.Emit("launch." + What, Data);
 
+        /// <summary>Version-manager download/install progress.</summary>
+        public static void NotifyVersions(string What, object Data) => Instance?.Bridge?.Emit("versions." + What, Data);
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             Bridge.Detach();

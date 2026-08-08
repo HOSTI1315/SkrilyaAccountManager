@@ -61,6 +61,16 @@ namespace RBX_Alt_Manager.Classes
         /// </summary>
         public static string FindPlayerExecutable()
         {
+            // A pin is an explicit user choice and therefore outranks the protocol registration. The pinned
+            // directory is immutable from Roblox's point of view: we launch the player directly and never run
+            // its bootstrapper/updater there.
+            string Pinned = VersionManager.GetPinnedExecutable();
+            if (!string.IsNullOrEmpty(Pinned))
+            {
+                if (CachedExecutable != Pinned) CachedExecutable = Pinned;
+                return CachedExecutable;
+            }
+
             if (!string.IsNullOrEmpty(CachedExecutable) && File.Exists(CachedExecutable)) return CachedExecutable;
 
             string FromRegistry = ExecutableFromProtocol();

@@ -190,7 +190,7 @@ namespace RBX_Alt_Manager.Classes
         }
 
         /// <summary>Where to send an account back to: this session's last launch, else the one saved on the account.</summary>
-        private static bool Destination(Account account, out long PlaceId, out string JobId)
+        internal static bool Destination(Account account, out long PlaceId, out string JobId)
         {
             PlaceId = 0;
             JobId = string.Empty;

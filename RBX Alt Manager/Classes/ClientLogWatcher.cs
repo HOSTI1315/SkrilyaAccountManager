@@ -159,6 +159,12 @@ namespace RBX_Alt_Manager.Classes
             if (Outcome == LaunchOutcome.Joined) Program.Logger.Info(Message);
             else Program.Logger.Warn(Message);
 
+            // A deliberately pinned old build can eventually be refused server-side. The exact log wording and
+            // disconnect reason are not a stable API, so VersionManager handles the robust signal we do have:
+            // this pinned process failed before reaching a server. It clears the pin and owns the single retry;
+            // suppress the ordinary relaunch event here so two supervisors cannot launch the account at once.
+            if (VersionManager.TryFallbackToLive(account, Outcome, Detail)) return;
+
             try { LaunchResolved?.Invoke(account, Outcome, Detail); }
             catch (Exception x) { Program.Logger.Error($"[LaunchWatch] handler threw: {x.Message}"); }
         }

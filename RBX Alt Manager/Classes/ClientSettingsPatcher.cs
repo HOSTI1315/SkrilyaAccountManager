@@ -10,9 +10,13 @@ namespace RBX_Alt_Manager.Classes
         {
             DirectoryInfo VersionFolder = null;
 
-            object RegistryValue = Registry.ClassesRoot.OpenSubKey(@"roblox\DefaultIcon")?.GetValue("");
+            string PinnedDirectory = VersionManager.EffectiveVersionDirectory();
+            if (!string.IsNullOrEmpty(PinnedDirectory) && Directory.Exists(PinnedDirectory))
+                VersionFolder = new DirectoryInfo(PinnedDirectory);
 
-            if (RegistryValue != null && RegistryValue is string RobloxPath)
+            object RegistryValue = VersionFolder == null ? Registry.ClassesRoot.OpenSubKey(@"roblox\DefaultIcon")?.GetValue("") : null;
+
+            if (VersionFolder == null && RegistryValue != null && RegistryValue is string RobloxPath)
                 VersionFolder = Directory.GetParent(RobloxPath);
 
             if (VersionFolder == null || !VersionFolder.Exists) { Program.Logger.Error("Can't patch ClientAppSettings, folder doesn't exist"); return; }
