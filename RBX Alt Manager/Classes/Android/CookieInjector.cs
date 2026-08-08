@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -17,15 +18,19 @@ namespace RBX_Alt_Manager.Classes.Android
     public sealed class CookieInjector
     {
         private static readonly Regex SafePackage = new Regex(@"^[A-Za-z0-9_.]+$", RegexOptions.Compiled);
+        private static readonly string ApplicationDataDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "SkrilyaAccountManager");
+        private static readonly byte[] BackupEntropy = Encoding.UTF8.GetBytes(
+            "SkrilyaAccountManager.AndroidCookieBackup.v1");
+        private const int BackupRetentionPerSerial = 3;
 
         private readonly AdbClient Adb;
         private readonly string PackageName;
 
         public bool BackupCookieStore { get; set; } = true;
-        public string BackupDirectory { get; set; } = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "SkrilyaAccountManager",
-            "android-backups");
+        public string BackupDirectory { get; set; } = Path.Combine(ApplicationDataDirectory, "android-backups");
+        public string WorkingDirectory { get; set; } = Path.Combine(ApplicationDataDirectory, "android-staging");
 
         public CookieInjector(AdbClient adb, string packageName)
         {
@@ -133,7 +138,12 @@ namespace RBX_Alt_Manager.Classes.Android
         private async Task<AdbCommandResult> ExecuteSqlFileAsync(string sql, CancellationToken cancellationToken)
         {
             string Id = Guid.NewGuid().ToString("N");
-            string Local = Path.Combine(Path.GetTempPath(), $"sam-android-cookie-{Id}.sql");
+            Directory.CreateDirectory(WorkingDirectory);
+            CleanupStaleFiles(WorkingDirectory, "sam-android-cookie-*.sql", TimeSpan.FromMinutes(30));
+
+            // Keep the plaintext token inside the app's user-local data directory rather than the shared %TEMP%.
+            // The normal path deletes it in finally; stale cleanup removes a file left behind by a hard crash.
+            string Local = Path.Combine(WorkingDirectory, $"sam-android-cookie-{Id}.sql");
             string Remote = $"/data/local/tmp/sam-android-cookie-{Id}.sql";
 
             try
@@ -157,19 +167,36 @@ namespace RBX_Alt_Manager.Classes.Android
         {
             string Id = Guid.NewGuid().ToString("N");
             string Remote = $"/data/local/tmp/sam-cookies-backup-{Id}.db";
+            string PlainLocal = null;
 
             try
             {
                 Directory.CreateDirectory(BackupDirectory);
+                Directory.CreateDirectory(WorkingDirectory);
+                CleanupStaleFiles(WorkingDirectory, "sam-android-backup-*.db", TimeSpan.FromMinutes(30));
+                CleanupStaleFiles(BackupDirectory, "*.dpapi.tmp-*", TimeSpan.FromMinutes(30));
+
+                // Previous builds wrote raw SQLite databases here. Protect them before creating another backup;
+                // a failed migration leaves the source in place rather than destroying the only copy.
+                await ProtectLegacyBackupsAsync(cancellationToken).ConfigureAwait(false);
+
                 string SafeSerial = Regex.Replace(Adb.Serial, @"[^A-Za-z0-9_.-]", "_");
-                string Local = Path.Combine(BackupDirectory, $"Cookies-{SafeSerial}-{DateTime.UtcNow:yyyyMMdd-HHmmss}.db");
+                string Final = Path.Combine(
+                    BackupDirectory,
+                    $"Cookies-{SafeSerial}-{DateTime.UtcNow:yyyyMMdd-HHmmss-fff}-{Id.Substring(0, 8)}.db.dpapi");
+                PlainLocal = Path.Combine(WorkingDirectory, $"sam-android-backup-{Id}.db");
 
                 AdbCommandResult Copy = await Adb.RootShellAsync(
                     $"cp {AdbClient.QuoteShell(CookieDatabasePath)} {AdbClient.QuoteShell(Remote)} && chmod 644 {AdbClient.QuoteShell(Remote)}",
                     cancellationToken).ConfigureAwait(false);
                 if (!Copy.Success) return;
 
-                await Adb.PullAsync(Remote, Local, cancellationToken).ConfigureAwait(false);
+                AdbCommandResult Pull = await Adb.PullAsync(Remote, PlainLocal, cancellationToken).ConfigureAwait(false);
+                if (!Pull.Success)
+                    throw new IOException($"adb pull failed: {TrimDiagnostic(Pull.CombinedOutput)}");
+
+                await ProtectBackupFileAsync(PlainLocal, Final, cancellationToken).ConfigureAwait(false);
+                RotateBackups(SafeSerial);
             }
             catch (Exception Ex) when (!(Ex is OperationCanceledException))
             {
@@ -177,8 +204,84 @@ namespace RBX_Alt_Manager.Classes.Android
             }
             finally
             {
+                if (!string.IsNullOrWhiteSpace(PlainLocal))
+                    try { File.Delete(PlainLocal); } catch { }
+
                 try { await Adb.RootShellAsync($"rm -f {AdbClient.QuoteShell(Remote)}", CancellationToken.None).ConfigureAwait(false); } catch { }
             }
+        }
+
+        private async Task ProtectLegacyBackupsAsync(CancellationToken cancellationToken)
+        {
+            foreach (string Legacy in Directory.GetFiles(BackupDirectory, "Cookies-*.db", SearchOption.TopDirectoryOnly))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                try
+                {
+                    string Protected = Legacy + ".dpapi";
+                    await ProtectBackupFileAsync(Legacy, Protected, cancellationToken).ConfigureAwait(false);
+                    File.Delete(Legacy);
+                }
+                catch (Exception Ex) when (!(Ex is OperationCanceledException))
+                {
+                    Program.Logger.Warn($"[Android] could not DPAPI-protect legacy cookie backup {Path.GetFileName(Legacy)}: {Ex.Message}");
+                }
+            }
+        }
+
+        private static async Task ProtectBackupFileAsync(string plainPath, string protectedPath, CancellationToken cancellationToken)
+        {
+            byte[] Plain = await File.ReadAllBytesAsync(plainPath, cancellationToken).ConfigureAwait(false);
+            string Temp = protectedPath + ".tmp-" + Guid.NewGuid().ToString("N");
+
+            try
+            {
+                byte[] Protected = ProtectedData.Protect(Plain, BackupEntropy, DataProtectionScope.CurrentUser);
+                await File.WriteAllBytesAsync(Temp, Protected, cancellationToken).ConfigureAwait(false);
+                File.Move(Temp, protectedPath, true);
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(Plain);
+                try { File.Delete(Temp); } catch { }
+            }
+        }
+
+        private void RotateBackups(string safeSerial)
+        {
+            try
+            {
+                FileInfo[] Backups = new DirectoryInfo(BackupDirectory)
+                    .GetFiles($"Cookies-{safeSerial}-*.db.dpapi", SearchOption.TopDirectoryOnly)
+                    .OrderByDescending(File => File.LastWriteTimeUtc)
+                    .ThenByDescending(File => File.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToArray();
+
+                foreach (FileInfo Old in Backups.Skip(BackupRetentionPerSerial))
+                    try { Old.Delete(); }
+                    catch (Exception Ex) { Program.Logger.Warn($"[Android] could not rotate backup {Old.Name}: {Ex.Message}"); }
+            }
+            catch (Exception Ex)
+            {
+                Program.Logger.Warn($"[Android] backup rotation failed for {Adb.Serial}: {Ex.Message}");
+            }
+        }
+
+        private static void CleanupStaleFiles(string directory, string pattern, TimeSpan olderThan)
+        {
+            DateTime Cutoff = DateTime.UtcNow - olderThan;
+
+            try
+            {
+                foreach (string FilePath in Directory.GetFiles(directory, pattern, SearchOption.TopDirectoryOnly))
+                    try
+                    {
+                        if (File.GetLastWriteTimeUtc(FilePath) < Cutoff) File.Delete(FilePath);
+                    }
+                    catch { }
+            }
+            catch { }
         }
 
         internal static IReadOnlyList<string> ParseCookieColumns(string schema)
