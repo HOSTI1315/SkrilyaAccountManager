@@ -172,6 +172,11 @@ namespace RBX_Alt_Manager
             General.Seed("PerfTrimOnMinimize", "false");
             General.Seed("PerfAutoMinimizeAlts", "false");
             General.Seed("PerfLowGraphics", "false");
+            General.Seed("PerfJobEnabled", "false", "Put each Roblox client in its own Job Object. CPU can be a hard cap; the memory setting only controls the resident working set. Off by default.");
+            General.Seed("PerfJobCpuPercent", "0", "Hard CPU ceiling per Roblox client, 5-100 percent. 0 means unlimited.");
+            General.Seed("PerfJobMemoryMB", "0", "Resident working-set ceiling per Roblox client in MB. 0 means unlimited. This is memory pressure, not a total/commit-memory ceiling.");
+            General.Seed("PerfMemoryPriority", "normal", "Memory priority for Roblox processes: normal, low or verylow.");
+            General.Seed("PerfPowerThrottle", "false", "Ask Windows to use execution-speed power throttling for Roblox background work.");
             // Anti-AFK is opt-in and never activates a client window. It posts a key message directly to each
             // Roblox window, which means the user's mouse/keyboard focus stays exactly where it was.
             General.Seed("AfkEnabled", "false", "Periodically send a key to every Roblox client so ordinary idle detection does not disconnect it. Some experiences using raw input can ignore synthetic messages.");
