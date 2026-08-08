@@ -32,6 +32,7 @@ namespace RBX_Alt_Manager.Forms
         private Button AssignProxiesButton;
         private CheckBox NewUiCB;
         private Button OpenWebUiButton;
+        private Button ProfileCleanerButton;
 
         private const int RowWidth = 265;
 
@@ -125,6 +126,13 @@ namespace RBX_Alt_Manager.Forms
 
             Panel.Controls.Add(NewUiCB);
             Panel.Controls.Add(OpenWebUiButton);
+
+            Panel.Controls.Add(Section("Maintenance"));
+
+            ProfileCleanerButton = new Button { Text = "Clean Roblox profile…", Width = RowWidth, Height = 26, AutoSize = false };
+            ProfileCleanerButton.Click += (s, e) => new ProfileCleanerForm().ShowDialog(this);
+            Tips.SetToolTip(ProfileCleanerButton, "Dry-run first. Removes Roblox logs/caches/profile state but never installed Versions, Skrilya account data, MachineGuid or network settings.");
+            Panel.Controls.Add(ProfileCleanerButton);
 
             Tab.Controls.Add(Panel);
             SettingsTC.TabPages.Add(Tab);
