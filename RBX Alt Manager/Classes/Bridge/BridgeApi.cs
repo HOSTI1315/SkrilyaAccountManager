@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RBX_Alt_Manager.Classes.Android;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -245,6 +246,43 @@ namespace RBX_Alt_Manager.Classes.Bridge
                 if (Result != null && Result.StartsWith("ERROR", StringComparison.OrdinalIgnoreCase)) throw new Exception(Result.Substring(Result.IndexOf(':') + 1).Trim());
 
                 return Result;
+            });
+
+            Bridge.Register("accounts.launchAndroid", async Parameters =>
+            {
+                Account account = Find(Parameters);
+
+                if (account == null) throw new Exception("Account not found");
+                if (!long.TryParse(Parameters.Value<string>("placeId") ?? Parameters.Value<long?>("placeId")?.ToString(), out long PlaceId) || PlaceId <= 0)
+                    throw new Exception("A place id is required");
+
+                string Serial = (Parameters.Value<string>("serial") ?? string.Empty).Trim();
+                if (Serial.Equals("auto", StringComparison.OrdinalIgnoreCase)) Serial = string.Empty;
+
+                long? UserId = null;
+                string UserRaw = Parameters.Value<string>("userId") ?? Parameters.Value<long?>("userId")?.ToString();
+
+                if (!string.IsNullOrWhiteSpace(UserRaw))
+                {
+                    if (!long.TryParse(UserRaw, out long ParsedUserId) || ParsedUserId <= 0)
+                        throw new Exception("userId must be a positive number");
+
+                    UserId = ParsedUserId;
+                }
+
+                AndroidLaunchResult Result = await account.JoinServerAndroidDetailed(
+                    PlaceId, string.IsNullOrWhiteSpace(Serial) ? null : Serial, UserId);
+
+                return new
+                {
+                    serial = Result.Serial,
+                    packageName = Result.Package,
+                    state = Result.State,
+                    reason = Result.Reason,
+                    placeId = Result.PlaceId,
+                    jobId = Result.JobId,
+                    disconnectCode = Result.DisconnectCode
+                };
             });
 
             // ---------- clipboard and links ----------
