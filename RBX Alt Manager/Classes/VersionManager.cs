@@ -109,7 +109,7 @@ namespace RBX_Alt_Manager.Classes
                 {
                     string Json = await Http.GetStringAsync(Url, Token).ConfigureAwait(false);
                     JToken RootToken = JToken.Parse(Json);
-                    foreach (JObject Object in RootToken.DescendantsAndSelf().OfType<JObject>())
+                    foreach (JObject Object in EnumerateObjects(RootToken))
                     {
                         string Version = Value(Object, "version", "clientVersionUpload", "versionGuid", "hash");
                         if (!VersionPattern.IsMatch(Version ?? string.Empty)) continue;
@@ -476,6 +476,16 @@ namespace RBX_Alt_Manager.Classes
                 if (Property?.Value.Type == JTokenType.String) return Property.Value.Value<string>();
             }
             return null;
+        }
+
+        private static IEnumerable<JObject> EnumerateObjects(JToken Token)
+        {
+            if (Token == null) yield break;
+            if (Token is JObject Object) yield return Object;
+
+            foreach (JToken Child in Token.Children())
+                foreach (JObject Descendant in EnumerateObjects(Child))
+                    yield return Descendant;
         }
 
         private static DateTime? Date(string Value) => DateTime.TryParse(Value, out DateTime Parsed) ? Parsed : null;
