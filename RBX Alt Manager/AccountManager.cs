@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PuppeteerSharp;
 using RBX_Alt_Manager.Classes;
+using RBX_Alt_Manager.Classes.Android;
 using RBX_Alt_Manager.Forms;
 using RBX_Alt_Manager.Properties;
 using RestSharp;
@@ -1087,8 +1088,9 @@ namespace RBX_Alt_Manager
             UserID.Text = General.Exists("SavedFollowUser") ? General.Get("SavedFollowUser") : string.Empty;
 
             // Added at runtime rather than in the designer: the designer file carries hand-maintained resource
-            // names, and this needs no designer state beyond one menu entry.
+            // names, and these need no designer state beyond their menu entries.
             AccountsStrip.Items.Add(new ToolStripMenuItem("Assign Proxies", null, (s, e) => ShowProxyAssignment()));
+            AccountsStrip.Items.Add(new ToolStripMenuItem("Launch on Android", null, async (s, e) => await LaunchSelectionOnAndroid()));
 
             if (!Developer.Get<bool>("DevMode"))
             {
@@ -1691,6 +1693,68 @@ namespace RBX_Alt_Manager
 
             using (Forms.ProxyAssignForm Form = new Forms.ProxyAssignForm(Selection))
                 Form.ShowDialog(this);
+        }
+
+        /// <summary>WinForms entry point for one Android slot. Pool/mass assignment belongs to the later pool UI.</summary>
+        private async Task LaunchSelectionOnAndroid()
+        {
+            List<Account> Selection = CurrentSelection();
+
+            if (Selection.Count != 1)
+            {
+                MessageBox.Show(
+                    Selection.Count == 0
+                        ? "Select an account first."
+                        : "Select exactly one account. Android pool/mass launch is handled separately.",
+                    "Launch on Android", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Match IDMatch = Regex.Match(PlaceID.Text, @"\/games\/(\d+)[\/|\?]?");
+            Game G = RecentGames.FirstOrDefault(RG => RG.Details.filteredName == PlaceID.Text);
+            if (G != null) PlaceID.Text = G.Details.placeId.ToString();
+
+            PlaceID.Text = IDMatch.Success ? IDMatch.Groups[1].Value : Regex.Replace(PlaceID.Text, "[^0-9]", "");
+
+            if (!long.TryParse(PlaceID.Text, out long PlaceId) || PlaceId <= 0)
+            {
+                MessageBox.Show("Enter a valid Place ID first.", "Launch on Android", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string Serial = ShowDialog(
+                "Emulator serial. Leave \"auto\" to use the first ready running instance.",
+                "Launch on Android",
+                "auto");
+
+            if (Serial == "/UC") return;
+            Serial = Serial?.Trim();
+            if (string.IsNullOrWhiteSpace(Serial) || Serial.Equals("auto", StringComparison.OrdinalIgnoreCase)) Serial = null;
+
+            try
+            {
+                if (!PlaceTimer.Enabled) _ = Task.Run(() => AddRecentGame(new Game(PlaceId)));
+
+                AndroidLaunchResult Result = await Selection[0].JoinServerAndroidDetailed(PlaceId, Serial);
+
+                if (Result.Joined)
+                {
+                    MessageBox.Show(
+                        $"{Selection[0].Username} joined place {Result.PlaceId} on {Result.Serial}" +
+                        (string.IsNullOrWhiteSpace(Result.JobId) ? string.Empty : $"\nJob: {Result.JobId}"),
+                        "Launch on Android", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                MessageBox.Show(
+                    $"{Selection[0].Username}: {Result.State}\n{Result.Reason}",
+                    "Launch on Android", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception x)
+            {
+                Program.Logger.Error($"[Android] WinForms launch failed: {x}");
+                MessageBox.Show(x.Message, "Launch on Android", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public bool UpdateMultiRoblox()

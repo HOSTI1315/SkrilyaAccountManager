@@ -2,19 +2,16 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using RBX_Alt_Manager.Classes.Android;
 
 namespace RBX_Alt_Manager.Classes
 {
     /// <summary>
     /// Puts an account back where it was when its client dies, within a budget.
     ///
-    /// The manager already has an auto-relaunch, but it lives in Nexus and decides "is this account still
-    /// playing?" from either a Nexus ping — which needs an executor running the Nexus script in-game — or from
-    /// Roblox presence, which lags. This one runs without any of that, because two better sources now exist:
-    /// the launch watcher knows how a launch ended, and the stuck detector knows what a live client is doing.
-    ///
-    /// It deliberately does NOT retry everything. A challenge or a rate limit is not a transient crash, and
-    /// retrying either makes the situation worse; those are reported and left alone.
+    /// PC and Android destinations are deliberately stored separately. A late Windows log verdict must never
+    /// consume an Android serial, and a late Android verdict must never turn into a PC protocol launch.
+    /// Detection stays platform-specific; the launch budget remains shared per account.
     /// </summary>
     internal static class Relauncher
     {
@@ -24,8 +21,22 @@ namespace RBX_Alt_Manager.Classes
 
         public static readonly LaunchBudget Budget = new LaunchBudget();
 
-        /// <summary>Where each account was last sent, so it can be sent back to the same place.</summary>
-        private static readonly ConcurrentDictionary<string, (long PlaceId, string JobId)> LastLaunch = new ConcurrentDictionary<string, (long, string)>();
+        private sealed class AndroidLaunchTarget
+        {
+            public long PlaceId;
+            public string Serial;
+            public long? FollowUserId;
+        }
+
+        private static readonly ConcurrentDictionary<string, (long PlaceId, string JobId)> LastPcLaunch =
+            new ConcurrentDictionary<string, (long, string)>(StringComparer.OrdinalIgnoreCase);
+
+        private static readonly ConcurrentDictionary<string, AndroidLaunchTarget> LastAndroidLaunch =
+            new ConcurrentDictionary<string, AndroidLaunchTarget>(StringComparer.OrdinalIgnoreCase);
+
+        // Android process crashes do not spend the normal relaunch budget, but still need a hard loop cap.
+        private static readonly ConcurrentDictionary<string, int> AndroidCrashStreak =
+            new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
         private static bool Subscribed;
 
@@ -71,12 +82,25 @@ namespace RBX_Alt_Manager.Classes
             catch { return Default; }
         }
 
-        /// <summary>Called by the launch path so a relaunch knows where to go.</summary>
+        /// <summary>Remember a Windows client destination without touching the Android target for this account.</summary>
         public static void Remember(Account account, long PlaceId, string JobId)
         {
             if (account == null || PlaceId <= 0) return;
 
-            LastLaunch[account.Username] = (PlaceId, JobId ?? string.Empty);
+            LastPcLaunch[account.Username] = (PlaceId, JobId ?? string.Empty);
+        }
+
+        /// <summary>Remember an Android slot without touching the Windows destination for this account.</summary>
+        public static void RememberAndroid(Account account, long PlaceId, string serial, long? followUserId = null)
+        {
+            if (account == null || PlaceId <= 0 || string.IsNullOrWhiteSpace(serial)) return;
+
+            LastAndroidLaunch[account.Username] = new AndroidLaunchTarget
+            {
+                PlaceId = PlaceId,
+                Serial = serial,
+                FollowUserId = followUserId
+            };
         }
 
         private static void Subscribe()
@@ -89,13 +113,11 @@ namespace RBX_Alt_Manager.Classes
             {
                 if (account == null) return;
 
-                // A launch that reached a server is the end of the story; a client that died before joining, or
-                // dropped straight back out, is what this exists for.
                 if (Outcome == LaunchOutcome.Joined) { Budget.Succeeded(account.Username); return; }
                 if (!OnCrash) return;
                 if (Outcome != LaunchOutcome.DiedEarly && Outcome != LaunchOutcome.Disconnected) return;
 
-                _ = Consider(account, $"launch ended: {Detail}");
+                _ = ConsiderPc(account, $"launch ended: {Detail}");
             };
 
             StuckDetector.StateChanged += Verdict =>
@@ -107,45 +129,119 @@ namespace RBX_Alt_Manager.Classes
                 Account account;
 
                 lock (AccountManager.AccountsLock)
-                    account = AccountManager.AccountsList?.FirstOrDefault(candidate => candidate.Username == Verdict.Account);
+                    account = AccountManager.AccountsList?.FirstOrDefault(candidate =>
+                        string.Equals(candidate.Username, Verdict.Account, StringComparison.OrdinalIgnoreCase));
 
-                if (account != null) _ = Consider(account, Verdict.Reason);
+                if (account != null) _ = ConsiderPc(account, Verdict.Reason);
+            };
+
+            LogcatWatcher.StateChanged += Verdict =>
+            {
+                if (Verdict == null || string.IsNullOrEmpty(Verdict.Account)) return;
+
+                Account account;
+
+                lock (AccountManager.AccountsLock)
+                    account = AccountManager.AccountsList?.FirstOrDefault(candidate =>
+                        string.Equals(candidate.Username, Verdict.Account, StringComparison.OrdinalIgnoreCase));
+
+                if (account == null) return;
+
+                if (Verdict.State == AndroidClientState.Joined)
+                {
+                    AndroidCrashStreak.TryRemove(Verdict.Account, out _);
+                    Budget.Succeeded(Verdict.Account);
+                    return;
+                }
+
+                if (Verdict.State == AndroidClientState.Crashed)
+                {
+                    if (!OnCrash) return;
+
+                    int Crashes = AndroidCrashStreak.AddOrUpdate(Verdict.Account, 1, (_, Seen) => Seen + 1);
+                    if (Crashes > 15)
+                    {
+                        Program.Logger.Warn($"[Relaunch] {Verdict.Account}: Android crashed 15 times in a row; leaving the slot alone");
+                        return;
+                    }
+
+                    _ = ConsiderAndroid(account, $"Android crash {Crashes}/15: {Verdict.Reason}", bypassBudget: true);
+                    return;
+                }
+
+                AndroidCrashStreak.TryRemove(Verdict.Account, out _);
+
+                bool ShouldRetry = Verdict.State == AndroidClientState.Disconnected
+                    ? OnCrash
+                    : Verdict.State == AndroidClientState.Timeout && OnStuck;
+
+                if (!ShouldRetry)
+                {
+                    Program.Logger.Warn($"[Relaunch] {Verdict.Account}: Android {LogcatWatcher.StateName(Verdict.State)} — {Verdict.Reason}; not retrying");
+                    return;
+                }
+
+                if (Budget.Failed(Verdict.Account))
+                {
+                    Program.Logger.Warn($"[Relaunch] {Verdict.Account}: giving up after {Budget.GiveUpAfter} failures — {Verdict.Reason}");
+                    return;
+                }
+
+                _ = ConsiderAndroid(account, $"Android {LogcatWatcher.StateName(Verdict.State)}: {Verdict.Reason}");
             };
         }
 
-        /// <summary>Decides whether this account should go back, and sends it if so.</summary>
-        private static async Task Consider(Account account, string Why)
+        private static async Task ConsiderPc(Account account, string Why)
         {
             if (!Enabled) return;
 
-            // Some failures are not worth a retry, and retrying them is actively harmful: a challenge needs a
-            // person, and a rate limit needs time and a different address, not another attempt.
+            if (!Destination(account, out long PlaceId, out string JobId))
+            {
+                Program.Logger.Info($"[Relaunch] {account.Username}: no PC destination to send it back to");
+                return;
+            }
+
+            await Request(account, PlaceId, JobId, Why);
+        }
+
+        private static async Task ConsiderAndroid(Account account, string Why, bool bypassBudget = false)
+        {
+            if (!Enabled) return;
+
+            if (!LastAndroidLaunch.TryGetValue(account.Username, out AndroidLaunchTarget Target) ||
+                Target == null || Target.PlaceId <= 0 || string.IsNullOrWhiteSpace(Target.Serial))
+            {
+                Program.Logger.Info($"[Relaunch] {account.Username}: no Android serial/destination to send it back to");
+                return;
+            }
+
+            await RequestAndroid(account, Target, Why, bypassBudget);
+        }
+
+        /// <summary>
+        /// Explicit PC relaunch gate used by Nexus and VersionManager. It never consults or mutates Android
+        /// destinations, so callers that asked for a Windows client cannot jump to an emulator.
+        /// </summary>
+        public static async Task<bool> Request(Account account, long PlaceId, string JobId, string Why)
+        {
+            if (account == null || PlaceId <= 0) return false;
+
             if (account.LastAuthFailure == "CAPTCHA" || account.LastAuthFailure == "RATE LIMITED")
             {
-                Program.Logger.Warn($"[Relaunch] {account.Username}: not retrying — {account.LastAuthFailure}");
-
-                return;
+                Program.Logger.Warn($"[Relaunch] {account.Username}: not retrying PC — {account.LastAuthFailure}");
+                return false;
             }
 
             BudgetVerdict Verdict = Budget.Check(account.Username);
 
             if (Verdict != BudgetVerdict.Allowed)
             {
-                Program.Logger.Info($"[Relaunch] {account.Username}: skipped — {Budget.Explain(Verdict, account.Username)}");
-
-                return;
-            }
-
-            if (!Destination(account, out long PlaceId, out string JobId))
-            {
-                Program.Logger.Info($"[Relaunch] {account.Username}: nowhere to send it back to");
-
-                return;
+                Program.Logger.Info($"[Relaunch] {account.Username}: PC skipped — {Budget.Explain(Verdict, account.Username)}");
+                return false;
             }
 
             Budget.Note(account.Username);
-
-            Program.Logger.Info($"[Relaunch] {account.Username} -> place {PlaceId} ({Why})");
+            Program.Logger.Info($"[Relaunch] {account.Username} -> PC place {PlaceId} ({Why})");
 
             try
             {
@@ -153,46 +249,91 @@ namespace RBX_Alt_Manager.Classes
 
                 if (Result != null && Result.StartsWith("Success", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Not a success yet — only that the client started. The launch watcher decides the rest, and
-                    // it is what clears or increments the streak.
-                    Program.Logger.Info($"[Relaunch] {account.Username}: client started");
-
-                    return;
+                    Program.Logger.Info($"[Relaunch] {account.Username}: PC client started");
+                    return true;
                 }
 
                 if (Budget.Failed(account.Username))
                     Program.Logger.Warn($"[Relaunch] {account.Username}: giving up after {Budget.GiveUpAfter} failures — {Result}");
                 else
-                    Program.Logger.Warn($"[Relaunch] {account.Username}: failed — {Result}");
+                    Program.Logger.Warn($"[Relaunch] {account.Username}: PC failed — {Result}");
+
+                return false;
             }
             catch (Exception x)
             {
                 Budget.Failed(account.Username);
-
-                Program.Logger.Error($"[Relaunch] {account.Username}: {x.Message}");
+                Program.Logger.Error($"[Relaunch] {account.Username}: PC {x.Message}");
+                return false;
             }
         }
 
-        /// <summary>Where to send an account back to: this session's last launch, else the one saved on the account.</summary>
-        private static bool Destination(Account account, out long PlaceId, out string JobId)
+        private static async Task<bool> RequestAndroid(Account account, AndroidLaunchTarget Target, string Why, bool bypassBudget)
+        {
+            if (account == null || Target == null || Target.PlaceId <= 0 || string.IsNullOrWhiteSpace(Target.Serial)) return false;
+
+            if (account.LastAuthFailure == "CAPTCHA" || account.LastAuthFailure == "RATE LIMITED")
+            {
+                Program.Logger.Warn($"[Relaunch] {account.Username}: not retrying Android — {account.LastAuthFailure}");
+                return false;
+            }
+
+            if (!bypassBudget)
+            {
+                BudgetVerdict Verdict = Budget.Check(account.Username);
+
+                if (Verdict != BudgetVerdict.Allowed)
+                {
+                    Program.Logger.Info($"[Relaunch] {account.Username}: Android skipped — {Budget.Explain(Verdict, account.Username)}");
+                    return false;
+                }
+
+                Budget.Note(account.Username);
+            }
+
+            Program.Logger.Info($"[Relaunch] {account.Username} -> Android {Target.Serial} place {Target.PlaceId} ({Why})");
+
+            try
+            {
+                // JoinServerAndroidDetailed publishes the resolved logcat verdict. That event owns Android
+                // success/failure streak accounting; counting the returned verdict here would count it twice.
+                AndroidLaunchResult Result = await account.JoinServerAndroidDetailed(
+                    Target.PlaceId, Target.Serial, Target.FollowUserId);
+
+                Program.Logger.Info($"[Relaunch] {account.Username}: Android resolved {Result.State}");
+                return Result.Joined;
+            }
+            catch (Exception x)
+            {
+                // No logcat verdict exists when launch setup itself throws, so this failure has not been counted.
+                Budget.Failed(account.Username);
+                Program.Logger.Error($"[Relaunch] {account.Username}: Android {x.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// PC-only destination contract used by VersionManager fallback. Android state is intentionally invisible
+        /// here; a Windows fallback must never consume an emulator serial.
+        /// </summary>
+        internal static bool Destination(Account account, out long PlaceId, out string JobId)
         {
             PlaceId = 0;
             JobId = string.Empty;
 
-            if (LastLaunch.TryGetValue(account.Username, out (long PlaceId, string JobId) Known) && Known.PlaceId > 0)
+            if (account == null) return false;
+
+            if (LastPcLaunch.TryGetValue(account.Username, out (long PlaceId, string JobId) Known) && Known.PlaceId > 0)
             {
                 PlaceId = Known.PlaceId;
                 JobId = Known.JobId;
-
                 return true;
             }
 
-            // The old window lets a user pin a place to an account; honour it rather than inventing one.
             if (long.TryParse(account.GetField(PlaceField), out long Saved) && Saved > 0)
             {
                 PlaceId = Saved;
                 JobId = account.GetField(JobField) ?? string.Empty;
-
                 return true;
             }
 

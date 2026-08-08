@@ -125,6 +125,9 @@ namespace RBX_Alt_Manager.Classes.Android
         public Task<AdbCommandResult> LogcatRobloxAsync(CancellationToken cancellationToken = default) =>
             RunAsync(new[] { "-s", Serial, "logcat", "-d", "-s", "Roblox" }, CommandTimeout, cancellationToken);
 
+        public Task<AdbCommandResult> ClearLogcatAsync(CancellationToken cancellationToken = default) =>
+            RunAsync(new[] { "-s", Serial, "logcat", "-c" }, CommandTimeout, cancellationToken);
+
         public async Task<bool> RootFileExistsAsync(string remotePath, CancellationToken cancellationToken = default)
         {
             AdbCommandResult Result = await RootShellAsync($"test -f {QuoteShell(remotePath)} && echo exists", cancellationToken).ConfigureAwait(false);

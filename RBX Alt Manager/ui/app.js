@@ -991,6 +991,44 @@ const RowMenu = {
           await launch(many);
           break;
 
+        case 'launch-android': {
+          if (bulk) {
+            toast(t('Launch on Android supports one account at a time for now'), 'error');
+            break;
+          }
+
+          const place = hook('place-id');
+          const placeId = place ? place.value.trim() : '';
+
+          if (!placeId) {
+            toast(t('Set a place id in the launcher first'), 'error');
+            break;
+          }
+
+          RowMenu.close();
+
+          const picked = await Prompt.ask(t('Android emulator serial (auto = first ready)'), 'auto');
+          if (picked === null) break;
+
+          const serial = String(picked).trim() || 'auto';
+          toast(I18N.fmt('Launching {name} on Android…', { name: username }));
+
+          const result = await RAM.call('accounts.launchAndroid', {
+            username,
+            placeId,
+            serial
+          }, 12 * 60 * 1000);
+
+          if (!result) throw new Error(t('Android launch returned no result'));
+
+          if (result.state === 'joined')
+            toast(I18N.fmt('{name}: joined on Android', { name: username }), 'ok');
+          else
+            toast(`${username}: ${result.state || 'unknown'} — ${result.reason || t('Android launch did not resolve')}`, 'error');
+
+          break;
+        }
+
         case 'open-profile': {
           const account = State.accounts.find(a => a.username === username);
           if (account) await RAM.call('app.openUrl', { url: `https://www.roblox.com/users/${account.userId}/profile` });
