@@ -793,8 +793,12 @@ namespace RBX_Alt_Manager
                 // environment, put it on its own desktop, or learn its PID. It is also indistinguishable from the
                 // protocol launch as far as Roblox is concerned: roblox-player: is registered as
                 // `RobloxPlayerBeta.exe "%1"`, so the resulting command line is identical.
-                bool Direct = AccountProxies.DirectLaunch || AccountManager.UseOldJoin || Proxy != null
+                bool Direct = VersionManager.GetPinnedExecutable() != null || AccountProxies.DirectLaunch || AccountManager.UseOldJoin || Proxy != null
                     || !string.IsNullOrEmpty(AccountProxies.TitleTemplate) || !string.IsNullOrEmpty(AccountProxies.DesktopName);
+
+                // Both launch paths need this destination. Besides crash recovery, VersionManager uses it for
+                // the one-shot safety fallback when a pinned client is rejected before it reaches a server.
+                Relauncher.Remember(this, PlaceID, JobID);
 
                 if (Direct)
                 {
@@ -823,9 +827,6 @@ namespace RBX_Alt_Manager
                     }
 
                     AccountProxies.BindToProcess(Slot, Client);
-
-                    // Where this account was sent, for the supervisor that may have to send it back.
-                    Relauncher.Remember(this, PlaceID, JobID);
 
                     string Title = ClientWindows.FormatTitle(AccountProxies.TitleTemplate, this, PlaceID, Client.Id);
 

@@ -215,6 +215,9 @@ namespace RBX_Alt_Manager
 
             General.Seed("NewUI", "true", "Open the new interface on startup. It is the main window now; the old one stays open alongside it because a few screens (Nexus, account utilities, themes) have not moved yet.");
             General.Seed("UiLanguage", "en", "Language of the new HTML interface: en or ru. Changed from the language chip in its title bar. The old window is English only.");
+            General.Seed("PinnedRobloxVersion", "", "Optional immutable Roblox build installed by the version manager. Empty means use Roblox's standard auto-updating installation.");
+            General.Seed("PinnedRobloxChannel", "LIVE", "Channel of the pinned Roblox build. LIVE is the standard production channel.");
+            General.Seed("PinnedFallbackToLive", "true", "If a non-current pinned client dies or is disconnected before joining, clear the pin and retry once with the standard live Roblox client.");
 
             General.Seed("ReaperEnabled", "false", "Kill Roblox clients that crashed but whose process is still running (no window, hundreds of MB held). Only touches real game clients that have been window-less past the grace period.");
             General.Seed("ReaperDryRun", "false", "Report what the reaper would kill without killing anything. Use this for a day before trusting it.");
