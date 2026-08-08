@@ -10,6 +10,13 @@ namespace RBX_Alt_Manager.Classes.Android
         public string Serial { get; internal set; }
         public string Package { get; internal set; }
         public string State { get; internal set; }
+        public string Reason { get; internal set; }
+        public long PlaceId { get; internal set; }
+        public string JobId { get; internal set; }
+        public int? DisconnectCode { get; internal set; }
+        internal AndroidClientVerdict Verdict { get; set; }
+
+        public bool Joined => string.Equals(State, "joined", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>force-stop/inject/deeplink launch operations for one already-discovered emulator slot.</summary>
@@ -40,9 +47,22 @@ namespace RBX_Alt_Manager.Classes.Android
             // InjectAsync force-stops before touching the DB. It must stay that way: a live WebView owns an
             // in-memory cookie jar and will otherwise overwrite the row we just changed.
             await Injector.InjectAsync(account.SecurityToken, cancellationToken).ConfigureAwait(false);
+
+            // The watcher reads a dump rather than a streaming pipe. Clear immediately before the intent so an
+            // old account's join/disconnect marker cannot be mistaken for the state of this launch.
+            AdbCommandResult Cleared = await Adb.ClearLogcatAsync(cancellationToken).ConfigureAwait(false);
+            if (!Cleared.Success)
+                throw new InvalidOperationException($"Could not clear logcat on {Adb.Serial}: {Cleared.CombinedOutput.Trim()}");
+
             await StartDeeplinkAsync(placeId, userId, cancellationToken).ConfigureAwait(false);
 
-            return new AndroidLaunchResult { Serial = Adb.Serial, Package = PackageName, State = "started" };
+            return new AndroidLaunchResult
+            {
+                Serial = Adb.Serial,
+                Package = PackageName,
+                State = "launching",
+                PlaceId = placeId
+            };
         }
 
         /// <summary>Teleports a live client without changing its account.</summary>
