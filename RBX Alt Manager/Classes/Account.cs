@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RBX_Alt_Manager.Classes;
+using RBX_Alt_Manager.Classes.Android;
 using RBX_Alt_Manager.Forms;
 using RestSharp;
 using System;
@@ -886,6 +887,37 @@ namespace RBX_Alt_Manager
                     : LastAuthFailure == "RATE LIMITED"
                         ? "ERROR: RATE LIMITED — too many launches from this IP. Give it a few minutes, or give this account its own proxy."
                         : "ERROR: Invalid Authentication Ticket, re-add the account or try again\n(Failed to get Authentication Ticket, Roblox has probably signed you out)";
+            }
+            finally { LaunchLock.Release(); }
+        }
+
+        /// <summary>
+        /// Starts this account inside a running Android emulator. This shares LaunchLock with JoinServer so a PC
+        /// launch and an Android cookie swap cannot race and kick each other as a duplicate session.
+        /// </summary>
+        public async Task<string> JoinServerAndroid(long PlaceID, string Serial, long? FollowUserId = null)
+        {
+            if (!LaunchLock.Wait(0))
+                return "ERROR: A launch for this account is already in progress. Please wait a moment.";
+
+            try
+            {
+                if (PlaceID <= 0) return "ERROR: A valid Android place id is required.";
+
+                LastAppLaunch = DateTime.Now;
+                LastUse = DateTime.Now;
+
+                AndroidLaunchResult Result = await AndroidRuntime.LaunchAsync(this, PlaceID, Serial, FollowUserId);
+
+                Program.Logger.Info($"[Android] {Username} -> {Result.Serial} place {PlaceID}" +
+                    (FollowUserId.HasValue ? $" user {FollowUserId.Value}" : string.Empty));
+
+                return "Success";
+            }
+            catch (Exception Ex)
+            {
+                Program.Logger.Error($"[Android] launch failed for {Username}: {Ex.Message}");
+                return $"ERROR: Android launch failed: {Ex.Message}";
             }
             finally { LaunchLock.Release(); }
         }

@@ -86,6 +86,7 @@ namespace RBX_Alt_Manager
         public static IniSection AccountControl;
         public static IniSection Watcher;
         public static IniSection Prompts;
+        public static IniSection Android;
 
         private static Mutex rbxMultiMutex;
         private readonly static object saveLock = new object();
@@ -132,6 +133,7 @@ namespace RBX_Alt_Manager
             AccountControl = IniSettings.Section("AccountControl");
             Watcher = IniSettings.Section("Watcher");
             Prompts = IniSettings.Section("Prompts");
+            Android = IniSettings.Section("Android");
 
             General.Seed("EnableMultiRbx", "false", "Allow more than one Roblox client at a time. Roblox itself refuses a second client, so the manager holds the lock it checks. Turn it on before Roblox is open, not after.");
             General.Seed("AccountJoinDelay", "8", "Seconds between launches when several accounts start at once. Counted per exit address, so accounts on different proxies do not wait for each other.");
@@ -251,6 +253,21 @@ namespace RBX_Alt_Manager
             AccountControl.Seed("RelaunchDelay", "60");
             AccountControl.Seed("LauncherDelayNumber", "9");
             AccountControl.Seed("NexusPort", "5242");
+
+            // Android launching is a second, explicitly opt-in launch path. Hardware/package/schema details are
+            // discovered at runtime; these settings are only overrides and operational limits.
+            Android.Seed("EnableAndroid", "false", "Enable launching accounts through Roblox inside a running Android emulator.");
+            Android.Seed("AdbPath", "", "Optional adb.exe override. Empty means detect adb next to a running LDPlayer, MuMu or MEmu process.");
+            Android.Seed("Serials", "", "Optional comma-separated emulator serial allow-list. Empty means every discovered running instance.");
+            Android.Seed("Package", "", "Optional Roblox Android package override. Empty means resolve the handler for roblox:// at runtime.");
+            Android.Seed("MaxInstances", "0", "Reserved for the Android pool. 0 means use every running instance rather than imposing a fixed account limit.");
+            Android.Seed("AutoStartInstances", "false", "Allow the future pool to start stopped emulator instances. Phases 1-3 only use instances that are already running.");
+            Android.Seed("LaunchBatch", "3", "Maximum cold-start batch size when AutoStartInstances is used.");
+            Android.Seed("LaunchDelay", "5", "Seconds between emulator cold-start batches.");
+            Android.Seed("ConnectTimeout", "90", "Seconds allowed for an Android client to reach the requested place before monitoring declares a timeout.");
+            Android.Seed("AutoexecPath", "/sdcard/Delta/Autoexecute", "Executor autoexec directory used only when Android provisioning/in-game control is enabled.");
+            Android.Seed("LanIp", "", "Optional host LAN IP override for the future Nexus autoexec bridge.");
+            Android.Seed("BackupCookieStore", "true", "Back up the emulator WebView Cookies database before replacing .ROBLOSECURITY.");
 
             Classes.AccountProxies.LoadSettings();
 
