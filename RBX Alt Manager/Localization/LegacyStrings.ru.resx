@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="Account Control" xml:space="preserve"><value>Управление аккаунтами</value></data>
+  <data name="Account Fields" xml:space="preserve"><value>Поля аккаунта</value></data>
+  <data name="Account Utilities" xml:space="preserve"><value>Инструменты аккаунта</value></data>
+  <data name="Add Account" xml:space="preserve"><value>Добавить аккаунт</value></data>
+  <data name="Add Friend" xml:space="preserve"><value>Добавить в друзья</value></data>
+  <data name="Alias" xml:space="preserve"><value>Псевдоним</value></data>
+  <data name="ArgumentsForm" xml:space="preserve"><value>Аргументы запуска</value></data>
+  <data name="Async Launching" xml:space="preserve"><value>Асинхронный запуск</value></data>
+  <data name="Auto Close" xml:space="preserve"><value>Автозакрытие</value></data>
+  <data name="Auto Execute" xml:space="preserve"><value>Автозапуск</value></data>
+  <data name="Auto Minimize" xml:space="preserve"><value>Автосворачивание</value></data>
+  <data name="Auto Refresh Cookies" xml:space="preserve"><value>Автообновление кук</value></data>
+  <data name="Auto Relaunch" xml:space="preserve"><value>Автоперезапуск</value></data>
+  <data name="Block" xml:space="preserve"><value>Заблокировать</value></data>
+  <data name="Buy" xml:space="preserve"><value>Купить</value></data>
+  <data name="Change Email" xml:space="preserve"><value>Сменить почту</value></data>
+  <data name="Change Password" xml:space="preserve"><value>Сменить пароль</value></data>
+  <data name="Change Style" xml:space="preserve"><value>Изменить стиль</value></data>
+  <data name="Check for Internet Before Launch" xml:space="preserve"><value>Проверять интернет перед запуском</value></data>
+  <data name="Clear" xml:space="preserve"><value>Очистить</value></data>
+  <data name="Close Roblox" xml:space="preserve"><value>Закрыть Roblox</value></data>
+  <data name="Collect Free Items" xml:space="preserve"><value>Собрать бесплатные предметы</value></data>
+  <data name="Command" xml:space="preserve"><value>Команда</value></data>
+  <data name="Continue" xml:space="preserve"><value>Продолжить</value></data>
+  <data name="Control Panel" xml:space="preserve"><value>Панель управления</value></data>
+  <data name="Cookie(s)" xml:space="preserve"><value>Кука(и)</value></data>
+  <data name="Copy" xml:space="preserve"><value>Копировать</value></data>
+  <data name="Copy App Link" xml:space="preserve"><value>Копировать ссылку приложения</value></data>
+  <data name="Copy Avatar JSON" xml:space="preserve"><value>Копировать JSON аватара</value></data>
+  <data name="Copy Group" xml:space="preserve"><value>Копировать группу</value></data>
+  <data name="Copy JobId" xml:space="preserve"><value>Копировать JobId</value></data>
+  <data name="Copy Name" xml:space="preserve"><value>Копировать имя</value></data>
+  <data name="Copy Password" xml:space="preserve"><value>Копировать пароль</value></data>
+  <data name="Copy Place Details" xml:space="preserve"><value>Копировать данные места</value></data>
+  <data name="Copy Place Link" xml:space="preserve"><value>Копировать ссылку места</value></data>
+  <data name="Copy PlaceID" xml:space="preserve"><value>Копировать PlaceID</value></data>
+  <data name="Copy Profile" xml:space="preserve"><value>Копировать профиль</value></data>
+  <data name="Copy Security Token" xml:space="preserve"><value>Копировать токен безопасности</value></data>
+  <data name="Copy User Pass Combo" xml:space="preserve"><value>Копировать логин:пароль</value></data>
+  <data name="Copy UserId" xml:space="preserve"><value>Копировать UserId</value></data>
+  <data name="Copy Username" xml:space="preserve"><value>Копировать имя пользователя</value></data>
+  <data name="Current Password" xml:space="preserve"><value>Текущий пароль</value></data>
+  <data name="Current Place" xml:space="preserve"><value>Текущее место</value></data>
+  <data name="Dark Top Bar" xml:space="preserve"><value>Тёмная верхняя панель</value></data>
+  <data name="Default Encryption" xml:space="preserve"><value>Шифрование по умолчанию</value></data>
+  <data name="Description" xml:space="preserve"><value>Описание</value></data>
+  <data name="Developer" xml:space="preserve"><value>Разработчик</value></data>
+  <data name="Disable Aging Alert" xml:space="preserve"><value>Отключить предупреждение о простое</value></data>
+  <data name="Disable Image Loading [Less Ram %]" xml:space="preserve"><value>Отключить загрузку изображений [меньше RAM]</value></data>
+  <data name="Documentation" xml:space="preserve"><value>Документация</value></data>
+  <data name="Downloading Chromium..." xml:space="preserve"><value>Загрузка Chromium...</value></data>
+  <data name="Edit Theme" xml:space="preserve"><value>Изменить тему</value></data>
+  <data name="Email" xml:space="preserve"><value>Почта</value></data>
+  <data name="Enable Developer Mode" xml:space="preserve"><value>Режим разработчика</value></data>
+  <data name="Enable Roblox Watcher" xml:space="preserve"><value>Включить наблюдение за Roblox</value></data>
+  <data name="Enable Web Server" xml:space="preserve"><value>Включить веб-сервер</value></data>
+  <data name="Every Request Requires Password" xml:space="preserve"><value>Пароль для каждого запроса</value></data>
+  <data name="Execute" xml:space="preserve"><value>Выполнить</value></data>
+  <data name="Executor" xml:space="preserve"><value>Исполнитель</value></data>
+  <data name="Favorite" xml:space="preserve"><value>В избранное</value></data>
+  <data name="Favorites" xml:space="preserve"><value>Избранное</value></data>
+  <data name="Follow" xml:space="preserve"><value>Следовать</value></data>
+  <data name="Game Name" xml:space="preserve"><value>Название игры</value></data>
+  <data name="Games" xml:space="preserve"><value>Игры</value></data>
+  <data name="General" xml:space="preserve"><value>Основные</value></data>
+  <data name="Get Authentication Ticket" xml:space="preserve"><value>Получить билет аутентификации</value></data>
+  <data name="Groups" xml:space="preserve"><value>Группы</value></data>
+  <data name="Help" xml:space="preserve"><value>Помощь</value></data>
+  <data name="Hide Headers" xml:space="preserve"><value>Скрыть заголовки</value></data>
+  <data name="Hide Multi Roblox Alert" xml:space="preserve"><value>Скрыть предупреждение Multi Roblox</value></data>
+  <data name="Hide Usernames" xml:space="preserve"><value>Скрыть имена пользователей</value></data>
+  <data name="Import" xml:space="preserve"><value>Импорт</value></data>
+  <data name="Info" xml:space="preserve"><value>Информация</value></data>
+  <data name="Interval (min)" xml:space="preserve"><value>Интервал (мин)</value></data>
+  <data name="Interval (sec)" xml:space="preserve"><value>Интервал (сек)</value></data>
+  <data name="Job ID" xml:space="preserve"><value>Job ID</value></data>
+  <data name="Join Game" xml:space="preserve"><value>Войти в игру</value></data>
+  <data name="Join Group" xml:space="preserve"><value>Вступить в группу</value></data>
+  <data name="Join Server" xml:space="preserve"><value>Войти на сервер</value></data>
+  <data name="Last Used" xml:space="preserve"><value>Последнее использование</value></data>
+  <data name="Launch Delay" xml:space="preserve"><value>Задержка запуска</value></data>
+  <data name="Like %" xml:space="preserve"><value>Лайки %</value></data>
+  <data name="List View" xml:space="preserve"><value>Список</value></data>
+  <data name="Load Region" xml:space="preserve"><value>Определить регион</value></data>
+  <data name="Manual Login" xml:space="preserve"><value>Ручной вход</value></data>
+  <data name="Max FPS" xml:space="preserve"><value>Макс. FPS</value></data>
+  <data name="Max Instances" xml:space="preserve"><value>Макс. инстансов</value></data>
+  <data name="Max Recent Games" xml:space="preserve"><value>Макс. недавних игр</value></data>
+  <data name="Minimize Roblox" xml:space="preserve"><value>Свернуть Roblox</value></data>
+  <data name="Miscellaneous" xml:space="preserve"><value>Разное</value></data>
+  <data name="Move Account To" xml:space="preserve"><value>Переместить аккаунт в</value></data>
+  <data name="Multi Roblox" xml:space="preserve"><value>Multi Roblox</value></data>
+  <data name="New Password" xml:space="preserve"><value>Новый пароль</value></data>
+  <data name="Open Browser" xml:space="preserve"><value>Открыть браузер</value></data>
+  <data name="Outfits" xml:space="preserve"><value>Образы</value></data>
+  <data name="Page" xml:space="preserve"><value>Страница</value></data>
+  <data name="Password" xml:space="preserve"><value>Пароль</value></data>
+  <data name="Password Locked (Recommended)" xml:space="preserve"><value>Защита паролем (рекомендуется)</value></data>
+  <data name="Per Instance" xml:space="preserve"><value>На инстанс</value></data>
+  <data name="Ping" xml:space="preserve"><value>Пинг</value></data>
+  <data name="Place ID" xml:space="preserve"><value>Place ID</value></data>
+  <data name="Players" xml:space="preserve"><value>Игроки</value></data>
+  <data name="Playing" xml:space="preserve"><value>В игре</value></data>
+  <data name="Port" xml:space="preserve"><value>Порт</value></data>
+  <data name="Quick Log In" xml:space="preserve"><value>Быстрый вход</value></data>
+  <data name="RecentGamesForm" xml:space="preserve"><value>Недавние игры</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Обновить</value></data>
+  <data name="Region" xml:space="preserve"><value>Регион</value></data>
+  <data name="Region Format" xml:space="preserve"><value>Формат региона</value></data>
+  <data name="Remove" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Remove Account" xml:space="preserve"><value>Удалить аккаунт</value></data>
+  <data name="Rename" xml:space="preserve"><value>Переименовать</value></data>
+  <data name="Reset Encryption Method" xml:space="preserve"><value>Сбросить способ шифрования</value></data>
+  <data name="Run on Windows Startup" xml:space="preserve"><value>Запускать вместе с Windows</value></data>
+  <data name="Save Output to File" xml:space="preserve"><value>Сохранить вывод в файл</value></data>
+  <data name="Save Passwords" xml:space="preserve"><value>Сохранять пароли</value></data>
+  <data name="Save Window Positions" xml:space="preserve"><value>Сохранять позиции окон</value></data>
+  <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Seconds" xml:space="preserve"><value>Секунды</value></data>
+  <data name="Send" xml:space="preserve"><value>Отправить</value></data>
+  <data name="Servers" xml:space="preserve"><value>Серверы</value></data>
+  <data name="Set Alias" xml:space="preserve"><value>Задать псевдоним</value></data>
+  <data name="Set Description" xml:space="preserve"><value>Задать описание</value></data>
+  <data name="Set Display Name" xml:space="preserve"><value>Задать отображаемое имя</value></data>
+  <data name="Set Version" xml:space="preserve"><value>Выбрать версию</value></data>
+  <data name="Settings" xml:space="preserve"><value>Настройки</value></data>
+  <data name="Show Account Presence" xml:space="preserve"><value>Показывать присутствие аккаунта</value></data>
+  <data name="Shuffle Chooses Lowest Server" xml:space="preserve"><value>Shuffle выбирает самый свободный сервер</value></data>
+  <data name="Sign out of all other sessions" xml:space="preserve"><value>Выйти из всех других сессий</value></data>
+  <data name="Sort Alphabetically" xml:space="preserve"><value>Сортировать по алфавиту</value></data>
+  <data name="Target Username" xml:space="preserve"><value>Имя целевого пользователя</value></data>
+  <data name="Theme Editor" xml:space="preserve"><value>Редактор темы</value></data>
+  <data name="Toggle" xml:space="preserve"><value>Переключить</value></data>
+  <data name="Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Universe" xml:space="preserve"><value>Вселенная</value></data>
+  <data name="Unlock" xml:space="preserve"><value>Разблокировать</value></data>
+  <data name="Unlock FPS" xml:space="preserve"><value>Разблокировать FPS</value></data>
+  <data name="Use Presence API" xml:space="preserve"><value>Использовать Presence API</value></data>
+  <data name="Username" xml:space="preserve"><value>Имя пользователя</value></data>
+  <data name="Utilities" xml:space="preserve"><value>Инструменты</value></data>
+  <data name="View Fields" xml:space="preserve"><value>Показать поля</value></data>
+  <data name="View Games" xml:space="preserve"><value>Показать игры</value></data>
+  <data name="View Outfits" xml:space="preserve"><value>Показать образы</value></data>
+  <data name="Warm Accounts" xml:space="preserve"><value>Прогреть аккаунты</value></data>
+  <data name="Watcher" xml:space="preserve"><value>Наблюдение</value></data>
+  <data name="Wear Avatar" xml:space="preserve"><value>Надеть аватар</value></data>
+  <data name="Webserver Password" xml:space="preserve"><value>Пароль веб-сервера</value></data>
+  <data name="Who Can Follow" xml:space="preserve"><value>Кто может следовать</value></data>
+  <data name="Clients" xml:space="preserve"><value>Клиенты</value></data>
+  <data name="Launch" xml:space="preserve"><value>Запуск</value></data>
+  <data name="Client windows" xml:space="preserve"><value>Окна клиентов</value></data>
+  <data name="Per-account proxies" xml:space="preserve"><value>Прокси по аккаунтам</value></data>
+  <data name="Interface (preview)" xml:space="preserve"><value>Интерфейс</value></data>
+  <data name="Maintenance" xml:space="preserve"><value>Обслуживание</value></data>
+  <data name="Clean Roblox profile…" xml:space="preserve"><value>Очистить профиль Roblox…</value></data>
+  <data name="Open the new interface" xml:space="preserve"><value>Открыть новый интерфейс</value></data>
+  <data name="Assign proxies to selection…" xml:space="preserve"><value>Назначить прокси выбранным…</value></data>
+</root>

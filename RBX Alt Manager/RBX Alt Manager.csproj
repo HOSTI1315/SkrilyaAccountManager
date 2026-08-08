@@ -28,7 +28,7 @@
 
     <OutputPath>..\build\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>en;ru</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -53,6 +53,11 @@
   <ItemGroup>
     <EmbeddedResource Include="AccountManager.resx" LogicalName="RBX_Alt_Manager.AccountManager.resources" />
     <EmbeddedResource Include="Properties\Resources.resx" LogicalName="RBX_Alt_Manager.Properties.Resources.resources" />
+    <EmbeddedResource Include="Localization\LegacyStrings.resx" LogicalName="RBX_Alt_Manager.Localization.LegacyStrings.resources" />
+    <EmbeddedResource Include="Localization\LegacyStrings.ru.resx" LogicalName="RBX_Alt_Manager.Localization.LegacyStrings.resources">
+      <Culture>ru</Culture>
+      <WithCulture>true</WithCulture>
+    </EmbeddedResource>
 
     <EmbeddedResource Include="Classes\AvatarControl.resx" LogicalName="RBX_Alt_Manager.Classes.AvatarControl.resources" />
     <EmbeddedResource Include="Classes\Field.resx" LogicalName="RBX_Alt_Manager.Classes.Field.resources" />
