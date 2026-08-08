@@ -39,7 +39,22 @@ namespace RBX_Alt_Manager.Classes.Android
                 throw new InvalidOperationException($"{Device.Serial}: emulator root disappeared before launch");
 
             AndroidLauncher Launcher = new AndroidLauncher(Adb, Device.RobloxPackage, BoolSetting("BackupCookieStore", true));
-            return await Launcher.LaunchAccountAsync(account, placeId, userId, cancellationToken).ConfigureAwait(false);
+            AndroidLaunchResult Result = await Launcher.LaunchAccountAsync(account, placeId, userId, cancellationToken).ConfigureAwait(false);
+
+            // ConnectTimeout used to be seeded into RAMSettings.ini but never read. It is the deadline for a real
+            // verdict now: the method does not report success merely because am start accepted the intent.
+            TimeSpan Timeout = TimeSpan.FromSeconds(IntSetting("ConnectTimeout", 90, 5, 600));
+            AndroidClientVerdict Verdict = await LogcatWatcher.WatchAsync(
+                account, Adb, Device.RobloxPackage, placeId, Timeout, cancellationToken).ConfigureAwait(false);
+
+            Result.State = LogcatWatcher.StateName(Verdict.State);
+            Result.Reason = Verdict.Reason;
+            Result.PlaceId = Verdict.PlaceId;
+            Result.JobId = Verdict.JobId;
+            Result.DisconnectCode = Verdict.DisconnectCode;
+            Result.Verdict = Verdict;
+
+            return Result;
         }
 
         private static EmulatorDevice SelectDevice(IReadOnlyList<EmulatorDevice> devices, string serial)
@@ -68,6 +83,14 @@ namespace RBX_Alt_Manager.Classes.Android
         {
             string Value = Setting(name);
             return bool.TryParse(Value, out bool Parsed) ? Parsed : fallback;
+        }
+
+        private static int IntSetting(string name, int fallback, int min, int max)
+        {
+            string Value = Setting(name);
+            if (!int.TryParse(Value, out int Parsed)) return fallback;
+
+            return Math.Min(Math.Max(Parsed, min), max);
         }
 
         private static string[] SplitList(string value) => string.IsNullOrWhiteSpace(value)
