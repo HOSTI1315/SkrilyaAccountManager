@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html><head><link href="icons/phosphor.css" rel="stylesheet"/><link href="ds.css" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>x-dc{display:none!important}</style>
+<style></style><style data-dc-tpl="4">
+    html, body { height: 100%; overflow: hidden; }
+    [hidden] { display: none !important; }
+    @keyframes noct-spin { to { transform: rotate(360deg); } }
+    ::placeholder { color: var(--color-neutral-600); }
+    input { font-family: var(--font-body); }
+    a { color: var(--color-accent-300); text-decoration: none; }
+    a:hover { color: var(--color-accent-200); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--color-neutral-800); border-radius: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    @keyframes noct-drift { from { transform: translateX(0); } to { transform: translateX(-30px); } }
+    body { -webkit-font-smoothing: antialiased; }
+    div, span, button, input, i { transition: background-color .16s ease, border-color .16s ease, box-shadow .2s ease, color .16s ease; }
+  </style><title>SkrilyaAccountManager</title><style>
+  [data-ram="titlebar"], [data-dc-tpl="7"] { app-region: drag; -webkit-app-region: drag; }
+  [data-ram="titlebar"] input, [data-dc-tpl="7"] input,
+  [data-ram="win-min"], [data-ram="win-max"], [data-ram="win-close"] { app-region: no-drag; -webkit-app-region: no-drag; }
+  [data-ram="win-min"], [data-ram="win-max"], [data-ram="win-close"] { cursor: pointer !important; }
+  [data-ram-row] { user-select: none; }
+  [hidden] { display: none !important; }
+</style></head>
+<body>
+<div id="dc-root"><div class="sc-host" data-sc-name="Skrilya Accounts"><div data-dc-tpl="5" style="position: relative; height: 100vh; width: 100%; overflow: hidden; display: flex; flex-direction: column; font-family: var(--font-body); color: var(--color-text); background: linear-gradient(180deg, #1b1d2d 0%, var(--color-bg) 42%, #101220 100%);">
+<div data-dc-tpl="6" style="position: absolute; top: -160px; left: 50%; width: 780px; height: 360px; transform: translateX(-50%); pointer-events: none; background: radial-gradient(50% 50% at 50% 50%, var(--color-accent-800) 0%, rgba(66,58,106,0) 72%); opacity: 0.38;"></div>
+<div data-dc-tpl="7" style="display: flex; align-items: center; gap: 14px; height: 48px; flex: 0 0 auto; padding: 0px 14px; position: relative; z-index: 3;">
+<div data-dc-tpl="8" style="display: flex; align-items: center; gap: 11px; width: 270px; flex: 0 0 auto;">
+<div data-dc-tpl="9" style="position: relative; width: 28px; height: 32px; flex: 0 0 auto; display: flex; align-items: flex-end;">
+<svg data-dc-tpl="10" style="position: absolute; top: 0px; left: -3px; width: 34px; height: 13px; pointer-events: none; filter: drop-shadow(oklch(0.52 0.19 27 / 0.55) 0px 0px 5px);" viewbox="0 0 34 13">
+<defs data-dc-tpl="11">
+<lineargradient data-dc-tpl="12" id="skrilya-horn" x1="0" x2="0" y1="1" y2="0">
+<stop data-dc-tpl="13" offset="0" stop-color="oklch(0.36 0.13 22)"></stop>
+<stop data-dc-tpl="14" offset="1" stop-color="oklch(0.64 0.21 28)"></stop>
+</lineargradient>
+</defs>
+<path d="M13.4 12.4 C 9.6 9.8 6.2 6.2 3.4 0.9 C 4.2 5.9 6.8 9.6 10.1 12.9 Z" data-dc-tpl="15" fill="url(#skrilya-horn)"></path>
+<path d="M20.6 12.4 C 24.4 9.8 27.8 6.2 30.6 0.9 C 29.8 5.9 27.2 9.6 23.9 12.9 Z" data-dc-tpl="16" fill="url(#skrilya-horn)"></path>
+</svg>
+<div data-dc-tpl="17" style="width: 28px; height: 28px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-md); background: var(--color-accent-900); border: 1px solid var(--color-accent-700); box-shadow: 0 0 18px -7px var(--color-accent); font-size: 13px; font-weight: 600; color: var(--color-accent-200);">S</div>
+</div>
+<div data-dc-tpl="18" style="min-width: 0px;">
+<div data-dc-tpl="19" style="font-size: 12px; font-weight: 600; letter-spacing: 0.2em; color: var(--color-neutral-200); line-height: 1.15;">SKRILYA</div>
+<div data-dc-tpl="20" style="font-size: 8.5px; font-weight: 500; letter-spacing: 0.22em; color: var(--color-neutral-600); line-height: 1.3;">ACCOUNT MANAGER</div>
+</div>
+</div>
+<div data-dc-tpl="21" style="flex: 1 1 0%; display: flex; justify-content: center; min-width: 0px;">
+<div data-dc-tpl="22" style="position: relative; width: min(470px, 100%);">
+<i class="ph ph-magnifying-glass" data-dc-tpl="23" style="position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--color-neutral-600);"></i>
+<input class="input" data-dc-tpl="24" data-ram="global-search" placeholder="Search anything — accounts, actions, settings…" style="height: 32px; min-height: 32px; padding: 0px 14px 0px 33px; border-radius: 999px; font-size: 12.5px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); color: var(--color-neutral-200);"/>
+</div>
+</div>
+<div data-dc-tpl="25" style="width: 270px; flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end; gap: 4px;">
+<div class="scp0" data-dc-tpl="26" style="display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; padding: 4px 7px 4px 8px; margin-right: 6px; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--color-neutral-800); color: var(--color-neutral-400);" title="Interface language">
+<span class="sc-interp">EN</span><i class="ph ph-caret-down" data-dc-tpl="27" style="font-size: 8px;"></i>
+</div>
+<div class="scp1" data-dc-tpl="28" data-ram="win-min" style="width: 30px; height: 24px; display: grid; place-items: center; border-radius: var(--radius-sm); color: var(--color-neutral-500); cursor: default; font-size: 12px;"><i class="ph ph-minus" data-dc-tpl="29"></i></div>
+<div class="scp1" data-dc-tpl="30" data-ram="win-max" style="width: 30px; height: 24px; display: grid; place-items: center; border-radius: var(--radius-sm); color: var(--color-neutral-500); cursor: default; font-size: 11px;"><i class="ph ph-square" data-dc-tpl="31"></i></div>
+<div class="scp2" data-dc-tpl="32" data-ram="win-close" style="width: 30px; height: 24px; display: grid; place-items: center; border-radius: var(--radius-sm); color: var(--color-neutral-500); cursor: default; font-size: 12px;"><i class="ph ph-x" data-dc-tpl="33"></i></div>
+</div>
+</div>
+<div data-dc-tpl="34" style="flex: 0 0 auto; height: 1px; margin: 0px 14px 12px; position: relative; z-index: 3; background: linear-gradient(to right,transparent,var(--color-neutral-800) 48px,var(--color-neutral-800) calc(100% - 48px),transparent);"></div>
+<div data-dc-tpl="35" style="flex: 1 1 0%; min-height: 0px; display: flex; gap: 10px; padding: 0px 12px 12px; position: relative; z-index: 2;">
+<div data-dc-tpl="37" style="width: 58px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 8px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 16px 38px -28px;">
+<div class="scp3" data-dc-tpl="39" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Dashboard" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Dashboard">
+<i class="ph ph-squares-four" data-dc-tpl="40"></i>
+</div>
+<div class="scp3" data-dc-tpl="39" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Accounts" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200); box-shadow: 0 0 20px -9px var(--color-accent);" title="Accounts">
+<i class="ph ph-users-three" data-dc-tpl="40"></i>
+</div>
+<div data-dc-tpl="41" style="width: 22px; height: 1px; flex: 0 0 auto; margin: 6px 0px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scp3" data-dc-tpl="43" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Launcher" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Launcher">
+<i class="ph ph-rocket-launch" data-dc-tpl="44"></i>
+</div>
+<div class="scp3" data-dc-tpl="43" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Relauncher" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Relauncher">
+<i class="ph ph-arrows-clockwise" data-dc-tpl="44"></i>
+</div>
+<div class="scp3" data-dc-tpl="43" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Watcher" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Watcher">
+<i class="ph ph-eye" data-dc-tpl="44"></i>
+</div>
+<div data-dc-tpl="45" style="width: 22px; height: 1px; flex: 0 0 auto; margin: 6px 0px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scp3" data-dc-tpl="47" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Free items" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Free items">
+<i class="ph ph-gift" data-dc-tpl="48"></i>
+</div>
+<div class="scp3" data-dc-tpl="47" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Macros" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Macros">
+<i class="ph ph-cursor-click" data-dc-tpl="48"></i>
+</div>
+<div class="scp3" data-dc-tpl="47" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Server list" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Server list">
+<i class="ph ph-list-dashes" data-dc-tpl="48"></i>
+</div>
+<div data-dc-tpl="49" style="width: 22px; height: 1px; flex: 0 0 auto; margin: 6px 0px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scp3" data-dc-tpl="51" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Proxies" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Proxies">
+<i class="ph ph-globe-hemisphere-west" data-dc-tpl="52"></i>
+</div>
+<div class="scp3" data-dc-tpl="51" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Resources" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500); box-shadow: none;" title="Resources">
+<i class="ph ph-package" data-dc-tpl="52"></i>
+</div>
+<div data-dc-tpl="53" style="margin-top: auto;"></div>
+<div class="scp3" data-dc-tpl="54" data-ram-off-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; font-size: 17px; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-rail="Settings" style="width: 40px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); cursor: pointer; border: 1px solid transparent; font-size: 17px; background: transparent; color: var(--color-neutral-500);" title="Settings">
+<i class="ph ph-gear-six" data-dc-tpl="55"></i>
+</div>
+</div>
+<div data-dc-tpl="83" style="flex: 1 1 0%; min-width: 0px; display: flex; flex-direction: column; gap: 10px;">
+<div data-dc-tpl="85" data-ram="tabstrip" style="flex: 0 0 auto; display: flex; align-items: center; gap: 4px; padding: 6px; width: fit-content; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800);">
+<div class="scp4" data-dc-tpl="86" data-ram-off-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;" data-ram-on-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200); box-shadow: 0 0 20px -9px var(--color-accent);" data-ram-tab="accounts" style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200); box-shadow: 0 0 20px -9px var(--color-accent);">Accounts</div>
+<div class="scp4" data-dc-tpl="87" data-ram-off-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;" data-ram-on-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200); box-shadow: 0 0 20px -9px var(--color-accent);" data-ram-tab="launcher" style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;">Launcher</div>
+<div class="scp4" data-dc-tpl="88" data-ram-off-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;" data-ram-on-style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;" data-ram-tab="watcher" style="padding: 7px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); box-shadow: none;">Watcher</div>
+</div>
+<div data-dc-tpl="194" data-ram-screen="accounts" style="flex: 1 1 0%; min-height: 0px; display: flex; flex-direction: column; gap: 10px;">
+<div data-dc-tpl="195" style="flex: 0 0 auto; display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="196" style="width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 52%, transparent); border: 1px solid var(--color-neutral-800); font-size: 19px; color: var(--color-accent-300);"><i class="ph ph-users-three" data-dc-tpl="197"></i></div>
+<div data-dc-tpl="198" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="199" style="display: flex; align-items: center; gap: 10px;">
+<h3 data-dc-tpl="200" style="margin: 0px; font-size: 25px; letter-spacing: -0.02em;">Accounts</h3>
+<span class="tag tag-accent" data-dc-tpl="201" data-ram="account-count" style="font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp">2 / 3 valid</span></span>
+</div>
+<div data-dc-tpl="202" style="font-size: 12.5px; color: var(--color-neutral-500); margin-top: 3px;">Manage, filter and launch your accounts</div>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="203" data-ram="refresh" style="border-radius: 999px; padding: 8px 16px; gap: 8px;">
+<i class="ph ph-arrows-clockwise" data-dc-tpl="204" style="font-size: 14px; animation: auto ease 0s 1 normal none running none;"></i>Refresh
+            </button>
+<button class="btn btn-primary" data-dc-tpl="205" data-ram="add-account" style="border-radius: 999px; padding: 8px 18px; gap: 8px;">
+<i class="ph ph-user-plus" data-dc-tpl="206" style="font-size: 14px;"></i>Add account<i class="ph ph-caret-down" data-dc-tpl="207" style="font-size: 9px; opacity: 0.7;"></i>
+</button>
+</div>
+<div data-dc-tpl="208" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800);">
+<div data-dc-tpl="209" style="display: flex; align-items: center; gap: 12px;">
+<div data-dc-tpl="210" style="position: relative; width: 280px; flex: 0 0 auto;">
+<i class="ph ph-magnifying-glass" data-dc-tpl="211" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--color-neutral-600);"></i>
+<input class="input" data-dc-tpl="212" data-ram="account-search" placeholder="Search accounts…" style="height: 34px; min-height: 34px; padding: 0px 12px 0px 32px; border-radius: 999px; font-size: 12.5px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value=""/>
+</div>
+<div data-dc-tpl="213" style="flex: 1 1 0%;"></div>
+<div data-dc-tpl="214" style="display: flex; align-items: center; gap: 3px;">
+<div class="scp4" data-dc-tpl="215" data-ram-filter="all" style="padding: 6px 16px; border-radius: var(--radius-md); font-size: 12.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);">All</div>
+<div class="scp4" data-dc-tpl="216" data-ram-filter="valid" style="padding: 6px 16px; border-radius: var(--radius-md); font-size: 12.5px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Valid</div>
+<div class="scp4" data-dc-tpl="217" data-ram-filter="invalid" style="padding: 6px 16px; border-radius: var(--radius-md); font-size: 12.5px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Invalid</div>
+<div class="scp4" data-dc-tpl="218" data-ram-filter="banned" style="padding: 6px 16px; border-radius: var(--radius-md); font-size: 12.5px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Banned</div>
+</div>
+<div data-dc-tpl="219" style="width: 1px; height: 22px; flex: 0 0 auto; background: linear-gradient(to bottom,transparent,var(--color-neutral-800),transparent);"></div>
+<div data-dc-tpl="220" style="display: flex; align-items: center; gap: 2px;">
+<div class="scp5" data-dc-tpl="221" style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-md); font-size: 12px; cursor: pointer; color: var(--color-neutral-400);"><i class="ph ph-check-square" data-dc-tpl="222" style="font-size: 14px;"></i>All</div>
+<div class="scp5" data-dc-tpl="223" style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-md); font-size: 12px; cursor: pointer; color: var(--color-neutral-400);"><i class="ph ph-eraser" data-dc-tpl="224" style="font-size: 14px;"></i>Clear</div>
+</div>
+</div>
+<div data-dc-tpl="225" data-ram="group-chips" style="display: flex; align-items: center; gap: 8px;">
+<span data-dc-tpl="226" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-right: 2px;">Group</span>
+<div class="scp4" data-dc-tpl="227" data-ram-group="All" style="padding: 4px 14px; border-radius: 999px; font-size: 12px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);">All</div>
+
+
+
+<div class="scp6" data-dc-tpl="231" style="width: 24px; height: 24px; display: grid; place-items: center; border-radius: 999px; cursor: pointer; font-size: 11px; border: 1px dashed var(--color-neutral-700); color: var(--color-neutral-500);" title="New group"><i class="ph ph-plus" data-dc-tpl="232"></i></div>
+<span data-dc-tpl="233" style="margin-left: 4px; font-size: 10.5px; color: var(--color-neutral-700);">manual order</span>
+<template data-ram="group-chip"><div class="scp4" data-dc-tpl="229" data-ram-group-chip="" draggable="true" style="display: flex; align-items: center; gap: 6px; padding: 4px 13px 4px 9px; border-radius: 999px; cursor: grab; font-size: 12px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500); opacity: 1;" title="Drag to reorder · right-click for options">
+<i class="ph ph-dots-six-vertical" data-dc-tpl="230" style="font-size: 11px; color: var(--color-neutral-700);"></i><span class="sc-interp">Default</span>
+</div></template></div>
+</div>
+<div data-dc-tpl="234" style="flex: 1 1 0%; min-height: 200px; display: grid; grid-template-columns: minmax(0px, 1fr) 352px; gap: 10px;">
+<div data-dc-tpl="235" style="min-width: 0px; display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 10px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="236" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;">
+<span data-dc-tpl="237" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Accounts</span>
+<div data-dc-tpl="238" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+<span data-dc-tpl="239" data-ram="selected-count" style="font-size: 11px; color: var(--color-neutral-600); font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp">1 selected</span></span>
+</div>
+<div data-dc-tpl="240" data-ram="accounts" style="flex: 1 1 0%; min-height: 0px; overflow: hidden auto; display: flex; flex-direction: column; gap: 6px; padding-right: 2px;">
+
+
+
+</div>
+</div>
+<div data-dc-tpl="264" style="display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px; overflow: hidden auto;">
+<div data-dc-tpl="265" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;">
+<span data-dc-tpl="266" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Launcher</span>
+<div data-dc-tpl="267" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+</div>
+<div class="field" data-dc-tpl="268" style="flex: 0 0 auto;">
+<label data-dc-tpl="269" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">Place ID</label>
+<input class="input" data-dc-tpl="270" data-ram="place-id" placeholder="Place ID or Roblox link" style="height: 36px; min-height: 36px; border-radius: calc(var(--radius-md) * 1.25); font-size: 13px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); font-variant-numeric: tabular-nums;" value=""/>
+</div>
+<div data-dc-tpl="271" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 12px; padding: 11px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 52%, transparent); border: 1px solid var(--color-neutral-800);">
+<div data-dc-tpl="272" style="display: flex; align-items: center; gap: 11px;">
+<div data-dc-tpl="273" style="width: 46px; height: 46px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); background: var(--color-accent-900); border: 1px solid var(--color-accent-800); font-size: 21px; color: var(--color-accent-300);"><i class="ph ph-game-controller" data-dc-tpl="274"></i></div>
+<div data-dc-tpl="275" style="min-width: 0px;">
+<div data-dc-tpl="276" data-ram="game-name" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">[2X⚔️] Sailor Piece</div>
+<div data-dc-tpl="277" data-ram="game-place" style="font-size: 11px; color: var(--color-neutral-600); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Place · 77747658251236</div>
+</div>
+</div>
+<div data-dc-tpl="278" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+<div data-dc-tpl="279">
+<div data-dc-tpl="280" style="display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);"><i class="ph ph-users" data-dc-tpl="281" style="font-size: 11px;"></i>Online</div>
+<div data-dc-tpl="282" data-ram="game-online" style="font-size: 15px; font-weight: 500; color: var(--color-neutral-100); margin-top: 2px; font-variant-numeric: tabular-nums;">5.8K</div>
+</div>
+<div data-dc-tpl="283">
+<div data-dc-tpl="284" style="display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);"><i class="ph ph-star" data-dc-tpl="285" style="font-size: 11px;"></i>Favorites</div>
+<div data-dc-tpl="286" data-ram="game-favorites" style="font-size: 15px; font-weight: 500; color: var(--color-neutral-100); margin-top: 2px; font-variant-numeric: tabular-nums;">828.9K</div>
+</div>
+<div data-dc-tpl="287">
+<div data-dc-tpl="288" style="display: flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);"><i class="ph ph-thumbs-up" data-dc-tpl="289" style="font-size: 11px;"></i>Likes</div>
+<div data-dc-tpl="290" data-ram="game-likes" style="font-size: 15px; font-weight: 500; color: var(--color-neutral-100); margin-top: 2px; font-variant-numeric: tabular-nums;">1.2M</div>
+</div>
+</div>
+</div>
+<div class="field" data-dc-tpl="291" style="flex: 0 0 auto;">
+<label data-dc-tpl="292" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">Job ID (optional)</label>
+<input class="input" data-dc-tpl="293" data-ram="job-id" placeholder="Job ID" style="height: 36px; min-height: 36px; border-radius: calc(var(--radius-md) * 1.25); font-size: 13px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value=""/>
+</div>
+<div class="field" data-dc-tpl="294" style="flex: 0 0 auto;">
+<label data-dc-tpl="295" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">VIP link / code (optional)</label>
+<input class="input" data-dc-tpl="296" data-ram="vip-code" placeholder="VIP link / code" style="height: 36px; min-height: 36px; border-radius: calc(var(--radius-md) * 1.25); font-size: 13px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value=""/>
+</div>
+<div data-dc-tpl="297" style="margin-top: auto;"></div>
+<button class="btn btn-primary" data-dc-tpl="298" data-ram="join" style="flex: 0 0 auto; width: 100%; height: 42px; border-radius: calc(var(--radius-md) * 1.5); gap: 9px; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;">
+<i class="ph ph-play" data-dc-tpl="299" style="font-size: 13px;"></i>Join server
+              </button>
+<div data-dc-tpl="300" data-ram="launch-hint" style="flex: 0 0 auto; text-align: center; font-size: 10.5px; color: var(--color-neutral-700); font-variant-numeric: tabular-nums;"><span class="sc-interp">Launches 1 selected account</span></div>
+</div>
+</div>
+</div>
+<div data-dc-tpl="302" data-ram-screen="launcher" hidden="" style="flex: 1 1 0%; min-height: 0px; display: flex; flex-direction: column; gap: 10px;">
+<div data-dc-tpl="303" style="flex: 0 0 auto; display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="304" style="width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); border-width: 1px; border-style: solid; font-size: 19px; color: var(--color-accent-300);"><i class="ph ph-list-magnifying-glass" data-dc-tpl="305"></i></div>
+<div data-dc-tpl="306" style="flex: 1 1 0%; min-width: 0px;">
+<h3 data-dc-tpl="307" style="margin: 0px; font-size: 25px; letter-spacing: -0.02em;">Server list</h3>
+<div data-dc-tpl="308" data-ram="server-subtitle" style="font-size: 12.5px; color: var(--color-neutral-500); margin-top: 3px;">Pick a server, or drop in a private link — the launch uses the accounts you ticked</div>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="309" data-ram="server-refresh" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 16px; gap: 8px;"><i class="ph ph-arrows-clockwise" data-dc-tpl="310" style="font-size: 14px; animation: auto ease 0s 1 normal none running none;"></i>Refresh</button>
+<button class="btn btn-primary" data-dc-tpl="311" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 18px; gap: 8px;"><i class="ph ph-link" data-dc-tpl="312" style="font-size: 14px;"></i>Private link</button>
+</div>
+<div data-dc-tpl="313" style="flex: 1 1 0%; min-height: 0px; display: grid; grid-template-columns: 302px minmax(0px, 1fr); gap: 10px;">
+<div data-dc-tpl="314" style="min-width: 0px; display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px; overflow: hidden auto;">
+<div data-dc-tpl="315" style="position: relative; flex: 0 0 auto;">
+<i class="ph ph-magnifying-glass" data-dc-tpl="316" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--color-neutral-600);"></i>
+<input class="input" data-dc-tpl="317" data-ram="game-search" placeholder="Search games or place ID…" style="height: 34px; min-height: 34px; padding: 0px 12px 0px 32px; border-radius: 999px; font-size: 12.5px; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);"/>
+</div>
+<div data-dc-tpl="318" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;"><span data-dc-tpl="319" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Favourites</span><div data-dc-tpl="320" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div></div>
+<div data-dc-tpl="321" data-ram="game-favourites" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px;">
+
+
+
+</div>
+<div data-dc-tpl="330" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;"><span data-dc-tpl="331" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Recent</span><div data-dc-tpl="332" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div></div>
+<div data-dc-tpl="333" data-ram="game-recent" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px;">
+
+
+</div>
+</div>
+<div data-dc-tpl="341" style="min-width: 0px; display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 10px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="342" style="flex: 0 0 auto; display: flex; align-items: center; gap: 12px;">
+<span data-dc-tpl="343" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Servers</span>
+<div data-dc-tpl="344" style="display: flex; align-items: center; gap: 3px;">
+<div class="scp4" data-dc-tpl="345" style="padding: 5px 13px; border-radius: var(--radius-md); font-size: 12px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);">All</div>
+<div class="scp4" data-dc-tpl="346" style="padding: 5px 13px; border-radius: var(--radius-md); font-size: 12px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Has room</div>
+<div class="scp4" data-dc-tpl="347" style="padding: 5px 13px; border-radius: var(--radius-md); font-size: 12px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Low ping</div>
+</div>
+<div data-dc-tpl="348" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+<span data-dc-tpl="349" style="font-size: 11px; color: var(--color-neutral-600); font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp" data-ram="server-count">6 of 6</span></span>
+</div>
+<div data-dc-tpl="350" data-ram="servers" style="flex: 1 1 0%; min-height: 0px; overflow: hidden auto; display: flex; flex-direction: column; gap: 6px; padding-right: 2px;">
+
+
+
+
+
+
+</div>
+</div>
+</div>
+</div><div data-dc-tpl="90" data-ram-screen="settings" hidden="" style="flex: 1 1 0%; min-height: 0px; display: flex; flex-direction: column; gap: 10px;">
+<div data-dc-tpl="91" style="flex: 0 0 auto; display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="92" style="width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); border-width: 1px; border-style: solid; font-size: 19px; color: var(--color-accent-300);"><i class="ph ph-gear-six" data-dc-tpl="93"></i></div>
+<div data-dc-tpl="94" style="flex: 1 1 0%; min-width: 0px;">
+<h3 data-dc-tpl="95" style="margin: 0px; font-size: 25px; letter-spacing: -0.02em;">Settings</h3>
+<div data-dc-tpl="96" style="font-size: 12.5px; color: var(--color-neutral-500); margin-top: 3px;">Launch, client windows, proxies, watching, web server and appearance</div>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="97" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 16px; gap: 8px;"><i class="ph ph-arrow-counter-clockwise" data-dc-tpl="98" style="font-size: 14px;"></i>Reset section</button>
+</div>
+<div data-dc-tpl="99" style="flex: 1 1 0%; min-height: 0px; display: grid; grid-template-columns: 198px minmax(0px, 1fr); gap: 10px;">
+<div data-dc-tpl="100" style="min-width: 0px; display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); overflow: hidden auto;">
+<div data-dc-tpl="101" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); padding: 5px 9px 7px;">Sections</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Client launch" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);">
+<i class="ph ph-rocket-launch" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Client launch</span></span>
+</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Client windows" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">
+<i class="ph ph-frame-corners" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Client windows</span></span>
+</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Proxies" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">
+<i class="ph ph-globe-hemisphere-west" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Proxies</span></span>
+</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Watching" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">
+<i class="ph ph-eye" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Watching</span></span>
+</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Web server" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">
+<i class="ph ph-hard-drives" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Web server</span></span>
+</div>
+<div class="scp3" data-dc-tpl="103" data-ram-off-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" data-ram-settings-section="Appearance" style="display: flex; align-items: center; gap: 10px; height: 34px; flex: 0 0 auto; padding: 0px 10px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">
+<i class="ph ph-paint-brush-broad" data-dc-tpl="104" style="flex: 0 0 auto; font-size: 15px;"></i><span data-dc-tpl="105" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Appearance</span></span>
+</div>
+</div>
+<div data-dc-tpl="106" data-ram="settings" data-ram-knob-off="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);" data-ram-knob-on="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);" data-ram-toggle-off="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;" data-ram-toggle-on="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;" style="min-width: 0px; display: flex; flex-direction: column; padding: 4px 18px 18px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px; overflow: hidden auto;">
+
+
+
+
+
+<template data-ram-settings-pane="Client launch"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Direct launch</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Start the client straight from the app instead of going through the Roblox website.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="DirectLaunch" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Delay between launches</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Seconds to wait when several accounts are started at once. Too low and Roblox drops the later ones.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="LaunchDelay" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="4"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Close a running client first</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Ends an existing Roblox process for that account before launching a new one.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="CloseExisting" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Launch method</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Protocol works on a normal install. Point at the player path if you keep several clients.</span></div>
+</div>
+<div class="scp3" data-dc-tpl="118" data-ram-setting="LaunchMethod" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 172px; flex: 0 0 auto; height: 34px; padding: 0px 11px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); border-width: 1px; border-style: solid; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);">
+<span data-dc-tpl="119" style="min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Protocol</span></span><i class="ph ph-caret-down" data-dc-tpl="120" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-500);"></i>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Join attempts</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">How many times a join is retried before the launch is reported as failed.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="JoinAttempts" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="3"/>
+</div></template><template data-ram-settings-pane="Client windows"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Arrange windows</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Applied once every client of a batch has finished loading.</span></div>
+</div>
+<div class="scp3" data-dc-tpl="118" data-ram-setting="WindowLayout" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 172px; flex: 0 0 auto; height: 34px; padding: 0px 11px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); border-width: 1px; border-style: solid; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);">
+<span data-dc-tpl="119" style="min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Tile grid</span></span><i class="ph ph-caret-down" data-dc-tpl="120" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-500);"></i>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Window width</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Used by the fixed-size layout.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="WindowWidth" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="960"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Window height</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Used by the fixed-size layout.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="WindowHeight" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="540"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Mute new clients</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Silences each client as it starts.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="MuteClients" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Keep clients on top</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Client windows stay above everything else, including this one.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="AlwaysOnTop" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div></template><template data-ram-settings-pane="Proxies"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Use proxies for account checks</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Validation and presence requests go through the proxy assigned to the account.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="UseProxies" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Rotate on failure</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Move the account to the next live proxy after a failed check.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="RotateOnFail" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Check timeout</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Milliseconds before a proxy is marked dead.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="ProxyTimeout" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="4000"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Default type</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Applied to pasted proxies that carry no scheme.</span></div>
+</div>
+<div class="scp3" data-dc-tpl="118" data-ram-setting="ProxyType" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 172px; flex: 0 0 auto; height: 34px; padding: 0px 11px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); border-width: 1px; border-style: solid; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);">
+<span data-dc-tpl="119" style="min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">HTTP</span></span><i class="ph ph-caret-down" data-dc-tpl="120" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-500);"></i>
+</div>
+</div></template><template data-ram-settings-pane="Watching"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Watcher</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Rejoins accounts that drop out of the server they were launched into.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="WatcherOn" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Rejoin delay</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Seconds between noticing the drop and rejoining.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="RejoinDelay" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="12"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Max attempts per hour</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Stops the loop when a server keeps kicking the account.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="MaxRejoins" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="6"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Notify on crash</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Shows a message when a client closes on its own.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="NotifyCrash" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div></template><template data-ram-settings-pane="Web server"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Local web server</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Lets scripts and other tools drive the manager over HTTP.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="WebServer" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Port</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Listens on 127.0.0.1 only, unless remote hosts are allowed below.</span></div>
+</div>
+<input class="input" data-dc-tpl="116" data-ram-setting="WebPort" style="width: 104px; flex: 0 0 auto; height: 34px; min-height: 34px; border-radius: var(--radius-md); font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value="7963"/>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Require password</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Requests must carry the password header. Leave this on.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="WebPassword" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Allow remote hosts</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Accepts requests from other machines on the network.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="WebRemote" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div></template><template data-ram-settings-pane="Appearance"><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Contour texture</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">The drifting line pattern behind the panels.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="ContourTexture" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Labels in the sidebar</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Show the names next to the rail icons.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="RailLabels" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Compact account rows</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Tighter rows — more accounts on screen at once.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="CompactRows" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-700); border-image: none; background: color-mix(in srgb, var(--color-bg) 70%, transparent); justify-content: flex-start;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-neutral-600);"></div>
+</div>
+</div><div data-dc-tpl="108" style="flex: 0 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 0px; border-bottom: 1px solid var(--color-neutral-900);">
+<div data-dc-tpl="109" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="110" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100);"><span class="sc-interp">Show Robux column</span></div>
+<div data-dc-tpl="111" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 3px; line-height: 1.5; max-width: 540px; text-wrap: pretty;"><span class="sc-interp">Balance shown in every account row.</span></div>
+</div>
+<div data-dc-tpl="113" data-ram-setting="ShowRobux" style="width: 38px; height: 21px; flex: 0 0 auto; padding: 2px; display: flex; align-items: center; border-radius: 999px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; background: var(--color-accent-700); justify-content: flex-end;">
+<div data-dc-tpl="114" style="width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent-100);"></div>
+</div>
+</div><div data-dc-tpl="122" style="flex: 0 0 auto; padding: 16px 0px 0px;">
+<div data-dc-tpl="123" style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;">
+<span data-dc-tpl="124" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Language</span><div data-dc-tpl="125" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+<span data-dc-tpl="126" style="font-size: 11px; color: var(--color-neutral-600);"><span class="sc-interp">English</span></span>
+</div>
+<div data-dc-tpl="127" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(212px, 1fr)); gap: 8px;">
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: color-mix(in srgb, var(--color-accent-900) 86%, transparent);">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: var(--color-accent-800); border: 1px solid var(--color-accent-600); color: var(--color-accent-100);"><span class="sc-interp">EN</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">English</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">English</span></div>
+</div>
+<i class="ph ph-check" data-dc-tpl="135" style="flex: 0 0 auto; font-size: 14px; color: var(--color-accent-300);"></i>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">RU</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Русский</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Russian</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">UK</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Українська</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Ukrainian</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">PT</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Português</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Portuguese (BR)</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">ES</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Español</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Spanish</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">TR</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Türkçe</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Turkish</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">DE</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Deutsch</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">German</span></div>
+</div>
+</div>
+<div class="scp3" data-dc-tpl="129" style="display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: transparent;">
+<span data-dc-tpl="130" style="width: 32px; height: 22px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; background: color-mix(in srgb, var(--color-bg) 60%, transparent); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-500);"><span class="sc-interp">ZH</span></span>
+<div data-dc-tpl="131" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="132" style="font-size: 13px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">中文</span></div>
+<div data-dc-tpl="133" style="font-size: 10.5px; color: var(--color-neutral-600);"><span class="sc-interp">Chinese (Simplified)</span></div>
+</div>
+</div>
+</div>
+<div data-dc-tpl="136" style="font-size: 11.5px; color: var(--color-neutral-600); margin-top: 12px;">Applies immediately — no restart needed.</div>
+</div></template></div>
+</div>
+</div><div data-dc-tpl="138" data-ram-screen="proxies" hidden="" style="flex: 1 1 0%; min-height: 0px; display: flex; flex-direction: column; gap: 10px;">
+<div data-dc-tpl="139" style="flex: 0 0 auto; display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="140" style="width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); border-width: 1px; border-style: solid; font-size: 19px; color: var(--color-accent-300);"><i class="ph ph-globe-hemisphere-west" data-dc-tpl="141"></i></div>
+<div data-dc-tpl="142" style="flex: 1 1 0%; min-width: 0px;">
+<h3 data-dc-tpl="143" style="margin: 0px; font-size: 25px; letter-spacing: -0.02em;">Proxies</h3>
+<div data-dc-tpl="144" style="font-size: 12.5px; color: var(--color-neutral-500); margin-top: 3px;">Assign proxies to accounts and keep an eye on which ones still answer</div>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="145" data-ram="proxy-check-all" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 16px; gap: 8px;"><i class="ph ph-pulse" data-dc-tpl="146" style="font-size: 14px; animation: auto ease 0s 1 normal none running none;"></i>Check all</button>
+<button class="btn btn-primary" data-dc-tpl="147" data-ram="proxy-import" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 18px; gap: 8px;"><i class="ph ph-plus" data-dc-tpl="148" style="font-size: 14px;"></i>Add proxies</button>
+</div>
+<div data-dc-tpl="149" style="flex: 1 1 0%; min-height: 0px; display: grid; grid-template-columns: minmax(0px, 1fr) 326px; gap: 10px;">
+<div data-dc-tpl="150" style="min-width: 0px; display: flex; flex-direction: column; gap: 10px; padding: 14px 14px 8px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px;">
+<div data-dc-tpl="151" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;">
+<span data-dc-tpl="152" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Proxy list</span><div data-dc-tpl="153" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+<span data-dc-tpl="154" style="font-size: 11px; color: var(--color-neutral-600); font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp" data-ram="proxy-count">3 alive · 5 total</span></span>
+</div>
+<div data-dc-tpl="155" data-ram="proxies" style="flex: 1 1 0%; min-height: 0px; overflow: hidden auto;">
+<table class="table" data-dc-tpl="157" style="width: 100%; table-layout: fixed;">
+<thead data-dc-tpl="158">
+<tr data-dc-tpl="159">
+<th data-dc-tpl="160" style="width: 44%;">Proxy</th>
+<th data-dc-tpl="161" style="width: 12%;">Type</th>
+<th data-dc-tpl="162" style="width: 10%;">Used</th>
+<th data-dc-tpl="163" style="width: 17%;">Status</th>
+<th data-dc-tpl="164" style="width: 17%; text-align: right;">Checked</th>
+</tr>
+</thead>
+<tbody data-dc-tpl="165" data-ram="proxy-rows">
+
+</tbody>
+</table>
+</div>
+</div>
+<div data-dc-tpl="179" style="display: flex; flex-direction: column; gap: 11px; padding: 14px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 72%, transparent); backdrop-filter: blur(18px) saturate(112%); border: 1px solid var(--color-neutral-800); box-shadow: rgba(233, 233, 237, 0.05) 0px 1px 0px inset, rgb(0, 0, 0) 0px 20px 46px -30px; overflow: hidden auto;">
+<div data-dc-tpl="180" style="flex: 0 0 auto; display: flex; align-items: baseline; gap: 12px;">
+<span data-dc-tpl="181" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-500);">Bulk assign</span><div data-dc-tpl="182" style="flex: 1 1 0%; height: 1px; background: linear-gradient(to right,var(--color-neutral-800),transparent);"></div>
+</div>
+<div class="field" data-dc-tpl="183" style="flex: 0 0 auto;">
+<label data-dc-tpl="184" style="font-size: 9.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">Proxy list — one per line</label>
+<textarea class="input" data-dc-tpl="185" data-ram="proxy-bulk" placeholder="host:port
+user:pass@host:port
+socks5://host:port" style="height: 150px; min-height: 150px; border-radius: calc(var(--radius-md) * 1.25); font-size: 12px; line-height: 1.7; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);"></textarea>
+</div>
+<div data-dc-tpl="186" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">
+<span class="tag tag-accent" data-dc-tpl="187" style="font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp" data-ram="proxy-parsed">0 parsed</span></span>
+<span data-dc-tpl="188" style="font-size: 11.5px; color: var(--color-neutral-600);">Handed out round-robin.</span>
+</div>
+<div data-dc-tpl="189" style="flex: 0 0 auto; font-size: 11.5px; color: var(--color-neutral-600); line-height: 1.55;">Goes to the accounts ticked on the Accounts tab — <span class="sc-interp">1 selected</span> right now. Accounts already carrying a proxy keep it unless you replace them.</div>
+<div data-dc-tpl="190" style="margin-top: auto;"></div>
+<button class="btn btn-primary" data-dc-tpl="191" data-ram="proxy-assign" style="flex: 0 0 auto; width: 100%; height: 40px; border-radius: calc(var(--radius-md) * 1.25); gap: 9px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;"><i class="ph ph-shuffle" data-dc-tpl="192" style="font-size: 14px;"></i>Assign</button>
+</div>
+</div>
+</div></div>
+</div>
+<div data-dc-tpl="376" data-ram="toast" style="position: fixed; right: 20px; bottom: 18px; z-index: 50; max-width: 420px; padding: 11px 15px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-neutral-800); color: var(--color-neutral-200); font-size: 12.5px; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity 0.18s, transform 0.18s;"></div>
+<div data-dc-tpl="377" data-ram="security" hidden="" style="position: fixed; inset: 0px; z-index: 60; display: grid; place-items: center; background: color-mix(in srgb, var(--color-bg) 72%, transparent); backdrop-filter: blur(8px) saturate(110%);">
+<div data-dc-tpl="378" style="width: min(440px, 92vw); padding: 26px 26px 22px; border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-neutral-800); box-shadow: rgb(0, 0, 0) 0px 40px 80px -40px, rgba(233, 233, 237, 0.05) 0px 1px 0px inset;">
+<div data-dc-tpl="379" style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+<div data-dc-tpl="380" style="width: 34px; height: 34px; display: grid; place-items: center; border-radius: var(--radius-md); background: var(--color-accent-900); border: 1px solid var(--color-accent-700); color: var(--color-accent-200);">
+<i class="ph ph-lock-key" data-dc-tpl="381" style="font-size: 16px;"></i>
+</div>
+<div data-dc-tpl="382" data-ram="security-title" style="font-size: 17px; font-weight: 500;">Protect your accounts</div>
+</div>
+<div data-dc-tpl="383" data-ram="security-text" style="font-size: 12.5px; color: var(--color-neutral-500); line-height: 1.5; margin-bottom: 18px;">Choose how the account file on this machine is encrypted.</div>
+<div data-dc-tpl="384" data-ram="security-choose" style="display: flex; flex-direction: column; gap: 9px;">
+<button class="btn btn-secondary" data-dc-tpl="385" data-ram="security-default" style="width: 100%; justify-content: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius-md); text-align: left;">
+<i class="ph ph-shield-check" data-dc-tpl="386" style="font-size: 15px;"></i>
+<span data-dc-tpl="387">This Windows account only<span data-dc-tpl="388" style="display: block; font-size: 11px; color: var(--color-neutral-600);">No password. Readable only by you, on this PC.</span></span>
+</button>
+<button class="btn btn-primary" data-dc-tpl="389" data-ram="security-choose-password" style="width: 100%; justify-content: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius-md); text-align: left;">
+<i class="ph ph-key" data-dc-tpl="390" style="font-size: 15px;"></i>
+<span data-dc-tpl="391">Password<span data-dc-tpl="392" style="display: block; font-size: 11px; opacity: 0.75;">Asked for on every start. Recommended.</span></span>
+</button>
+</div>
+<div data-dc-tpl="393" data-ram="security-password" hidden="" style="display: flex; flex-direction: column; gap: 10px;">
+<input class="input" data-dc-tpl="394" data-ram="security-input" placeholder="Password" style="height: 38px; border-radius: var(--radius-md); font-size: 13px;" type="password"/>
+<input class="input" data-dc-tpl="395" data-ram="security-confirm" placeholder="Repeat the password" style="height: 38px; border-radius: var(--radius-md); font-size: 13px;" type="password"/>
+<button class="btn btn-primary" data-dc-tpl="396" data-ram="security-submit" style="width: 100%; height: 40px; border-radius: var(--radius-md); justify-content: center; letter-spacing: 0.1em; text-transform: uppercase; font-size: 11.5px;">Continue</button>
+</div>
+<div data-dc-tpl="397" data-ram="security-error" style="min-height: 16px; margin-top: 12px; font-size: 11.5px; color: oklch(0.66 0.13 26);"></div>
+</div>
+</div>
+<svg data-dc-tpl="493" fill="none" preserveaspectratio="none" stroke="var(--color-neutral-700)" stroke-width="1" style="position: absolute; top: 0px; left: -3%; width: 106%; height: 100%; pointer-events: none; z-index: 4; opacity: 0.36; animation: 140s ease-in-out 0s infinite alternate none running noct-drift;" viewbox="0 0 1400 880">
+<path d="M-20 34 C 240 -14 520 104 820 54 S 1180 -24 1420 52" data-dc-tpl="494"></path>
+<path d="M-20 92 C 260 42 480 172 800 114 S 1200 36 1420 116" data-dc-tpl="495"></path>
+<path d="M-20 101 C 260 51 480 181 800 123 S 1200 45 1420 125" data-dc-tpl="496" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 168 C 300 118 520 242 860 186 S 1210 110 1420 192" data-dc-tpl="497" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 262 C 220 312 560 202 900 262 S 1240 332 1420 272" data-dc-tpl="498"></path>
+<path d="M-20 336 C 260 388 540 284 920 338 S 1250 404 1420 346" data-dc-tpl="499" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 345 C 260 397 540 293 920 347 S 1250 413 1420 355" data-dc-tpl="500" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 448 C 300 498 600 390 940 448 S 1260 508 1420 454" data-dc-tpl="501"></path>
+<path d="M-20 524 C 280 576 580 468 960 526 S 1280 586 1420 532" data-dc-tpl="502" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 628 C 240 678 620 566 980 624 S 1290 682 1420 630" data-dc-tpl="503"></path>
+<path d="M-20 637 C 240 687 620 575 980 633 S 1290 691 1420 639" data-dc-tpl="504" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 722 C 300 772 640 662 1000 722 S 1300 778 1420 726" data-dc-tpl="505" stroke="var(--color-neutral-800)"></path>
+<path d="M-20 812 C 260 860 600 752 1020 812 S 1310 866 1420 818" data-dc-tpl="506"></path>
+</svg>
+</div></div></div>
+<script data-dc-script="" data-props='{"$preview":{"width":1320,"height":840},"railLabels":{"editor":"boolean","default":false,"tsType":"boolean","section":"Layout"},"waveTexture":{"editor":"boolean","default":true,"tsType":"boolean","section":"Layout"},"sortBy":{"editor":"enum","options":["Recent","Name","Status"],"default":"Recent","tsType":"string","section":"Accounts"},"showAddModal":{"editor":"boolean","default":false,"tsType":"boolean","section":"Add account"},"addModalState":{"editor":"enum","options":["Auto","Empty","Checking","Error","Success"],"default":"Auto","tsType":"string","section":"Add account"},"securityStep":{"editor":"enum","options":["Off","Choose","Password"],"default":"Off","tsType":"string","section":"First run"}}' type="text/x-dc">
+class Component extends DCLogic {
+  state = {
+    tab: 'accounts', nav: 'Accounts', filter: 'All', group: 'All', q: '',
+    accounts: [
+      { id: 'a1', name: '0c_PF', uid: '10691258562', pres: 'Offline', robux: '0', status: 'Valid', proxy: '', group: 'Default' },
+      { id: 'a2', name: 'z6V4q', uid: '10691244316', pres: 'In game', robux: '0', status: 'Valid', proxy: 'proxy · fi-1', group: 'Farm' },
+      { id: 'a3', name: 'Matheus748725', uid: '7712240125', pres: 'Offline', robux: '—', status: 'Expired', proxy: '', group: 'Default' }
+    ],
+    groups: ['Default', 'Farm', 'Alts'],
+    sel: ['a1'], active: 'a1',
+    place: '77747658251236', job: '', vip: '', refreshing: false,
+    lang: 'EN', menu: null, sub: null,
+    addOpen: false, addTab: 'cookie', cookie: '', bulk: '', addGroup: 'Default',
+    addState: 'empty', toast: null,
+    setSection: 'Client launch', sv: {}, proxyBulk: '', proxyChecking: false,
+    serverFilter: 'All',
+    dragRow: null, overRow: null, dragGroup: null, overGroup: null
+  };
+
+  NAMES = ['kyzo_dev', 'fl1nt_rb', 'vX_ashy', 'noct77', 'mira_ok', 'sh4dowz'];
+
+  SET_NAV = [
+    { name: 'Client launch', icon: 'ph ph-rocket-launch' },
+    { name: 'Client windows', icon: 'ph ph-frame-corners' },
+    { name: 'Proxies', icon: 'ph ph-globe-hemisphere-west' },
+    { name: 'Watching', icon: 'ph ph-eye' },
+    { name: 'Web server', icon: 'ph ph-hard-drives' },
+    { name: 'Appearance', icon: 'ph ph-paint-brush-broad' }
+  ];
+
+  SETTINGS = {
+    'Client launch': [
+      { id: 'DirectLaunch', kind: 'toggle', v: true, name: 'Direct launch', desc: 'Start the client straight from the app instead of going through the Roblox website.' },
+      { id: 'LaunchDelay', kind: 'input', v: '4', name: 'Delay between launches', desc: 'Seconds to wait when several accounts are started at once. Too low and Roblox drops the later ones.' },
+      { id: 'CloseExisting', kind: 'toggle', v: true, name: 'Close a running client first', desc: 'Ends an existing Roblox process for that account before launching a new one.' },
+      { id: 'LaunchMethod', kind: 'select', v: 'Protocol', options: ['Protocol', 'Player path', 'Bloxstrap'], name: 'Launch method', desc: 'Protocol works on a normal install. Point at the player path if you keep several clients.' },
+      { id: 'JoinAttempts', kind: 'input', v: '3', name: 'Join attempts', desc: 'How many times a join is retried before the launch is reported as failed.' }
+    ],
+    'Client windows': [
+      { id: 'WindowLayout', kind: 'select', v: 'Tile grid', options: ['Do nothing', 'Tile grid', 'Cascade', 'Fixed size'], name: 'Arrange windows', desc: 'Applied once every client of a batch has finished loading.' },
+      { id: 'WindowWidth', kind: 'input', v: '960', name: 'Window width', desc: 'Used by the fixed-size layout.' },
+      { id: 'WindowHeight', kind: 'input', v: '540', name: 'Window height', desc: 'Used by the fixed-size layout.' },
+      { id: 'MuteClients', kind: 'toggle', v: true, name: 'Mute new clients', desc: 'Silences each client as it starts.' },
+      { id: 'AlwaysOnTop', kind: 'toggle', v: false, name: 'Keep clients on top', desc: 'Client windows stay above everything else, including this one.' }
+    ],
+    'Proxies': [
+      { id: 'UseProxies', kind: 'toggle', v: true, name: 'Use proxies for account checks', desc: 'Validation and presence requests go through the proxy assigned to the account.' },
+      { id: 'RotateOnFail', kind: 'toggle', v: true, name: 'Rotate on failure', desc: 'Move the account to the next live proxy after a failed check.' },
+      { id: 'ProxyTimeout', kind: 'input', v: '4000', name: 'Check timeout', desc: 'Milliseconds before a proxy is marked dead.' },
+      { id: 'ProxyType', kind: 'select', v: 'HTTP', options: ['HTTP', 'SOCKS4', 'SOCKS5'], name: 'Default type', desc: 'Applied to pasted proxies that carry no scheme.' }
+    ],
+    'Watching': [
+      { id: 'WatcherOn', kind: 'toggle', v: true, name: 'Watcher', desc: 'Rejoins accounts that drop out of the server they were launched into.' },
+      { id: 'RejoinDelay', kind: 'input', v: '12', name: 'Rejoin delay', desc: 'Seconds between noticing the drop and rejoining.' },
+      { id: 'MaxRejoins', kind: 'input', v: '6', name: 'Max attempts per hour', desc: 'Stops the loop when a server keeps kicking the account.' },
+      { id: 'NotifyCrash', kind: 'toggle', v: false, name: 'Notify on crash', desc: 'Shows a message when a client closes on its own.' }
+    ],
+    'Web server': [
+      { id: 'WebServer', kind: 'toggle', v: false, name: 'Local web server', desc: 'Lets scripts and other tools drive the manager over HTTP.' },
+      { id: 'WebPort', kind: 'input', v: '7963', name: 'Port', desc: 'Listens on 127.0.0.1 only, unless remote hosts are allowed below.' },
+      { id: 'WebPassword', kind: 'toggle', v: true, name: 'Require password', desc: 'Requests must carry the password header. Leave this on.' },
+      { id: 'WebRemote', kind: 'toggle', v: false, name: 'Allow remote hosts', desc: 'Accepts requests from other machines on the network.' }
+    ],
+    'Appearance': [
+      { id: 'ContourTexture', kind: 'toggle', v: true, name: 'Contour texture', desc: 'The drifting line pattern behind the panels.' },
+      { id: 'RailLabels', kind: 'toggle', v: false, name: 'Labels in the sidebar', desc: 'Show the names next to the rail icons.' },
+      { id: 'CompactRows', kind: 'toggle', v: false, name: 'Compact account rows', desc: 'Tighter rows — more accounts on screen at once.' },
+      { id: 'ShowRobux', kind: 'toggle', v: true, name: 'Show Robux column', desc: 'Balance shown in every account row.' }
+    ]
+  };
+
+  PROXIES = [
+    { id: 'x1', cc: 'FI', host: '51.83.140.22:8000', type: 'HTTP', n: 2, state: 'Alive', ip: '51.83.140.22', when: '2 min ago' },
+    { id: 'x2', cc: 'DE', host: '88.198.24.10:3128', type: 'HTTP', n: 1, state: 'Alive', ip: '88.198.24.10', when: '6 min ago' },
+    { id: 'x3', cc: 'RU', host: '5.101.55.9:1080', type: 'SOCKS5', n: 0, state: 'Dead', ip: '—', when: '1 h ago' },
+    { id: 'x4', cc: 'US', host: '142.4.117.60:8080', type: 'HTTP', n: 3, state: 'Alive', ip: '142.4.117.60', when: '11 min ago' },
+    { id: 'x5', cc: 'NL', host: '51.15.242.202:1080', type: 'SOCKS5', n: 0, state: 'Untested', ip: '—', when: 'never' }
+  ];
+
+  SERVERS = [
+    { id: 'v1', job: 'a41f9c2e-7db4', players: 12, cap: 20, region: 'Frankfurt · Germany', ping: 24 },
+    { id: 'v2', job: '7b0e41d9-2ca8', players: 20, cap: 20, region: 'Ashburn · United States', ping: 118 },
+    { id: 'v3', job: 'c92d room-1', players: 6, cap: 20, region: 'Amsterdam · Netherlands', ping: 31 },
+    { id: 'v4', job: 'd18a4f70-91bc', players: 18, cap: 20, region: 'Singapore', ping: 212 },
+    { id: 'v5', job: 'e57c0b31-4ad2', players: 3, cap: 20, region: 'Warsaw · Poland', ping: 46 },
+    { id: 'v6', job: 'f6b28ce4-70df', players: 19, cap: 20, region: 'London · United Kingdom', ping: 38 }
+  ];
+
+  GAMES_FAV = [
+    { name: '[2X⚔️] Sailor Piece', place: '77747658251236' },
+    { name: 'Blox Fruits', place: '2753915549' },
+    { name: 'Pet Simulator 99', place: '8737899170' }
+  ];
+
+  GAMES_RECENT = [
+    { name: 'Arsenal', place: '286090429' },
+    { name: 'Blade Ball', place: '13772394625' }
+  ];
+
+  LANGS = [
+    { code: 'EN', native: 'English', name: 'English' },
+    { code: 'RU', native: 'Русский', name: 'Russian' },
+    { code: 'UK', native: 'Українська', name: 'Ukrainian' },
+    { code: 'PT', native: 'Português', name: 'Portuguese (BR)' },
+    { code: 'ES', native: 'Español', name: 'Spanish' },
+    { code: 'TR', native: 'Türkçe', name: 'Turkish' },
+    { code: 'DE', native: 'Deutsch', name: 'German' },
+    { code: 'ZH', native: '中文', name: 'Chinese (Simplified)' }
+  ];
+
+  ADD_OPTIONS = [
+    { label: 'Cookie(s)', tab: 'cookie', icon: 'ph ph-cookie', hint: 'Paste one .ROBLOSECURITY value' },
+    { label: 'Cookie list', tab: 'bulk', icon: 'ph ph-list-plus', hint: 'Import many cookies at once' },
+    { label: 'Manual Login', tab: 'login', icon: 'ph ph-browser', hint: 'Sign in through a Roblox window' }
+  ];
+
+  DANGER = 'oklch(0.66 0.13 26)';
+
+  pill(on) {
+    return on
+      ? { bg: 'var(--color-accent-900)', bd: 'var(--color-accent-700)', fg: 'var(--color-accent-200)', sh: '0 0 20px -9px var(--color-accent)' }
+      : { bg: 'transparent', bd: 'transparent', fg: 'var(--color-neutral-500)', sh: 'none' };
+  }
+
+  navItem(label, icon) {
+    const tabs = { Accounts: 'accounts', Launcher: 'launcher', Watcher: 'watcher', 'Server list': 'launcher' };
+    const p = this.pill(this.state.nav === label);
+    return Object.assign({ label, icon }, p, {
+      go: () => this.setState(tabs[label] ? { nav: label, tab: tabs[label], menu: null } : { nav: label, menu: null })
+    });
+  }
+
+  closeMenu = () => this.setState({ menu: null });
+
+  anchored = (kind) => (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    this.setState({ menu: { kind: kind, x: Math.round(r.right), y: Math.round(r.bottom + 8) } });
+  };
+
+  atPointer = (kind, id, h) => (e) => {
+    e.preventDefault();
+    this.setState({
+      menu: { kind: kind, id: id, x: Math.max(8, Math.min(e.clientX, window.innerWidth - 262)), y: Math.max(8, Math.min(e.clientY, window.innerHeight - h)) },
+      sub: null
+    });
+  };
+
+  copy(text) { try { navigator.clipboard.writeText(text); } catch (err) {} }
+
+  setVal(id) {
+    const all = this.SETTINGS;
+    for (const k in all) {
+      const hit = all[k].filter((x) => x.id === id)[0];
+      if (hit) return this.state.sv[id] !== undefined ? this.state.sv[id] : hit.v;
+    }
+    return undefined;
+  }
+
+  setPut(id, v) { this.setState((st) => ({ sv: Object.assign({}, st.sv, { [id]: v }) })); }
+
+  countCookies(text) { return String(text || '').split('\n').filter((l) => l.trim().length > 0).length; }
+
+  openAdd = (tab) => () => this.setState({ addOpen: true, addTab: tab || 'cookie', addState: 'empty', menu: null, sub: null });
+  closeAdd = () => this.setState({ addOpen: false, addState: 'empty' });
+
+  finish(n) {
+    this.setState((st) => {
+      const made = [];
+      for (let i = 0; i < n; i++) {
+        made.push({
+          id: 'n' + Date.now() + i,
+          name: this.NAMES[(st.accounts.length + i) % this.NAMES.length],
+          uid: String(1000000000 + Math.floor(Math.random() * 8999999999)),
+          pres: 'Offline', robux: '0', status: 'Valid', proxy: '', group: st.addGroup
+        });
+      }
+      return { accounts: st.accounts.concat(made), addState: 'success', toast: n + (n === 1 ? ' account added to ' : ' accounts added to ') + st.addGroup };
+    });
+    setTimeout(() => this.setState({ toast: null }), 2800);
+  }
+
+  moveBy(list, from, to, key) {
+    const i = list.findIndex((x) => (key ? x[key] : x) === from);
+    const j = list.findIndex((x) => (key ? x[key] : x) === to);
+    if (i < 0 || j < 0 || i === j) return list;
+    const out = list.slice();
+    out.splice(j, 0, out.splice(i, 1)[0]);
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state, p = this.props, m = s.menu || {};
+    const D = this.DANGER;
+    const isSettings = s.nav === 'Settings';
+    const isProxies = s.nav === 'Proxies';
+    const overlay = isSettings || isProxies;
+
+    const tabPill = (name) => Object.assign(this.pill(s.tab === name && !overlay), {
+      go: () => this.setState({ tab: name, nav: name.charAt(0).toUpperCase() + name.slice(1), menu: null })
+    });
+    const filterPill = (name) => Object.assign(this.pill(s.filter === name), { go: () => this.setState({ filter: name }) });
+
+    const OK = 'oklch(0.72 0.085 152)';
+    const q = s.q.trim().toLowerCase();
+    let list = s.accounts.filter((a) => {
+      if (s.filter === 'Valid' && a.status !== 'Valid') return false;
+      if (s.filter === 'Invalid' && a.status === 'Valid') return false;
+      if (s.filter === 'Banned') return false;
+      if (s.group !== 'All' && a.group !== s.group) return false;
+      if (q && a.name.toLowerCase().indexOf(q) < 0 && a.uid.indexOf(q) < 0) return false;
+      return true;
+    });
+    const sort = p.sortBy || 'Recent';
+    if (sort === 'Name') list = list.slice().sort((x, y) => x.name.localeCompare(y.name));
+    if (sort === 'Status') list = list.slice().sort((x, y) => (x.status === 'Valid' ? 0 : 1) - (y.status === 'Valid' ? 0 : 1));
+
+    const rows = list.map((a) => {
+      const on = s.active === a.id, checked = s.sel.indexOf(a.id) >= 0, over = s.overRow === a.id;
+      return Object.assign({}, a, {
+        initial: a.name.slice(0, 1).toUpperCase(),
+        robuxLabel: 'R$ ' + a.robux,
+        hasProxy: !!a.proxy,
+        checked,
+        cbBg: checked ? 'var(--color-accent-700)' : 'transparent',
+        cbBd: checked ? 'var(--color-accent-500)' : 'var(--color-neutral-700)',
+        bg: on ? 'color-mix(in srgb, var(--color-accent-900) 86%, transparent)' : 'color-mix(in srgb, var(--color-bg) 46%, transparent)',
+        bd: over ? 'var(--color-accent-500)' : (on ? 'var(--color-accent-700)' : 'var(--color-neutral-800)'),
+        op: s.dragRow === a.id ? '0.4' : '1',
+        dot: a.status === 'Valid' ? OK : D,
+        statusFg: a.status === 'Valid' ? 'var(--color-neutral-300)' : D,
+        presFg: a.pres === 'In game' ? 'var(--color-accent-300)' : 'var(--color-neutral-600)',
+        pick: () => this.setState({ active: a.id }),
+        onCtx: this.atPointer('ctx', a.id, 620),
+        onDots: (e) => {
+          e.stopPropagation();
+          const r = e.currentTarget.getBoundingClientRect();
+          this.setState({ active: a.id, sub: null, menu: { kind: 'ctx', id: a.id, x: Math.round(Math.min(r.left, window.innerWidth - 262)), y: Math.round(Math.max(10, Math.min(r.bottom + 6, window.innerHeight - 620))) } });
+        },
+        dragStart: (e) => { if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move'; this.setState({ dragRow: a.id, menu: null }); },
+        dragOver: (e) => { e.preventDefault(); if (this.state.overRow !== a.id) this.setState({ overRow: a.id }); },
+        drop: (e) => { e.preventDefault(); this.setState((st) => ({ accounts: this.moveBy(st.accounts, st.dragRow, a.id, 'id'), dragRow: null, overRow: null })); },
+        dragEnd: () => this.setState({ dragRow: null, overRow: null }),
+        toggle: (e) => {
+          e.stopPropagation();
+          this.setState((st) => ({ sel: st.sel.indexOf(a.id) >= 0 ? st.sel.filter((i) => i !== a.id) : st.sel.concat([a.id]) }));
+        }
+      });
+    });
+
+    const groupChips = s.groups.map((g) => {
+      const on = s.group === g;
+      return Object.assign(this.pill(on), {
+        name: g,
+        bd: s.overGroup === g ? 'var(--color-accent-500)' : (on ? 'var(--color-accent-700)' : 'transparent'),
+        op: s.dragGroup === g ? '0.4' : '1',
+        go: () => this.setState({ group: g }),
+        onCtx: this.atPointer('grp', g, 150),
+        dragStart: (e) => { if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move'; this.setState({ dragGroup: g, menu: null }); },
+        dragOver: (e) => { e.preventDefault(); if (this.state.overGroup !== g) this.setState({ overGroup: g }); },
+        drop: (e) => { e.preventDefault(); this.setState((st) => ({ groups: this.moveBy(st.groups, st.dragGroup, g), dragGroup: null, overGroup: null })); },
+        dragEnd: () => this.setState({ dragGroup: null, overGroup: null })
+      });
+    });
+
+    const langs = this.LANGS.map((l) => {
+      const on = s.lang === l.code;
+      return Object.assign({}, l, {
+        on,
+        bg: on ? 'color-mix(in srgb, var(--color-accent-900) 86%, transparent)' : 'transparent',
+        bd: on ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+        fg: on ? 'var(--color-accent-200)' : 'var(--color-neutral-300)',
+        chipBg: on ? 'var(--color-accent-800)' : 'color-mix(in srgb, var(--color-bg) 60%, transparent)',
+        chipBd: on ? 'var(--color-accent-600)' : 'var(--color-neutral-800)',
+        chipFg: on ? 'var(--color-accent-100)' : 'var(--color-neutral-500)',
+        go: () => this.setState({ lang: l.code, menu: null })
+      });
+    });
+
+    const ITEM = (o) => Object.assign({
+      isItem: true, isSep: false, id: '', label: '', icon: '', kbd: '', caret: '',
+      bg: 'transparent', fg: 'var(--color-neutral-200)', iconFg: 'inherit',
+      hover: () => { if (this.state.sub) this.setState({ sub: null }); },
+      go: this.closeMenu
+    }, o);
+    const SEP = { isSep: true, isItem: true === false, id: '', label: '', icon: '', kbd: '', caret: '', bg: 'transparent', fg: '' };
+
+    let menuTitle = '', menuItems = [], moveGroups = [], subItems = [];
+    if (m.kind === 'ctx') {
+      const a = s.accounts.filter((x) => x.id === m.id)[0] || {};
+      menuTitle = a.name || '';
+      const close = () => this.setState({ menu: null, sub: null });
+      const subs = {
+        copy: [
+          { id: 'copy-username', label: 'Username', icon: 'ph ph-user', v: a.name },
+          { id: 'copy-userid', label: 'User ID', icon: 'ph ph-identification-card', v: a.uid },
+          { id: 'copy-profile', label: 'Profile link', icon: 'ph ph-link', v: 'https://www.roblox.com/users/' + a.uid + '/profile' },
+          { id: 'copy-cookie', label: '.ROBLOSECURITY cookie', icon: 'ph ph-cookie', v: '' },
+          { id: 'copy-alias', label: 'Alias', icon: 'ph ph-textbox', v: a.name },
+          { id: 'copy-description', label: 'Description', icon: 'ph ph-note', v: '' },
+          { id: 'copy-group', label: 'Group', icon: 'ph ph-folders', v: a.group },
+          { id: 'copy-proxy', label: 'Assigned proxy', icon: 'ph ph-globe-hemisphere-west', v: a.proxy }
+        ].map((o) => Object.assign({}, o, { go: () => { this.copy(o.v || ''); close(); } })),
+        set: [
+          { id: 'set-alias', label: 'Alias…', icon: 'ph ph-textbox' },
+          { id: 'set-description', label: 'Description…', icon: 'ph ph-note-pencil' },
+          { id: 'set-group', label: 'Group…', icon: 'ph ph-folders' },
+          { id: 'set-proxy', label: 'Proxy…', icon: 'ph ph-globe-hemisphere-west' },
+          { id: 'set-password', label: 'Account password…', icon: 'ph ph-key' },
+          { id: 'set-flags', label: 'Launch flags…', icon: 'ph ph-flag' }
+        ].map((o) => Object.assign({}, o, { go: close })),
+        tools: [
+          { id: 'tool-cookie-browser', label: 'Open cookie in browser', icon: 'ph ph-browser' },
+          { id: 'tool-settings', label: 'Roblox settings page', icon: 'ph ph-gear' },
+          { id: 'tool-avatar', label: 'Avatar editor', icon: 'ph ph-person' },
+          { id: 'tool-trade', label: 'Trades', icon: 'ph ph-swap' },
+          { id: 'tool-groups', label: 'Groups', icon: 'ph ph-users-four' },
+          { id: 'tool-launch-url', label: 'Copy launch URL', icon: 'ph ph-link-simple' }
+        ].map((o) => Object.assign({}, o, { go: close }))
+      };
+      const openSub = (name) => (e) => {
+        const r = e.currentTarget.getBoundingClientRect(), w = 226;
+        const x = r.right + 4 + w > window.innerWidth ? r.left - w - 4 : r.right + 4;
+        const h = (subs[name] || []).length * 30 + 16;
+        this.setState({ sub: { name: name, x: Math.round(x), y: Math.round(Math.max(10, Math.min(r.top - 6, window.innerHeight - h - 10))) } });
+      };
+      const openFg = (name) => (s.sub && s.sub.name === name ? 'color-mix(in srgb, var(--color-bg) 70%, transparent)' : 'transparent');
+      subItems = (s.sub && subs[s.sub.name]) || [];
+      menuItems = [
+        ITEM({ id: 'launch', label: 'Launch', icon: 'ph ph-play', kbd: 'Enter' }),
+        ITEM({ id: 'launch-here', label: 'Launch into current Place ID', icon: 'ph ph-rocket-launch' }),
+        ITEM({ id: 'join-job', label: 'Join by Job ID…', icon: 'ph ph-crosshair-simple' }),
+        ITEM({ id: 'follow', label: 'Follow another user…', icon: 'ph ph-user-focus' }),
+        SEP,
+        ITEM({ id: 'open-profile', label: 'Open profile in browser', icon: 'ph ph-arrow-square-out', kbd: 'Ctrl+B' }),
+        ITEM({ id: 'tools', label: 'Browser tools', icon: 'ph ph-browser', caret: 'ph ph-caret-right', bg: openFg('tools'), hover: openSub('tools'), go: openSub('tools') }),
+        SEP,
+        ITEM({ id: 'copy', label: 'Copy', icon: 'ph ph-copy', caret: 'ph ph-caret-right', bg: openFg('copy'), hover: openSub('copy'), go: openSub('copy') }),
+        ITEM({ id: 'set', label: 'Set', icon: 'ph ph-pencil-simple', caret: 'ph ph-caret-right', bg: openFg('set'), hover: openSub('set'), go: openSub('set') }),
+        SEP,
+        ITEM({ id: 'refresh-one', label: 'Refresh status', icon: 'ph ph-arrows-clockwise', kbd: 'F5' }),
+        ITEM({ id: 'revalidate', label: 'Re-validate cookie', icon: 'ph ph-shield-check' }),
+        ITEM({ id: 'signout', label: 'Sign out everywhere', icon: 'ph ph-sign-out' }),
+        SEP,
+        ITEM({ id: 'remove', label: 'Remove from list', icon: 'ph ph-trash', kbd: 'Del', fg: D, go: () => this.setState((st) => ({ accounts: st.accounts.filter((x) => x.id !== m.id), sel: st.sel.filter((i) => i !== m.id), menu: null, sub: null })) })
+      ];
+      moveGroups = s.groups.map((g) => {
+        const on = a.group === g;
+        return {
+          name: g,
+          bg: on ? 'var(--color-accent-900)' : 'color-mix(in srgb, var(--color-bg) 60%, transparent)',
+          bd: on ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+          fg: on ? 'var(--color-accent-200)' : 'var(--color-neutral-400)',
+          go: () => this.setState((st) => ({
+            accounts: st.accounts.map((x) => (x.id === m.id ? Object.assign({}, x, { group: g }) : x)),
+            menu: null
+          }))
+        };
+      });
+    } else if (m.kind === 'opt') {
+      const all = this.SETTINGS;
+      let row = null;
+      for (const k in all) { const hit = all[k].filter((x) => x.id === m.id)[0]; if (hit) row = hit; }
+      menuTitle = row ? row.name : '';
+      const cur = this.setVal(m.id);
+      menuItems = ((row || {}).options || []).map((o) => ITEM({
+        id: 'opt-' + o, label: o, icon: 'ph ph-check',
+        fg: cur === o ? 'var(--color-accent-200)' : 'var(--color-neutral-200)',
+        iconFg: cur === o ? 'var(--color-accent-300)' : 'var(--color-neutral-800)',
+        go: () => { this.setPut(m.id, o); this.setState({ menu: null }); }
+      }));
+    } else if (m.kind === 'grp') {
+      menuTitle = m.id || '';
+      menuItems = [
+        ITEM({ id: 'group-only', label: 'Show only this group', icon: 'ph ph-funnel', go: () => this.setState({ group: m.id, menu: null }) }),
+        ITEM({ id: 'group-rename', label: 'Rename…', icon: 'ph ph-pencil-simple', kbd: 'F2' }),
+        ITEM({ id: 'group-delete', label: 'Delete group', icon: 'ph ph-trash', fg: D, go: () => this.setState((st) => ({
+            groups: st.groups.filter((g) => g !== m.id),
+            accounts: st.accounts.map((x) => (x.group === m.id ? Object.assign({}, x, { group: 'Default' }) : x)),
+            group: st.group === m.id ? 'All' : st.group,
+            menu: null
+          })) })
+      ];
+    }
+
+    const OKC = 'oklch(0.72 0.085 152)';
+    const addTabPill = (name) => Object.assign(this.pill(s.addTab === name), { go: () => this.setState({ addTab: name, addState: 'empty' }) });
+    const bulkN = this.countCookies(s.bulk);
+    const effState = (p.addModalState && p.addModalState !== 'Auto') ? String(p.addModalState).toLowerCase() : s.addState;
+    let statusText = '', statusIcon = '', statusFg = 'var(--color-neutral-500)', statusSpin = 'none';
+    if (effState === 'checking') {
+      statusText = s.addTab === 'login' ? 'Waiting for you to finish signing in…' : 'Validating…';
+      statusIcon = 'ph ph-circle-notch'; statusSpin = 'noct-spin .9s linear infinite'; statusFg = 'var(--color-neutral-400)';
+    } else if (effState === 'error') {
+      statusText = 'Cookie rejected — expired or already added.';
+      statusIcon = 'ph ph-warning-circle'; statusFg = D;
+    } else if (effState === 'success') {
+      statusText = 'Added to ' + s.addGroup + '.';
+      statusIcon = 'ph ph-check-circle'; statusFg = OKC;
+    }
+    const addGroups = s.groups.map((g) => {
+      const on = s.addGroup === g;
+      return {
+        name: g,
+        bg: on ? 'var(--color-accent-900)' : 'color-mix(in srgb, var(--color-bg) 60%, transparent)',
+        bd: on ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+        fg: on ? 'var(--color-accent-200)' : 'var(--color-neutral-400)',
+        go: () => this.setState({ addGroup: g })
+      };
+    });
+
+    const setNav = this.SET_NAV.map((n) => {
+      const on = s.setSection === n.name;
+      return Object.assign(this.pill(on), { name: n.name, icon: n.icon, go: () => this.setState({ setSection: n.name, menu: null }) });
+    });
+    const setRows = (this.SETTINGS[s.setSection] || []).map((r) => {
+      const v = this.setVal(r.id);
+      return {
+        id: r.id, name: r.name, desc: r.desc, v: v,
+        isToggle: r.kind === 'toggle', isInput: r.kind === 'input', isSelect: r.kind === 'select',
+        trackBg: v === true ? 'var(--color-accent-700)' : 'color-mix(in srgb, var(--color-bg) 70%, transparent)',
+        trackBd: v === true ? 'var(--color-accent-500)' : 'var(--color-neutral-700)',
+        knobBg: v === true ? 'var(--color-accent-100)' : 'var(--color-neutral-600)',
+        knobAt: v === true ? 'flex-end' : 'flex-start',
+        toggle: () => this.setPut(r.id, !v),
+        set: (e) => this.setPut(r.id, e.target.value),
+        open: (e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          this.setState({ sub: null, menu: { kind: 'opt', id: r.id, x: Math.round(rect.left), y: Math.round(Math.min(rect.bottom + 6, window.innerHeight - 40 - (r.options || []).length * 30)) } });
+        }
+      };
+    });
+
+    const PS = { Alive: OK, Dead: D, Untested: 'var(--color-neutral-600)', Checking: 'var(--color-accent-400)' };
+    const proxyRows = this.PROXIES.map((x) => {
+      const state = s.proxyChecking ? 'Checking' : x.state;
+      return Object.assign({}, x, {
+        state: state,
+        ip: s.proxyChecking ? '' : x.ip,
+        exit: s.proxyChecking ? 'checking…' : (x.ip === '—' ? 'no exit IP' : 'exit ' + x.ip),
+        when: s.proxyChecking ? 'now' : x.when,
+        dot: PS[state], fg: state === 'Alive' ? 'var(--color-neutral-300)' : PS[state]
+      });
+    });
+    const alive = this.PROXIES.filter((x) => x.state === 'Alive').length;
+    const proxyStats = alive + ' alive · ' + this.PROXIES.length + ' total';
+
+    const serverPill = (name) => Object.assign(this.pill(s.serverFilter === name), { go: () => this.setState({ serverFilter: name }) });
+    const serverRows = this.SERVERS.filter((v) => {
+      if (s.serverFilter === 'Has room') return v.players < v.cap;
+      if (s.serverFilter === 'Low ping') return v.ping < 60;
+      return true;
+    }).map((v) => {
+      const ratio = v.players / v.cap;
+      return {
+        id: v.id, job: v.job, region: v.region,
+        fill: v.players + ' / ' + v.cap,
+        pct: Math.round(ratio * 100) + '%',
+        barFg: ratio >= 1 ? D : (ratio > 0.75 ? 'var(--color-accent-500)' : 'var(--color-accent-600)'),
+        ping: v.ping + ' ms',
+        pingFg: v.ping < 60 ? OK : (v.ping < 140 ? 'var(--color-neutral-300)' : D)
+      };
+    });
+    const gameRow = (g) => {
+      const on = s.place === g.place;
+      return {
+        name: g.name, place: g.place,
+        bg: on ? 'color-mix(in srgb, var(--color-accent-900) 86%, transparent)' : 'color-mix(in srgb, var(--color-bg) 46%, transparent)',
+        bd: on ? 'var(--color-accent-700)' : 'var(--color-neutral-800)',
+        go: () => this.setState({ place: g.place })
+      };
+    };
+    const favGames = this.GAMES_FAV.map(gameRow);
+    const recentGames = this.GAMES_RECENT.map(gameRow);
+
+    const valid = s.accounts.filter((a) => a.status === 'Valid').length;
+    const labels = p.railLabels === true;
+    const langRow = this.LANGS.filter((l) => l.code === s.lang)[0] || this.LANGS[0];
+
+    return {
+      waves: p.waveTexture !== false && this.setVal('ContourTexture') !== false,
+      iconRail: !labels && this.setVal('RailLabels') !== true,
+      labelRail: labels || this.setVal('RailLabels') === true,
+      nav1: [this.navItem('Dashboard', 'ph ph-squares-four'), this.navItem('Accounts', 'ph ph-users-three')],
+      nav2: [this.navItem('Launcher', 'ph ph-rocket-launch'), this.navItem('Relauncher', 'ph ph-arrows-clockwise'), this.navItem('Watcher', 'ph ph-eye')],
+      nav3: [this.navItem('Free items', 'ph ph-gift'), this.navItem('Macros', 'ph ph-cursor-click'), this.navItem('Server list', 'ph ph-list-dashes')],
+      nav4: [this.navItem('Proxies', 'ph ph-globe-hemisphere-west'), this.navItem('Resources', 'ph ph-package')],
+      navSettings: this.navItem('Settings', 'ph ph-gear-six'),
+      t1: tabPill('accounts'), t2: tabPill('launcher'), t3: tabPill('watcher'),
+      showTabs: !overlay, isSettings, isProxies,
+      isAccounts: s.tab === 'accounts' && !overlay,
+      isLauncher: s.tab === 'launcher' && !overlay,
+      isWatcher: s.tab === 'watcher' && !overlay,
+      setNav, setRows, isAppearance: s.setSection === 'Appearance',
+      proxyRows, proxyStats, proxySpin: s.proxyChecking ? 'noct-spin .9s linear infinite' : 'none',
+      checkProxies: () => {
+        if (this.state.proxyChecking) return;
+        this.setState({ proxyChecking: true });
+        setTimeout(() => this.setState({ proxyChecking: false }), 1500);
+      },
+      proxyBulk: s.proxyBulk, setProxyBulk: (e) => this.setState({ proxyBulk: e.target.value }),
+      proxyBulkCount: this.countCookies(s.proxyBulk) + ' parsed',
+      sf1: serverPill('All'), sf2: serverPill('Has room'), sf3: serverPill('Low ping'),
+      serverRows, noServers: serverRows.length === 0,
+      serverCount: serverRows.length + ' of ' + this.SERVERS.length,
+      favGames, recentGames,
+      f1: filterPill('All'), f2: filterPill('Valid'), f3: filterPill('Invalid'), f4: filterPill('Banned'),
+      gAll: Object.assign(this.pill(s.group === 'All'), { go: () => this.setState({ group: 'All' }) }),
+      groupChips,
+      addGroup: () => this.setState((st) => ({ groups: st.groups.concat(['Group ' + (st.groups.length + 1)]) })),
+      q: s.q, setQ: (e) => this.setState({ q: e.target.value }),
+      place: s.place, setPlace: (e) => this.setState({ place: e.target.value }),
+      job: s.job, setJob: (e) => this.setState({ job: e.target.value }),
+      vip: s.vip, setVip: (e) => this.setState({ vip: e.target.value }),
+      rows, noRows: rows.length === 0,
+      validLabel: valid + ' / ' + s.accounts.length + ' valid',
+      selLabel: s.sel.length + ' selected',
+      launchHint: s.sel.length === 1 ? 'Launches 1 selected account' : 'Launches ' + s.sel.length + ' selected accounts',
+      spin: s.refreshing ? 'noct-spin .7s linear' : 'none',
+      refresh: () => {
+        if (this.state.refreshing) return;
+        this.setState({ refreshing: true });
+        setTimeout(() => this.setState({ refreshing: false }), 700);
+      },
+      selectAll: () => this.setState({ sel: rows.map((r) => r.id) }),
+      clearSel: () => this.setState({ sel: [] }),
+      langs, langCode: s.lang, langNative: langRow.native,
+      addOptions: this.ADD_OPTIONS.map((o) => Object.assign({}, o, { go: this.openAdd(o.tab) })),
+      addOpen: s.addOpen || p.showAddModal === true,
+      at1: addTabPill('cookie'), at2: addTabPill('bulk'), at3: addTabPill('login'),
+      isCookieTab: s.addTab === 'cookie', isBulkTab: s.addTab === 'bulk', isLoginTab: s.addTab === 'login',
+      cookie: s.cookie, setCookie: (e) => this.setState({ cookie: e.target.value, addState: 'empty' }),
+      bulk: s.bulk, setBulk: (e) => this.setState({ bulk: e.target.value, addState: 'empty' }),
+      bulkCount: bulkN + (bulkN === 1 ? ' recognised' : ' recognised'),
+      addGroups, closeAdd: this.closeAdd,
+      statusText, statusIcon, statusFg, statusSpin,
+      showSubmit: s.addTab !== 'login',
+      submitOff: effState === 'checking' || (s.addTab === 'cookie' && !s.cookie.trim()) || (s.addTab === 'bulk' && bulkN === 0),
+      submitLabel: s.addTab === 'bulk' ? 'Add ' + bulkN + (bulkN === 1 ? ' account' : ' accounts') : 'Add account',
+      submitAdd: () => {
+        const val = s.addTab === 'bulk' ? s.bulk : s.cookie;
+        this.setState({ addState: 'checking' });
+        setTimeout(() => {
+          if (/bad|expired|invalid/i.test(val)) this.setState({ addState: 'error' });
+          else this.finish(s.addTab === 'bulk' ? bulkN : 1);
+        }, 1100);
+      },
+      startLogin: () => {
+        this.setState({ addState: 'checking' });
+        setTimeout(() => this.finish(1), 1800);
+      },
+      toastOn: !!s.toast, toastText: s.toast || '',
+      secHidden: (p.securityStep || 'Off') === 'Off',
+      secChooseHidden: p.securityStep === 'Password',
+      secPasswordHidden: (p.securityStep || 'Off') !== 'Password',
+      subOpen: !!(s.sub && subItems.length), subItems,
+      subX: ((s.sub || {}).x || 0) + 'px', subY: ((s.sub || {}).y || 0) + 'px',
+      openLangMenu: this.anchored('lang'),
+      openAddMenu: this.anchored('add'),
+      closeMenu: this.closeMenu,
+      menuOpen: !!s.menu,
+      isAddMenu: m.kind === 'add', isLangMenu: m.kind === 'lang',
+      isItemMenu: m.kind === 'ctx' || m.kind === 'grp' || m.kind === 'opt',
+      menuX: (m.x || 0) + 'px', menuY: (m.y || 0) + 'px',
+      menuTitle, menuItems, moveGroups, hasMoveRow: m.kind === 'ctx'
+    };
+  }
+}
+</script>
+<template data-ram="account-row"><div class="scp3" data-dc-tpl="242" data-ram-row="" draggable="true" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding: 11px 12px 11px 6px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: color-mix(in srgb, var(--color-accent-900) 86%, transparent); opacity: 1;">
+<i class="ph ph-dots-six-vertical scp7" data-dc-tpl="243" style="flex: 0 0 auto; font-size: 14px; color: var(--color-neutral-800); cursor: grab;"></i>
+<div data-dc-tpl="244" data-ram-field="check" style="width: 17px; height: 17px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); border-width: 1px; border-style: solid; border-color: var(--color-accent-500); border-image: none; font-size: 11px; color: var(--color-accent-100); background: var(--color-accent-700);">
+<i class="ph ph-check" data-dc-tpl="246" data-ram-field="check-icon"></i>
+</div>
+<div data-dc-tpl="247" data-ram-field="avatar" style="width: 34px; height: 34px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); background: var(--color-accent-900); border: 1px solid var(--color-accent-800); font-size: 13px; font-weight: 500; color: var(--color-accent-200);"><span class="sc-interp">0</span></div>
+<div data-dc-tpl="248" style="flex: 1 1 auto; min-width: 130px;">
+<div data-dc-tpl="249" data-ram-field="username" style="font-size: 13.5px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">0c_PF</span></div>
+<div data-dc-tpl="250" style="display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 11px; color: var(--color-neutral-600); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden;">
+<span data-dc-tpl="251" data-ram-field="presence" style="color: var(--color-neutral-600);"><span class="sc-interp">Offline</span></span><span data-dc-tpl="252">·</span><span data-dc-tpl="253" data-ram-field="userId" style="overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">10691258562</span></span>
+</div>
+</div>
+<span data-dc-tpl="256" data-ram-field="robux" style="flex: 0 0 auto; min-width: 44px; text-align: right; white-space: nowrap; font-size: 12px; color: var(--color-neutral-400); font-variant-numeric: tabular-nums;"><span class="sc-interp">R$ 0</span></span>
+<div data-dc-tpl="257" data-ram-field="status" style="flex: 0 0 auto; min-width: 58px; display: flex; align-items: center; justify-content: flex-end; gap: 7px; white-space: nowrap; font-size: 12px; color: var(--color-neutral-300);">
+<span data-dc-tpl="258" data-ram-field="dot" style="width: 6px; height: 6px; flex: 0 0 auto; border-radius: 50%; background: oklch(0.72 0.085 152);"></span><span class="sc-interp">Valid</span>
+</div>
+<i class="ph ph-dots-three-vertical scp8" data-dc-tpl="259" style="flex: 0 0 auto; font-size: 15px; color: var(--color-neutral-700); cursor: pointer;"></i>
+</div></template><div data-dc-tpl="260" data-ram="add-modal" hidden="" style="position: fixed; inset: 0px; z-index: 20; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, rgb(11, 12, 20) 66%, transparent); backdrop-filter: blur(4px);">
+<div data-dc-tpl="261" style="width: min(600px, 100%); max-height: 100%; display: flex; flex-direction: column; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 96%, transparent); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 40px 90px -34px; overflow: hidden;">
+<div data-dc-tpl="262" style="flex: 0 0 auto; display: flex; align-items: flex-start; gap: 13px; padding: 17px 17px 0px;">
+<div data-dc-tpl="263" style="width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); border-width: 1px; border-style: solid; font-size: 17px; color: var(--color-accent-300);"><i class="ph ph-user-plus" data-dc-tpl="264"></i></div>
+<div data-dc-tpl="265" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="266" style="font-size: 19px; font-weight: 500; letter-spacing: -0.01em; color: var(--color-neutral-100);">Add account</div>
+<div data-dc-tpl="267" style="font-size: 11.5px; color: var(--color-neutral-500); margin-top: 2px;">Cookies are stored encrypted with your Windows account.</div>
+</div>
+<div class="scp9" data-dc-tpl="268" data-ram="add-close" style="width: 28px; height: 28px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-md); cursor: pointer; color: var(--color-neutral-500); font-size: 13px;"><i class="ph ph-x" data-dc-tpl="269"></i></div>
+</div>
+<div data-dc-tpl="270" style="flex: 0 0 auto; display: flex; align-items: center; gap: 4px; padding: 14px 17px 0px;">
+<div class="scp4" data-dc-tpl="271" data-ram-add-tab="cookie" data-ram-off-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);">Single cookie</div>
+<div class="scp4" data-dc-tpl="272" data-ram-add-tab="bulk" data-ram-off-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Cookie list</div>
+<div class="scp4" data-dc-tpl="273" data-ram-add-tab="login" data-ram-off-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);" data-ram-on-style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);" style="padding: 7px 14px; border-radius: var(--radius-md); font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--color-neutral-500);">Sign in</div>
+</div>
+<div data-dc-tpl="274" data-ram-add-pane="cookie" style="flex: 1 1 0%; min-height: 0px; overflow: auto; padding: 15px 17px 16px; display: flex; flex-direction: column; gap: 13px;">
+<div class="field" data-dc-tpl="276">
+<label data-dc-tpl="277" style="font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">.ROBLOSECURITY cookie</label>
+<input class="input" data-dc-tpl="278" data-ram="add-cookie" placeholder="_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you.--|_AB12…" style="height: 38px; min-height: 38px; border-radius: calc(var(--radius-md) * 1.25); font-size: 12px; letter-spacing: 0.01em; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);" value=""/>
+</div>
+<div data-dc-tpl="279" style="font-size: 11.5px; color: var(--color-neutral-600); line-height: 1.55;">Copy the value of the <span data-dc-tpl="280" style="color: var(--color-neutral-400);">.ROBLOSECURITY</span> cookie from a signed-in browser. The username is resolved automatically once it validates.</div>
+<div data-dc-tpl="294" style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+<span data-dc-tpl="295" style="font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-right: 2px;">Add to group</span>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Default" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);"><span class="sc-interp">Default</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Farm" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Farm</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Alts" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Alts</span></div>
+</div>
+</div><div data-dc-tpl="274" data-ram-add-pane="login" hidden="" style="flex: 1 1 0%; min-height: 0px; overflow: auto; padding: 15px 17px 16px; display: flex; flex-direction: column; gap: 13px;">
+<div data-dc-tpl="289" style="display: flex; align-items: flex-start; gap: 12px; padding: 13px; border-radius: calc(var(--radius-md) * 1.5); background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800); border-width: 1px; border-style: solid;">
+<i class="ph ph-browser" data-dc-tpl="290" style="flex: 0 0 auto; font-size: 17px; color: var(--color-accent-300); margin-top: 1px;"></i>
+<div data-dc-tpl="291" style="flex: 1 1 0%; min-width: 0px; font-size: 11.5px; color: var(--color-neutral-500); line-height: 1.6;">A Roblox sign-in window opens inside the app. Finish the login — including two-step verification — and the session is captured the moment the page reaches the home feed.</div>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="292" data-ram="add-login" style="height: 40px; border-radius: calc(var(--radius-md) * 1.25); gap: 9px;"><i class="ph ph-sign-in" data-dc-tpl="293" style="font-size: 14px;"></i>Open sign-in window</button>
+<div data-dc-tpl="294" style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+<span data-dc-tpl="295" style="font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-right: 2px;">Add to group</span>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Default" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);"><span class="sc-interp">Default</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Farm" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Farm</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Alts" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Alts</span></div>
+</div>
+</div><div data-dc-tpl="274" data-ram-add-pane="bulk" hidden="" style="flex: 1 1 0%; min-height: 0px; overflow: auto; padding: 15px 17px 16px; display: flex; flex-direction: column; gap: 13px;">
+<div class="field" data-dc-tpl="282">
+<label data-dc-tpl="283" style="font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-bottom: 6px;">Cookie list — one per line</label>
+<textarea class="input" data-dc-tpl="284" data-ram="add-bulk" placeholder="_|WARNING:-DO-NOT-SHARE-THIS…
+_|WARNING:-DO-NOT-SHARE-THIS…" style="height: 154px; min-height: 154px; border-radius: calc(var(--radius-md) * 1.25); font-size: 12px; line-height: 1.7; background: color-mix(in srgb, var(--color-bg) 58%, transparent); border-color: var(--color-neutral-800);"></textarea>
+</div>
+<div data-dc-tpl="285" style="display: flex; align-items: center; gap: 10px;">
+<span class="tag tag-accent" data-dc-tpl="286" data-ram="add-bulk-count" style="font-variant-numeric: tabular-nums; white-space: nowrap;"><span class="sc-interp">0 recognised</span></span>
+<span data-dc-tpl="287" style="font-size: 11.5px; color: var(--color-neutral-600);">Blank lines and duplicates are skipped.</span>
+</div>
+<div data-dc-tpl="294" style="display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
+<span data-dc-tpl="295" style="font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); margin-right: 2px;">Add to group</span>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Default" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);"><span class="sc-interp">Default</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Farm" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Farm</span></div>
+<div class="scp3" data-dc-tpl="297" data-ram-add-group="Alts" style="padding: 4px 12px; border-radius: 999px; font-size: 11.5px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Alts</span></div>
+</div>
+</div>
+<div data-dc-tpl="298" style="flex: 0 0 auto; display: flex; align-items: center; gap: 12px; padding: 12px 17px; border-top: 1px solid var(--color-neutral-800); background: color-mix(in srgb, var(--color-bg) 45%, transparent);">
+<div data-dc-tpl="299" data-ram="add-status" style="flex: 1 1 0%; min-width: 0px; display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--color-neutral-500);">
+<i class="" data-dc-tpl="300" style="flex: 0 0 auto; font-size: 14px; animation: auto ease 0s 1 normal none running none;"></i>
+<span data-dc-tpl="301" data-ram="add-status-text" style="min-width: 0px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span class="sc-interp"></span></span>
+</div>
+<button class="btn btn-secondary" data-dc-tpl="302" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 16px;">Cancel</button>
+<button class="btn btn-primary" data-dc-tpl="304" data-ram="add-submit" style="flex: 0 0 auto; border-radius: 999px; padding: 8px 18px; gap: 8px;"><i class="ph ph-plus" data-dc-tpl="305" style="font-size: 13px;"></i><span class="sc-interp">Add account</span></button>
+</div>
+</div>
+</div><div data-dc-tpl="330" data-ram="row-menu" hidden="" style="position: fixed; z-index: 8; left: 135px; top: 241px; width: 252px; max-height: calc(-16px + 100vh); overflow: hidden auto; padding: 6px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 94%, transparent); backdrop-filter: blur(20px) saturate(112%); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 24px 54px -24px;">
+<div data-dc-tpl="331" style="padding: 7px 9px 6px; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">0c_PF</span></div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="launch" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-play" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Launch</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp">Enter</span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="launch-here" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-rocket-launch" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Launch into current Place ID</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="join-job" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-crosshair-simple" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Join by Job ID…</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="follow" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-user-focus" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Follow another user…</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div data-dc-tpl="334" style="height: 1px; margin: 5px 6px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="open-profile" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-arrow-square-out" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Open profile in browser</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp">Ctrl+B</span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="tools" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: color-mix(in srgb, var(--color-bg) 70%, transparent);">
+<i class="ph ph-browser" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Browser tools</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="ph ph-caret-right" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div data-dc-tpl="334" style="height: 1px; margin: 5px 6px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="copy" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-copy" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Copy</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="ph ph-caret-right" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="set" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-pencil-simple" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Set</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="ph ph-caret-right" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div data-dc-tpl="334" style="height: 1px; margin: 5px 6px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="refresh-one" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-arrows-clockwise" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Refresh status</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp">F5</span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="revalidate" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-shield-check" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Re-validate cookie</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="signout" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;">
+<i class="ph ph-sign-out" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Sign out everywhere</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div data-dc-tpl="334" style="height: 1px; margin: 5px 6px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div class="scpa" data-dc-tpl="336" data-ram-menu="remove" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: oklch(0.66 0.13 26); background: transparent;">
+<i class="ph ph-trash" data-dc-tpl="337" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="338" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Remove from list</span></span>
+<span data-dc-tpl="339" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp">Del</span></span>
+<i class="" data-dc-tpl="340" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div>
+<div data-dc-tpl="342" style="height: 1px; margin: 5px 6px; background: linear-gradient(to right,transparent,var(--color-neutral-800),transparent);"></div>
+<div data-dc-tpl="343" style="padding: 3px 9px 6px; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600);">Move to group</div>
+<div data-dc-tpl="344" style="display: flex; flex-wrap: wrap; gap: 5px; padding: 0px 8px 6px;">
+<div class="scp3" data-dc-tpl="346" style="padding: 3px 10px; border-radius: 999px; font-size: 11px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: var(--color-accent-900); color: var(--color-accent-200);"><span class="sc-interp">Default</span></div>
+<div class="scp3" data-dc-tpl="346" style="padding: 3px 10px; border-radius: 999px; font-size: 11px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Farm</span></div>
+<div class="scp3" data-dc-tpl="346" style="padding: 3px 10px; border-radius: 999px; font-size: 11px; cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-neutral-800); border-image: none; background: color-mix(in srgb, var(--color-bg) 60%, transparent); color: var(--color-neutral-400);"><span class="sc-interp">Alts</span></div>
+</div>
+</div><div data-dc-tpl="348" data-ram-submenu="copy" hidden="" style="position: fixed; z-index: 9; left: 384px; top: 479px; width: 222px; max-height: calc(-16px + 100vh); overflow: hidden auto; padding: 6px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 94%, transparent); backdrop-filter: blur(20px) saturate(112%); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 24px 54px -24px;">
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-username" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-user" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Username</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-userid" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-identification-card" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">User ID</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-profile" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-link" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Profile link</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-cookie" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-cookie" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">.ROBLOSECURITY cookie</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-alias" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-textbox" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Alias</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-description" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-note" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Description</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-group" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-folders" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Group</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="copy-proxy" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-globe-hemisphere-west" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Assigned proxy</span></span>
+</div>
+</div><div data-dc-tpl="348" data-ram-submenu="set" hidden="" style="position: fixed; z-index: 9; left: 384px; top: 511px; width: 222px; max-height: calc(-16px + 100vh); overflow: hidden auto; padding: 6px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 94%, transparent); backdrop-filter: blur(20px) saturate(112%); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 24px 54px -24px;">
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-alias" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-textbox" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Alias…</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-description" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-note-pencil" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Description…</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-group" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-folders" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Group…</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-proxy" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-globe-hemisphere-west" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Proxy…</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-password" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-key" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Account password…</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="set-flags" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-flag" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Launch flags…</span></span>
+</div>
+</div><div data-dc-tpl="348" data-ram-submenu="tools" hidden="" style="position: fixed; z-index: 9; left: 384px; top: 437px; width: 222px; max-height: calc(-16px + 100vh); overflow: hidden auto; padding: 6px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 94%, transparent); backdrop-filter: blur(20px) saturate(112%); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 24px 54px -24px;">
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-cookie-browser" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-browser" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Open cookie in browser</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-settings" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-gear" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Roblox settings page</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-avatar" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-person" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Avatar editor</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-trade" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-swap" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Trades</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-groups" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-users-four" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Groups</span></span>
+</div>
+<div class="scpa" data-dc-tpl="350" data-ram-menu="tool-launch-url" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200);">
+<i class="ph ph-link-simple" data-dc-tpl="351" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85;"></i>
+<span data-dc-tpl="352" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Copy launch URL</span></span>
+</div>
+</div><div data-dc-tpl="469" data-ram="select-menu" hidden="" style="position: fixed; z-index: 8; left: 1181px; top: 443px; width: 252px; max-height: calc(-16px + 100vh); overflow: hidden auto; padding: 6px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-surface) 94%, transparent); backdrop-filter: blur(20px) saturate(112%); border: 1px solid var(--color-neutral-700); box-shadow: rgb(0, 0, 0) 0px 24px 54px -24px;">
+<div data-dc-tpl="470" data-ram="select-menu-title" style="padding: 7px 9px 6px; font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Launch method</span></div>
+
+
+
+<template data-ram="select-option" data-ram-off-style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-neutral-200); background: transparent;" data-ram-on-style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-accent-200); background: transparent;" data-ram-tick-off="flex: 0 0 auto; font-size: 14px; opacity: 0.85; color: var(--color-neutral-800);" data-ram-tick-on="flex: 0 0 auto; font-size: 14px; opacity: 0.85; color: var(--color-accent-300);"><div class="scpa" data-dc-tpl="475" data-ram-menu="opt-Protocol" style="display: flex; align-items: center; gap: 10px; padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; font-size: 12.5px; color: var(--color-accent-200); background: transparent;">
+<i class="ph ph-check" data-dc-tpl="476" style="flex: 0 0 auto; font-size: 14px; opacity: 0.85; color: var(--color-accent-300);"></i>
+<span data-dc-tpl="477" style="flex: 1 1 0%; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Protocol</span></span>
+<span data-dc-tpl="478" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-700);"><span class="sc-interp"></span></span>
+<i class="" data-dc-tpl="479" style="flex: 0 0 auto; font-size: 10px; color: var(--color-neutral-600);"></i>
+</div></template></div><template data-ram="proxy-row"><tr data-dc-tpl="166" data-ram-proxy-row="">
+<td data-dc-tpl="167">
+<div data-dc-tpl="168" style="display: flex; align-items: center; gap: 10px;">
+<span data-dc-tpl="169" style="width: 26px; height: 20px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--radius-sm); font-size: 9px; font-weight: 600; letter-spacing: 0.06em; background: var(--color-accent-900); border: 1px solid var(--color-accent-800); color: var(--color-accent-200);"></span>
+<div data-dc-tpl="170" style="min-width: 0px;">
+<div data-dc-tpl="171" data-ram-field="proxy-host" style="font-size: 12.5px; color: var(--color-neutral-100); font-variant-numeric: tabular-nums; white-space: nowrap;"></div>
+<div data-dc-tpl="172" data-ram-field="proxy-ip" style="font-size: 10.5px; color: var(--color-neutral-700); font-variant-numeric: tabular-nums; white-space: nowrap;"></div>
+</div>
+</div>
+</td>
+<td data-dc-tpl="173" data-ram-field="proxy-type" style="font-size: 11.5px; color: var(--color-neutral-500); white-space: nowrap;"></td>
+<td data-dc-tpl="174" data-ram-field="proxy-accounts" style="font-size: 12px; color: var(--color-neutral-300); font-variant-numeric: tabular-nums;"></td>
+<td data-dc-tpl="175">
+<div data-dc-tpl="176" data-ram-field="proxy-status" style="display: flex; align-items: center; gap: 8px; font-size: 12px;">
+<span data-dc-tpl="177" style="width: 6px; height: 6px; flex: 0 0 auto; border-radius: 50%;"></span>
+</div>
+</td>
+<td data-dc-tpl="178" data-ram-field="proxy-checked" style="text-align: right; overflow: hidden; text-overflow: ellipsis; font-size: 11px; color: var(--color-neutral-600); white-space: nowrap;"></td>
+</tr></template><template data-ram="server-row"><div class="scp3" data-dc-tpl="352" data-ram-server-row="" style="flex: 0 0 auto; display: flex; align-items: center; gap: 14px; padding: 11px 13px; border-radius: calc(var(--radius-md) * 1.5); border: 1px solid var(--color-neutral-800); background: color-mix(in srgb, var(--color-bg) 46%, transparent);">
+<div data-dc-tpl="353" style="width: 96px; flex: 0 0 auto;">
+<div data-dc-tpl="354" data-ram-field="server-fill" style="font-size: 12.5px; color: var(--color-neutral-100); font-variant-numeric: tabular-nums;"><span class="sc-interp">12 / 20</span></div>
+<div data-dc-tpl="355" style="height: 3px; margin-top: 5px; border-radius: 999px; background: var(--color-neutral-900); overflow: hidden;">
+<div data-dc-tpl="356" data-ram-field="server-bar" style="height: 3px; border-radius: 999px; width: 60%; background: var(--color-accent-600);"></div>
+</div>
+</div>
+<div data-dc-tpl="357" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="358" data-ram-field="server-region" style="font-size: 12.5px; color: var(--color-neutral-200); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">Frankfurt · Germany</span></div>
+<div data-dc-tpl="359" data-ram-field="server-job" style="font-size: 10.5px; color: var(--color-neutral-700); margin-top: 2px; font-variant-numeric: tabular-nums;"><span class="sc-interp">a41f9c2e-7db4</span></div>
+</div>
+<div data-dc-tpl="360" data-ram-field="server-ping" style="flex: 0 0 auto; width: 66px; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; color: oklch(0.72 0.085 152);"><span class="sc-interp">24 ms</span></div>
+<button class="btn btn-primary" data-dc-tpl="361" data-ram-field="server-join" style="flex: 0 0 auto; border-radius: 999px; padding: 6px 15px; font-size: 12px; gap: 7px;"><i class="ph ph-play" data-dc-tpl="362" style="font-size: 11px;"></i>Join</button>
+</div></template><template data-ram="game-row"><div class="scp3" data-dc-tpl="323" data-ram-game-row="" style="display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: calc(var(--radius-md) * 1.5); cursor: pointer; border-width: 1px; border-style: solid; border-color: var(--color-accent-700); border-image: none; background: color-mix(in srgb, var(--color-accent-900) 86%, transparent);">
+<div data-dc-tpl="324" style="width: 32px; height: 32px; flex: 0 0 auto; display: grid; place-items: center; border-radius: calc(var(--radius-md) * 1.25); background: var(--color-accent-900); border: 1px solid var(--color-accent-800); font-size: 15px; color: var(--color-accent-300);"><i class="ph ph-game-controller" data-dc-tpl="325"></i></div>
+<div data-dc-tpl="326" style="flex: 1 1 0%; min-width: 0px;">
+<div data-dc-tpl="327" data-ram-field="game-row-name" style="font-size: 12.5px; font-weight: 500; color: var(--color-neutral-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><span class="sc-interp">[2X⚔️] Sailor Piece</span></div>
+<div data-dc-tpl="328" data-ram-field="game-row-place" style="font-size: 10.5px; color: var(--color-neutral-600); font-variant-numeric: tabular-nums;"><span class="sc-interp">77747658251236</span></div>
+</div>
+<i class="ph ph-star-fill" data-dc-tpl="329" style="flex: 0 0 auto; font-size: 12px; color: var(--color-accent-400);"></i>
+</div></template><script src="bridge.js"></script><script src="i18n.js"></script><script src="app.js"></script></body></html>

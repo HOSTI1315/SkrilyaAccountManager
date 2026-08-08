@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RAM — web shell preview</title>
+<style>
+  :root{
+    --bg:#07090d; --rail:#0a0d12; --card:#10141b; --raised:#141922;
+    --stroke:#1d2431; --stroke-soft:#161b24;
+    --text:#e8edf5; --muted:#7b8798; --faint:#4e5766;
+    --accent:#2de2e6; --magenta:#ff3d8a; --good:#3ddc97; --bad:#ff5c7a;
+    --mono:"Consolas","JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    width:1180px;height:740px;background:var(--bg);color:var(--text);
+    font:13px/1.4 "Segoe UI",system-ui,sans-serif;display:flex;overflow:hidden;
+    border:1px solid var(--stroke);border-radius:14px;
+  }
+
+  /* ---------- rail ---------- */
+  .rail{width:218px;background:var(--rail);padding:22px 0 16px;display:flex;flex-direction:column;flex:0 0 auto}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 22px 10px}
+  .logo{width:26px;height:26px;border-radius:8px;background:#0e1a20;border:1px solid #552de2e6;
+        display:grid;place-items:center;color:var(--accent);font-weight:700;font-size:13px;
+        box-shadow:0 0 16px rgba(45,226,230,.5)}
+  .brand span{font:700 13.5px var(--mono);letter-spacing:.5px}
+  .sect{font:600 10px var(--mono);color:var(--faint);margin:18px 0 8px 22px;letter-spacing:1px}
+  .nav{display:flex;align-items:center;gap:12px;height:36px;margin:1px 10px;padding-left:20px;
+       border-radius:8px;color:var(--muted);cursor:pointer;position:relative}
+  .nav:hover{background:rgba(255,255,255,.04);color:var(--text)}
+  .nav.on{background:rgba(255,255,255,.08);color:var(--text)}
+  .nav.on::before{content:"";position:absolute;left:0;top:9px;width:2px;height:18px;border-radius:1px;
+                  background:var(--accent);box-shadow:0 0 12px rgba(45,226,230,.9)}
+  .rail .spacer{flex:1}
+  .divider{height:1px;background:var(--stroke-soft);margin:0 18px 12px}
+
+  /* ---------- content ---------- */
+  .main{flex:1;display:flex;flex-direction:column;padding:18px 20px 20px 24px;gap:10px;min-width:0}
+  .top{display:flex;align-items:center}
+  .search{width:430px;height:36px;margin:0 auto;border-radius:18px;background:#0c1016;border:1px solid var(--stroke);
+          display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--faint);font-size:12px}
+  .wbtns{position:absolute;right:24px;display:flex;gap:20px;color:var(--muted);font-size:12px}
+
+  .tabs{display:inline-flex;gap:4px;padding:4px;border-radius:20px;background:#0b0f15;border:1px solid var(--stroke-soft);align-self:flex-start}
+  .tab{padding:7px 20px;border-radius:16px;color:var(--muted);font-size:12.5px;cursor:pointer}
+  .tab.on{background:var(--raised);color:var(--text)}
+
+  .card{background:var(--card);border:1px solid var(--stroke-soft);border-radius:14px}
+  .head{padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+  .head h1{font-size:21px;font-weight:700;display:flex;align-items:center;gap:12px}
+  .badge{font:10.5px var(--mono);color:var(--accent);background:rgba(45,226,230,.13);
+         border:1px solid rgba(45,226,230,.27);border-radius:10px;padding:3px 8px}
+  .sub{color:var(--muted);font-size:12px;margin-top:4px}
+  .btn{border-radius:10px;padding:9px 18px;font-size:12.5px;cursor:pointer;border:1px solid var(--stroke);
+       background:var(--raised);color:var(--text);display:inline-flex;align-items:center;gap:8px}
+  .btn:hover{border-color:rgba(45,226,230,.4)}
+  .btn.accent{border:0;color:#04262a;font-weight:600;
+    background:linear-gradient(135deg,#2de2e6,#19b9d8);box-shadow:0 0 18px rgba(45,226,230,.35)}
+  .btn.accent:hover{box-shadow:0 0 26px rgba(45,226,230,.6)}
+
+  .filters{padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+  .fsearch{width:260px;height:32px;border-radius:10px;background:#0c1016;border:1px solid var(--stroke);
+           display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--faint);font-size:12px}
+  .chips{display:flex;align-items:center;gap:4px}
+  .chip{padding:5px 14px;border-radius:14px;font-size:11.5px;color:var(--muted);border:1px solid transparent;cursor:pointer}
+  .chip.on{color:var(--accent);background:rgba(45,226,230,.13);border-color:rgba(45,226,230,.33)}
+  .vsep{width:1px;height:18px;background:var(--stroke);margin:0 10px}
+
+  .body{flex:1;display:flex;gap:12px;min-height:0}
+  .list{flex:1;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .label{font:10px var(--mono);color:var(--faint);letter-spacing:1px;margin-left:6px}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;
+       background:#0e131a;border:1px solid var(--stroke-soft)}
+  .row.sel{background:var(--raised);border-color:rgba(45,226,230,.27);box-shadow:0 0 22px rgba(45,226,230,.12)}
+  .who{display:flex;align-items:center;gap:12px}
+  .av{width:34px;height:34px;border-radius:10px;background:#141a22;border:1px solid var(--stroke);
+      display:grid;place-items:center;font-weight:700;color:var(--muted)}
+  .row.sel .av{background:#16202b;border-color:rgba(45,226,230,.2);color:var(--accent)}
+  .name{font-size:13px;font-weight:600}
+  .meta{font-size:10.5px;color:var(--faint);margin-top:2px;display:flex;gap:6px}
+  .meta .mono{font-family:var(--mono)}
+  .ingame{color:var(--accent)}
+  .right{display:flex;align-items:center;gap:14px}
+  .rbx{font:11.5px var(--mono);color:var(--muted)}
+  .tag{font:10px var(--mono);color:var(--magenta);background:rgba(255,61,138,.1);
+       border:1px solid rgba(255,61,138,.2);border-radius:8px;padding:2px 7px}
+  .status{display:flex;align-items:center;gap:7px;font-size:11.5px}
+  .dot{display:inline-block;flex:0 0 auto;width:7px;height:7px;border-radius:50%}
+  .dot.ok{background:var(--good);box-shadow:0 0 10px var(--good)}
+  .dot.err{background:var(--bad);box-shadow:0 0 10px var(--bad)}
+  .status.ok{color:var(--good)} .status.err{color:var(--bad)}
+
+  .launcher{width:330px;padding:14px 16px;display:flex;flex-direction:column;flex:0 0 auto}
+  .flabel{font:9.5px var(--mono);color:var(--faint);letter-spacing:1px;margin:14px 0 6px}
+  .input{border-radius:10px;background:#0c1016;border:1px solid var(--stroke);padding:10px 14px;font-size:12.5px;min-height:38px}
+  .game{border-radius:12px;background:#0c1016;border:1px solid var(--stroke);padding:12px;margin-top:12px}
+  .game .t{display:flex;align-items:center;gap:10px}
+  .thumb{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#1b3a5b,#0e2036);display:grid;place-items:center;font-size:16px}
+  .stats{display:flex;margin-top:12px}
+  .stats div{flex:1}
+  .stats span{display:block;font:8.5px var(--mono);color:var(--faint);letter-spacing:.5px}
+  .stats b{font-size:14px}
+  .stats .a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+  <aside class="rail">
+    <div class="brand"><div class="logo">R</div><span>SKRILYA</span></div>
+
+    <div class="sect">MAIN</div>
+    <div class="nav">◈ Dashboard</div>
+    <div class="nav on">◉ Accounts</div>
+
+    <div class="sect">LAUNCH</div>
+    <div class="nav">▲ Launcher</div>
+    <div class="nav">↻ Relauncher</div>
+    <div class="nav">◎ Watcher</div>
+
+    <div class="sect">TOOLS</div>
+    <div class="nav">✦ Free items</div>
+    <div class="nav">▶ Macros</div>
+    <div class="nav">⌗ Server list</div>
+
+    <div class="sect">SYSTEM</div>
+    <div class="nav">⛨ Proxies</div>
+    <div class="nav">▤ Resources</div>
+
+    <div class="spacer"></div>
+    <div class="divider"></div>
+    <div class="nav">⚙ Settings</div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div class="search">⌕ Search anything — accounts, actions, settings…</div>
+      <div class="wbtns"><span>—</span><span>▢</span><span>✕</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on">Accounts</div><div class="tab">Launcher</div><div class="tab">Watcher</div>
+    </div>
+
+    <section class="card head">
+      <div>
+        <h1>Accounts <span class="badge">3 / 3 valid</span></h1>
+        <div class="sub">Manage, filter and launch your accounts</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div class="btn">↻ Refresh</div>
+        <div class="btn accent">+ Add account</div>
+      </div>
+    </section>
+
+    <section class="card filters">
+      <div class="fsearch">⌕ Search accounts…</div>
+      <div class="chips">
+        <div class="chip on">All</div><div class="chip">Valid</div><div class="chip">Invalid</div><div class="chip">Banned</div>
+        <div class="vsep"></div><div class="chip">Default</div>
+      </div>
+    </section>
+
+    <div class="body">
+      <section class="card list">
+        <div class="label">ACCOUNTS</div>
+
+        <div class="row sel">
+          <div class="who">
+            <div class="av">0</div>
+            <div><div class="name">0c_PF</div>
+              <div class="meta">Offline <span>·</span> <span class="mono">10691258562</span></div></div>
+          </div>
+          <div class="right"><span class="rbx">R$ 0</span>
+            <span class="status ok"><i class="dot ok"></i>Valid</span></div>
+        </div>
+
+        <div class="row">
+          <div class="who">
+            <div class="av">z</div>
+            <div><div class="name">z6V4q</div>
+              <div class="meta"><span class="ingame">In game</span> <span>·</span> <span class="mono">10691244316</span></div></div>
+          </div>
+          <div class="right"><span class="tag">proxy · fi-1</span><span class="rbx">R$ 0</span>
+            <span class="status ok"><i class="dot ok"></i>Valid</span></div>
+        </div>
+
+        <div class="row">
+          <div class="who">
+            <div class="av">M</div>
+            <div><div class="name">Matheus748725</div>
+              <div class="meta">Offline <span>·</span> <span class="mono">7712240125</span></div></div>
+          </div>
+          <div class="right"><span class="rbx">R$ —</span>
+            <span class="status err"><i class="dot err"></i>Expired</span></div>
+        </div>
+      </section>
+
+      <section class="card launcher">
+        <div class="label">LAUNCHER</div>
+
+        <div class="flabel">PLACE ID</div>
+        <div class="input">77747658251236</div>
+
+        <div class="game">
+          <div class="t"><div class="thumb">⛵</div><b style="font-size:12.5px">[2X⚔] Sailor Piece</b></div>
+          <div class="stats">
+            <div><span>ONLINE</span><b class="a">5.8K</b></div>
+            <div><span>FAVORITES</span><b>828.9K</b></div>
+            <div><span>LIKES</span><b>1.2M</b></div>
+          </div>
+        </div>
+
+        <div class="flabel">JOB ID (OPTIONAL)</div>
+        <div class="input" style="color:var(--faint)">Job ID (optional)</div>
+
+        <div class="flabel">VIP LINK / CODE (OPTIONAL)</div>
+        <div class="input" style="color:var(--faint)">VIP link / code (optional)</div>
+
+        <div class="btn accent" style="margin-top:16px;justify-content:center">▶ JOIN SERVER</div>
+      </section>
+    </div>
+  </main>
+
+</body>
+</html>

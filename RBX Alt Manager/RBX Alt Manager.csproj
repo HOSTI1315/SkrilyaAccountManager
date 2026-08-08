@@ -1,0 +1,145 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>RBX_Alt_Manager</RootNamespace>
+    <AssemblyName>SkrilyaAccountManager</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Deterministic>true</Deterministic>
+
+    <!-- x86 existed only because CefSharp's Chromium runtime had to match the process bitness.
+         CefSharp is gone (Windows 10+ always uses the PuppeteerSharp path), so build x64. -->
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+
+    <ApplicationIcon>Resources\team_KX4_icon.ico</ApplicationIcon>
+    <ApplicationManifest>app1.manifest</ApplicationManifest>
+
+    <!-- AssemblyInfo.cs is kept by hand; it carries the version shown in the interface. -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!-- resx items are declared explicitly below so their manifest names keep matching the form
+         types; see the comment on that ItemGroup. -->
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+
+    <OutputPath>..\build\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <!-- No symbols in the shipped build: the PDB path record embeds the full build directory
+         (C:\Users\<name>\...), which leaks the builder's username. Build Debug for stack traces. -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Manifest names must stay byte-identical to the .NET Framework build, otherwise every
+       ComponentResourceManager(typeof(Form)) lookup misses and forms load without their images.
+       The legacy rule derives the name from the DependentUpon class's namespace, NOT the file path,
+       and six of these files live in a folder that doesn't match their namespace. -->
+  <ItemGroup>
+    <EmbeddedResource Include="AccountManager.resx" LogicalName="RBX_Alt_Manager.AccountManager.resources" />
+    <EmbeddedResource Include="Properties\Resources.resx" LogicalName="RBX_Alt_Manager.Properties.Resources.resources" />
+
+    <EmbeddedResource Include="Classes\AvatarControl.resx" LogicalName="RBX_Alt_Manager.Classes.AvatarControl.resources" />
+    <EmbeddedResource Include="Classes\Field.resx" LogicalName="RBX_Alt_Manager.Classes.Field.resources" />
+    <EmbeddedResource Include="Classes\GameControl.resx" LogicalName="RBX_Alt_Manager.Classes.GameControl.resources" />
+    <EmbeddedResource Include="Classes\MissingAssetControl.resx" LogicalName="RBX_Alt_Manager.Classes.MissingAssetControl.resources" />
+
+    <EmbeddedResource Include="Forms\MissingAssets.resx" LogicalName="RBX_Alt_Manager.Forms.MissingAssets.resources" />
+    <EmbeddedResource Include="Forms\RecentGamesForm.resx" LogicalName="RBX_Alt_Manager.Forms.RecentGamesForm.resources" />
+    <EmbeddedResource Include="Forms\SettingsForm.resx" LogicalName="RBX_Alt_Manager.Forms.SettingsForm.resources" />
+    <EmbeddedResource Include="Forms\ThemeEditor.resx" LogicalName="RBX_Alt_Manager.Forms.ThemeEditor.resources" />
+
+    <!-- namespace != folder for these six -->
+    <EmbeddedResource Include="Forms\AccountFields.resx" LogicalName="RBX_Alt_Manager.AccountFields.resources" />
+    <EmbeddedResource Include="Forms\AccountUtils.resx" LogicalName="RBX_Alt_Manager.AccountUtils.resources" />
+    <EmbeddedResource Include="Forms\ArgumentsForm.resx" LogicalName="RBX_Alt_Manager.ArgumentsForm.resources" />
+    <EmbeddedResource Include="Forms\ImportForm.resx" LogicalName="RBX_Alt_Manager.ImportForm.resources" />
+    <EmbeddedResource Include="Forms\ServerList.resx" LogicalName="RBX_Alt_Manager.ServerList.resources" />
+    <EmbeddedResource Include="Nexus\AccountControl.resx" LogicalName="RBX_Alt_Manager.Forms.AccountControl.resources" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Not published: Program.Main writes this file out from Resources.log4 when it is missing, so a
+         published build stays the single file it is meant to be and still logs from the first run. -->
+    <None Update="log4.config" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+
+    <!-- The HTML shell sits beside the build as loose files on purpose: the design is authored outside this
+         repo, and dropping in a new index.html/ds.css must not require a rebuild. CopyToPublishDirectory is
+         Never because `dotnet publish` produces the one file handed to users — see the EmbeddedResource below,
+         which is the copy that ships. A loose ui folder next to the exe still wins over it. -->
+    <None Include="ui\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
+
+    <!-- The same files, embedded, so a published single file really is a single file. The logical name keeps
+         the relative path (RecursiveDir uses '\'), which is what WebShell rebuilds the folder from. -->
+    <EmbeddedResource Include="ui\**\*" LogicalName="ui/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- UI -->
+    <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.5" />
+    <PackageReference Include="FastColoredTextBox.NET10" Version="2.16.26.9180" />
+    <PackageReference Include="WindowsAPICodePack" Version="8.0.15.2" />
+
+    <!-- New UI shell: the interface is HTML/CSS rendered by WebView2 (Edge Chromium, already present on
+         Windows 10/11). Only the shell window is native; everything inside talks to C# over the bridge. -->
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3485.44" />
+
+    <!-- Browser automation (Chromium is downloaded at first run) -->
+    <PackageReference Include="PuppeteerSharp" Version="10.0.0" />
+    <PackageReference Include="PuppeteerExtraSharp" Version="2.0.0" />
+    <PackageReference Include="Yove.Proxy" Version="1.1.1" />
+
+    <!-- HTTP / serialization -->
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
+
+    <!-- Nexus control socket -->
+    <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+
+    <!-- Crypto: replaces libsodium-net 0.10.0, which was .NET Framework only.
+         Same libsodium primitives (SecretBox + Argon2), so AccountData.json stays readable.
+         ProtectedData (DPAPI) and ConfigurationManager now come from the shared framework. -->
+    <PackageReference Include="Sodium.Core" Version="1.4.1" />
+
+    <!-- WMI, for Process.GetCommandLine() -->
+    <PackageReference Include="System.Management" Version="9.0.0" />
+
+    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
+  </ItemGroup>
+
+  <!-- `dotnet publish` produces the file that gets handed to a user, so nothing may sit beside it that
+       nothing at runtime reads. Two things do by default:
+
+         * package XML documentation (WebView2 ships three, ~750 KB of IntelliSense text);
+         * App.config, copied out as SkrilyaAccountManager.dll.config — its entire contents (supportedRuntime,
+           assembly binding redirects, system.web, log4net auto-configuration) are .NET Framework only and are
+           ignored on .NET; nothing here calls ConfigurationManager.
+
+       Normal builds keep both, so nothing about developing here changes. -->
+  <Target Name="TrimPublishOutput" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.xml'" />
+      <!-- Matched on RelativePath, not Filename: this item's source is App.config and only its published
+           name is SkrilyaAccountManager.dll.config, so the filename metadata never matches. -->
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.RelativePath)' == '$(AssemblyName).dll.config'" />
+    </ItemGroup>
+  </Target>
+
+</Project>
