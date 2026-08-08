@@ -110,7 +110,7 @@
     <PackageReference Include="Yove.Proxy" Version="1.1.1" />
 
     <!-- HTTP / serialization -->
-    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="RestSharp" Version="112.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
 
@@ -125,7 +125,7 @@
     <!-- WMI, for Process.GetCommandLine() -->
     <PackageReference Include="System.Management" Version="9.0.0" />
 
-    <PackageReference Include="log4net" Version="2.0.17" />
+    <PackageReference Include="log4net" Version="3.3.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 
