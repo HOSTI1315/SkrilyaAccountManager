@@ -220,7 +220,7 @@ namespace RBX_Alt_Manager
             General.Seed("DefaultGroup", "Default", "The group new accounts are put in when none is picked while adding them.");
 
             General.Seed("NewUI", "true", "Open the new interface on startup. It is the main window now; the old one stays open alongside it because a few screens (Nexus, account utilities, themes) have not moved yet.");
-            General.Seed("UiLanguage", "en", "Language of the new HTML interface: en or ru. Changed from the language chip in its title bar. The old window is English only.");
+            General.Seed("UiLanguage", "en", "Interface language: en or ru. The choice applies to the HTML interface and caption text in legacy WinForms windows.");
             General.Seed("PinnedRobloxVersion", "", "Optional immutable Roblox build installed by the version manager. Empty means use Roblox's standard auto-updating installation.");
             General.Seed("PinnedRobloxChannel", "LIVE", "Channel of the pinned Roblox build. LIVE is the standard production channel.");
             General.Seed("PinnedFallbackToLive", "true", "If a non-current pinned client dies or is disconnected before joining, clear the pin and retry once with the standard live Roblox client.");
@@ -269,6 +269,7 @@ namespace RBX_Alt_Manager
 
             Classes.AccountProxies.LoadSettings();
             Classes.AntiAfk.Start();
+            Classes.LegacyI18n.Start();
 
             // From here on the logic layer has a user interface to talk to. Until this line (and in any host
             // that never sets it) Shell stays headless: messages are logged and questions answer themselves
