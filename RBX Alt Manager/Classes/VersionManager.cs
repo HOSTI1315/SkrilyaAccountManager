@@ -48,6 +48,7 @@ namespace RBX_Alt_Manager.Classes
 
         private static readonly HttpClient Http = new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
         private static readonly Regex VersionPattern = new Regex(@"^version-[0-9a-f]+$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ChannelPattern = new Regex(@"^[a-z0-9][a-z0-9_-]{0,63}$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly object InstallGate = new object();
         private static readonly object FallbackGate = new object();
         private static CancellationTokenSource InstallCancellation;
@@ -444,7 +445,11 @@ namespace RBX_Alt_Manager.Classes
         private static string SafeChannel(string Channel)
         {
             string Value = string.IsNullOrWhiteSpace(Channel) ? "LIVE" : Channel.Trim();
-            foreach (char Character in Path.GetInvalidFileNameChars()) Value = Value.Replace(Character, '_');
+            // Channel names become directory names below Root. Replacing only invalid filename characters is not
+            // sufficient: "." and ".." are valid strings but have path semantics. Keep the accepted alphabet
+            // deliberately narrow so a catalog/config value can never escape the version store.
+            if (!ChannelPattern.IsMatch(Value))
+                throw new ArgumentException("Roblox channel must contain only letters, numbers, '_' or '-'.", nameof(Channel));
             return Value;
         }
 
