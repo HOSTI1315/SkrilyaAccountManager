@@ -25,12 +25,81 @@ namespace RBX_Alt_Manager.Classes
     public static class ResourceManager
     {
         [DllImport("psapi.dll")] private static extern bool EmptyWorkingSet(IntPtr hProcess);
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)] private static extern IntPtr CreateJobObjectW(IntPtr lpJobAttributes, string lpName);
+        [DllImport("kernel32.dll", SetLastError = true)] private static extern bool AssignProcessToJobObject(IntPtr hJob, IntPtr hProcess);
+        [DllImport("kernel32.dll", SetLastError = true)] private static extern bool SetInformationJobObject(IntPtr hJob, int JobObjectInfoClass, IntPtr lpJobObjectInfo, uint cbJobObjectInfoLength);
+        [DllImport("kernel32.dll", SetLastError = true)] private static extern bool CloseHandle(IntPtr hObject);
+        [DllImport("kernel32.dll", SetLastError = true)] private static extern bool SetProcessInformation(IntPtr hProcess, int ProcessInformationClass, IntPtr ProcessInformation, uint ProcessInformationSize);
         [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")] private static extern int GetWindowThreadProcessId(IntPtr hWnd, out int pid);
         [DllImport("user32.dll")] private static extern bool IsIconic(IntPtr hWnd);
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         private const int SW_MINIMIZE = 6;
+        private const int JobObjectExtendedLimitInformation = 9;
+        private const int JobObjectCpuRateControlInformation = 15;
+        private const uint JOB_OBJECT_LIMIT_WORKINGSET = 0x00000001;
+        private const uint JOB_OBJECT_CPU_RATE_CONTROL_ENABLE = 0x1;
+        private const uint JOB_OBJECT_CPU_RATE_CONTROL_HARD_CAP = 0x4;
+        private const int ProcessMemoryPriority = 0;
+        private const int ProcessPowerThrottling = 4;
+        private const uint PROCESS_POWER_THROTTLING_CURRENT_VERSION = 1;
+        private const uint PROCESS_POWER_THROTTLING_EXECUTION_SPEED = 0x1;
+        private const uint PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION = 0x4;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
+        {
+            public uint ControlFlags;
+            public uint CpuRate;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct JOBOBJECT_BASIC_LIMIT_INFORMATION
+        {
+            public long PerProcessUserTimeLimit;
+            public long PerJobUserTimeLimit;
+            public uint LimitFlags;
+            public UIntPtr MinimumWorkingSetSize;
+            public UIntPtr MaximumWorkingSetSize;
+            public uint ActiveProcessLimit;
+            public UIntPtr Affinity;
+            public uint PriorityClass;
+            public uint SchedulingClass;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct IO_COUNTERS
+        {
+            public ulong ReadOperationCount;
+            public ulong WriteOperationCount;
+            public ulong OtherOperationCount;
+            public ulong ReadTransferCount;
+            public ulong WriteTransferCount;
+            public ulong OtherTransferCount;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct JOBOBJECT_EXTENDED_LIMIT_INFORMATION
+        {
+            public JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation;
+            public IO_COUNTERS IoInfo;
+            public UIntPtr ProcessMemoryLimit;
+            public UIntPtr JobMemoryLimit;
+            public UIntPtr PeakProcessMemoryUsed;
+            public UIntPtr PeakJobMemoryUsed;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MEMORY_PRIORITY_INFORMATION { public uint MemoryPriority; }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct PROCESS_POWER_THROTTLING_STATE
+        {
+            public uint Version;
+            public uint ControlMask;
+            public uint StateMask;
+        }
 
         // Shared matcher: recognises both `-b 123` and the modern `browsertrackerid:123` URI form. See ClientLauncher.
         private static readonly Regex TrackerRegex = ClientLauncher.TrackerRegex;
@@ -39,12 +108,19 @@ namespace RBX_Alt_Manager.Classes
 
         private static readonly Dictionary<int, Sample> Samples = new Dictionary<int, Sample>();
         private static readonly object SamplesLock = new object();
+        private static readonly Dictionary<int, IntPtr> Jobs = new Dictionary<int, IntPtr>();
+        private static readonly object JobsLock = new object();
 
         public struct Stat { public double Cpu; public long RamMB; public bool Minimized; public int Pid; }
 
         // ---- setting accessors (never throw; safe defaults) ----
         private static string S(string Key, string Default) { try { var g = AccountManager.General; return g != null && g.Exists(Key) ? g.Get(Key) : Default; } catch { return Default; } }
         private static bool B(string Key, bool Default) { try { var g = AccountManager.General; return g != null && g.Exists(Key) ? g.Get<bool>(Key) : Default; } catch { return Default; } }
+        private static int I(string Key, int Default, int Min, int Max)
+        {
+            try { return AccountManager.General != null && AccountManager.General.Exists(Key) && int.TryParse(AccountManager.General.Get(Key), out int Value) ? Math.Max(Min, Math.Min(Max, Value)) : Default; }
+            catch { return Default; }
+        }
 
         public static bool Enabled => B("PerfManage", true);
 
@@ -132,6 +208,8 @@ namespace RBX_Alt_Manager.Classes
 
                 if (proc == null) return;
 
+                ApplyJobControls(proc);
+
                 long Mask = AffinityMask(); if (Mask != 0) SetAffinity(proc, Mask);
 
                 if (!B("PerfDynamicPriority", true))
@@ -155,7 +233,15 @@ namespace RBX_Alt_Manager.Classes
         {
             var Output = new Dictionary<string, Stat>();
 
-            if (!Enabled) return Output;
+            if (!Enabled)
+            {
+                // Dropping our handles removes the opt-in Job limits without terminating Roblox: this manager
+                // never sets JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE. It also prevents stale handles if PerfManage is
+                // switched off while clients are still alive.
+                ReleaseDeadJobs(new HashSet<int>());
+                lock (SamplesLock) Samples.Clear();
+                return Output;
+            }
 
             int ForegroundPid = 0; try { GetWindowThreadProcessId(GetForegroundWindow(), out ForegroundPid); } catch { }
 
@@ -204,7 +290,135 @@ namespace RBX_Alt_Manager.Classes
             lock (SamplesLock)
                 foreach (int Id in Samples.Keys.Where(k => !Alive.Contains(k)).ToList()) Samples.Remove(Id);
 
+            ReleaseDeadJobs(Alive);
+
             return Output;
+        }
+
+        /// <summary>
+        /// Applies the opt-in Job/process controls once to the real RobloxPlayerBeta resolved by tracker id.
+        /// A separate Job Object per client makes a configured CPU 15% cap a true per-client hard cap. The
+        /// working-set setting is deliberately different: it limits resident pages and may cause paging, but is
+        /// not a commit/allocation ceiling. We never set KILL_ON_JOB_CLOSE, so closing the manager cannot close
+        /// Roblox.
+        /// </summary>
+        private static void ApplyJobControls(Process Process)
+        {
+            try
+            {
+                if (Process == null || Process.HasExited) return;
+
+                int MemoryPriority = MemoryPriorityValue(S("PerfMemoryPriority", "normal"));
+                if (MemoryPriority != 5) SetMemoryPriority(Process, (uint)MemoryPriority);
+                if (B("PerfPowerThrottle", false)) SetPowerThrottle(Process);
+
+                if (!B("PerfJobEnabled", false)) return;
+
+                int CpuPercent = I("PerfJobCpuPercent", 0, 0, 100);
+                int MemoryMB = I("PerfJobMemoryMB", 0, 0, 1024 * 1024);
+                if (CpuPercent > 0 && CpuPercent < 5) CpuPercent = 5;
+                if (CpuPercent == 0 && MemoryMB == 0) return;
+
+                lock (JobsLock)
+                    if (Jobs.ContainsKey(Process.Id)) return;
+
+                IntPtr Job = CreateJobObjectW(IntPtr.Zero, null);
+                if (Job == IntPtr.Zero) throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "CreateJobObject failed");
+
+                try
+                {
+                    if (CpuPercent > 0)
+                    {
+                        var Cpu = new JOBOBJECT_CPU_RATE_CONTROL_INFORMATION
+                        {
+                            ControlFlags = JOB_OBJECT_CPU_RATE_CONTROL_ENABLE | JOB_OBJECT_CPU_RATE_CONTROL_HARD_CAP,
+                            CpuRate = (uint)(CpuPercent * 100)
+                        };
+                        if (!SetJobInfo(Job, JobObjectCpuRateControlInformation, Cpu))
+                            throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "CPU hard cap was rejected");
+                    }
+
+                    if (MemoryMB > 0)
+                    {
+                        var Limits = new JOBOBJECT_EXTENDED_LIMIT_INFORMATION();
+                        Limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_WORKINGSET;
+                        // Windows rejects a non-zero maximum with a zero minimum. One page is deliberately tiny:
+                        // this setting is a ceiling, not a request to reserve a large resident minimum.
+                        Limits.BasicLimitInformation.MinimumWorkingSetSize = (UIntPtr)4096UL;
+                        Limits.BasicLimitInformation.MaximumWorkingSetSize = (UIntPtr)((ulong)MemoryMB * 1024UL * 1024UL);
+                        if (!SetJobInfo(Job, JobObjectExtendedLimitInformation, Limits))
+                            throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "working-set limit was rejected");
+                    }
+
+                    if (!AssignProcessToJobObject(Job, Process.Handle))
+                        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), "client is already in an incompatible Job Object");
+
+                    lock (JobsLock) Jobs[Process.Id] = Job;
+                    Job = IntPtr.Zero; // ownership moved to Jobs
+                    Program.Logger.Info($"[ResourceManager] PID {Process.Id}: job CPU={(CpuPercent > 0 ? CpuPercent + "%" : "unlimited")}, working-set={(MemoryMB > 0 ? MemoryMB + " MB" : "unlimited")}");
+                }
+                finally { if (Job != IntPtr.Zero) CloseHandle(Job); }
+            }
+            catch (Exception x) { Program.Logger.Warn($"[ResourceManager] hard limits: {x.Message}"); }
+        }
+
+        private static bool SetJobInfo<T>(IntPtr Job, int Class, T Value) where T : struct
+        {
+            int Size = Marshal.SizeOf<T>();
+            IntPtr Pointer = Marshal.AllocHGlobal(Size);
+            try
+            {
+                Marshal.StructureToPtr(Value, Pointer, false);
+                return SetInformationJobObject(Job, Class, Pointer, (uint)Size);
+            }
+            finally { Marshal.FreeHGlobal(Pointer); }
+        }
+
+        private static void SetMemoryPriority(Process Process, uint Priority)
+        {
+            var Info = new MEMORY_PRIORITY_INFORMATION { MemoryPriority = Priority };
+            SetProcessInfo(Process.Handle, ProcessMemoryPriority, Info);
+        }
+
+        private static void SetPowerThrottle(Process Process)
+        {
+            uint Flags = PROCESS_POWER_THROTTLING_EXECUTION_SPEED | PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION;
+            var Info = new PROCESS_POWER_THROTTLING_STATE { Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION, ControlMask = Flags, StateMask = Flags };
+            SetProcessInfo(Process.Handle, ProcessPowerThrottling, Info);
+        }
+
+        private static bool SetProcessInfo<T>(IntPtr Process, int Class, T Value) where T : struct
+        {
+            int Size = Marshal.SizeOf<T>();
+            IntPtr Pointer = Marshal.AllocHGlobal(Size);
+            try
+            {
+                Marshal.StructureToPtr(Value, Pointer, false);
+                return SetProcessInformation(Process, Class, Pointer, (uint)Size);
+            }
+            finally { Marshal.FreeHGlobal(Pointer); }
+        }
+
+        private static int MemoryPriorityValue(string Value)
+        {
+            switch ((Value ?? string.Empty).Trim().ToLowerInvariant())
+            {
+                case "verylow": return 1;
+                case "low": return 3;
+                default: return 5;
+            }
+        }
+
+        private static void ReleaseDeadJobs(HashSet<int> Alive)
+        {
+            lock (JobsLock)
+            {
+                foreach (int Id in Jobs.Keys.Where(Id => !Alive.Contains(Id)).ToList())
+                {
+                    try { CloseHandle(Jobs[Id]); } catch { }
+                    Jobs.Remove(Id);
+                }
+            }
         }
 
         /// <summary>Trims the working set of every running client. Pages fault back in on next use.</summary>
