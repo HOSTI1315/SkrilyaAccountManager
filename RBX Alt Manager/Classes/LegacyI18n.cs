@@ -17,7 +17,7 @@ namespace RBX_Alt_Manager.Classes
         private sealed class Original { public string Text; }
         private sealed class Seen { }
 
-        private static readonly ResourceManager Strings = new ResourceManager("RBX_Alt_Manager.Localization.LegacyStrings", typeof(LegacyI18n).Assembly);
+        private static readonly System.Resources.ResourceManager Strings = new System.Resources.ResourceManager("RBX_Alt_Manager.Localization.LegacyStrings", typeof(LegacyI18n).Assembly);
         private static readonly ConditionalWeakTable<object, Original> Originals = new ConditionalWeakTable<object, Original>();
         private static readonly ConditionalWeakTable<Form, Seen> SeenForms = new ConditionalWeakTable<Form, Seen>();
         private static bool Started;
