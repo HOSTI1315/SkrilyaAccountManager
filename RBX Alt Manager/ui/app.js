@@ -1382,13 +1382,17 @@ const Language = {
 const Screens = {
   // rail title -> what to show. Everything not listed has no screen in this build yet.
   destinations: {
+    'Dashboard': { screen: 'dashboard' },
     'Accounts': { screen: 'accounts', tab: 'accounts' },
     'Launcher': { screen: 'launcher', tab: 'launcher' },
     'Server list': { screen: 'launcher', tab: 'launcher' },
+    'Relauncher': { screen: 'relauncher' },
     'Watcher': { screen: 'watcher', tab: 'watcher' },
+    'Macros': { screen: 'macros' },
     'Settings': { screen: 'settings' },
     'Proxies': { screen: 'proxies' },
-    'Free items': { screen: 'freeitems' }
+    'Free items': { screen: 'freeitems' },
+    'Resources': { screen: 'resources' }
   },
 
   current: 'accounts',
@@ -1416,33 +1420,14 @@ const Screens = {
       item.setAttribute('style', item.getAttribute(on ? 'data-ram-on-style' : 'data-ram-off-style') || '');
     });
 
-    // The watcher pane has no design of its own yet; the tab is real, so it says so rather than showing nothing.
-    const empty = document.querySelector('[data-ram-screen="watcher"]');
-    if (empty) empty.hidden = name !== 'watcher';
-
     if (name === 'settings') SettingsScreen.open();
     if (name === 'proxies') ProxyScreen.open();
     if (name === 'launcher') ServerScreen.open();
     if (name === 'freeitems') FreeItemsScreen.open();
+    if (['dashboard', 'relauncher', 'watcher', 'macros', 'resources'].includes(name)) OpsScreens.open(name);
   },
 
   wire() {
-    // The watcher tab is an empty state, so it is built here rather than imported.
-    const host = document.querySelector('[data-ram-screen="accounts"]');
-
-    if (host && !document.querySelector('[data-ram-screen="watcher"]')) {
-      const block = document.createElement('div');
-      block.setAttribute('data-ram-screen', 'watcher');
-      block.hidden = true;
-      block.style.cssText = 'flex:1 1 0%;display:grid;place-items:center;color:var(--color-neutral-600);font-size:13px;text-align:center;padding:60px 20px';
-      block.innerHTML = '<div><div style="font-size:15px;color:var(--color-neutral-400);margin-bottom:6px">Watcher</div>' +
-        '<div>Rejoining and the client sweepers run in the background.<br>Their switches are under Settings.</div></div>';
-
-      host.parentElement.appendChild(block);
-
-    I18N.apply(block);
-    }
-
     document.querySelectorAll('[data-ram-rail]').forEach(item => item.addEventListener('click', () => {
       const title = item.getAttribute('data-ram-rail');
       const dest = this.destinations[title];
@@ -1457,6 +1442,246 @@ const Screens = {
 
     this.show('accounts');
   }
+};
+
+// ---------------------------------------------------------------- operations screens
+//
+// The design rail already contained these destinations; the old implementation deliberately showed a "not in
+// this build" toast. They are runtime-built from the same design tokens as Free items so a design re-import can
+// replace index.html without erasing the operational UI.
+
+const OpsScreens = {
+  built: false,
+
+  card(title, body, extra = '') {
+    return `<section style="padding:16px 18px;border-radius:var(--radius-lg);border:1px solid var(--color-neutral-800);
+             background:color-mix(in srgb,var(--color-surface) 72%,transparent);${extra}">
+      <div style="font-size:13px;font-weight:600;color:var(--color-neutral-200);margin-bottom:10px">${title}</div>${body}</section>`;
+  },
+
+  field(label, key, type = 'text', value = '') {
+    if (type === 'bool') return `<label style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 0">
+      <span style="font-size:12px;color:var(--color-neutral-400)">${label}</span><input type="checkbox" data-ops-setting="${key}" data-ops-kind="bool"></label>`;
+    return `<label style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:6px 0">
+      <span style="font-size:12px;color:var(--color-neutral-400)">${label}</span>
+      <input class="input" data-ops-setting="${key}" data-ops-kind="${type}" value="${value}" style="width:150px;height:32px;min-height:32px"></label>`;
+  },
+
+  make(name, title, subtitle, html) {
+    const host = document.querySelector('[data-ram-screen="accounts"]');
+    if (!host || document.querySelector(`[data-ram-screen="${name}"]`)) return;
+    const block = document.createElement('div');
+    block.setAttribute('data-ram-screen', name);
+    block.hidden = true;
+    block.style.cssText = 'flex:1 1 0%;min-height:0;display:flex;flex-direction:column;gap:10px;overflow:hidden';
+    block.innerHTML = `<header style="flex:0 0 auto;padding:16px 18px;border-radius:var(--radius-lg);border:1px solid var(--color-neutral-800);
+      background:color-mix(in srgb,var(--color-surface) 72%,transparent)"><h3 style="margin:0;font-size:24px">${title}</h3>
+      <div style="font-size:12px;color:var(--color-neutral-500);margin-top:3px">${subtitle}</div></header>
+      <div data-ops-body="${name}" style="flex:1 1 0%;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px">${html}</div>`;
+    host.parentElement.appendChild(block);
+    I18N.apply(block);
+  },
+
+  build() {
+    if (this.built) return;
+
+    this.make('dashboard', 'Dashboard', 'Live account, client and automation status',
+      `<div data-ops-dashboard style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"></div>`);
+
+    this.make('relauncher', 'Relauncher', 'One supervisor and one retry budget for crash, stuck and Nexus recovery',
+      this.card('Automatic recovery',
+        this.field('Enabled', 'RelaunchEnabled', 'bool') + this.field('Relaunch after a crash', 'RelaunchOnCrash', 'bool') +
+        this.field('Relaunch stuck clients', 'RelaunchOnStuck', 'bool') + this.field('Cooldown (seconds)', 'RelaunchCooldownSeconds', 'number') +
+        this.field('Maximum per hour', 'RelaunchMaxPerHour', 'number') + this.field('Give up after failures', 'RelaunchGiveUpAfter', 'number') +
+        `<div data-ops-relaunch-state style="font-size:11.5px;color:var(--color-neutral-500);margin-top:8px"></div>`));
+
+    this.make('watcher', 'Watcher', 'Inspect client logs and clean dead processes without guessing from window titles',
+      `<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">${this.card('Stuck detector',
+        this.field('Read client logs', 'StuckDetectorEnabled', 'bool') + this.field('Close refused clients', 'StuckKillAuthErrors', 'bool') +
+        this.field('Close clients that never joined', 'StuckKillStuck', 'bool') + this.field('Starting grace (seconds)', 'StuckLaunchGraceSeconds', 'number') +
+        this.field('Stuck after (seconds)', 'StuckAfterSeconds', 'number'))}${this.card('Zombie reaper',
+        this.field('Enabled', 'ReaperEnabled', 'bool') + this.field('Dry run only', 'ReaperDryRun', 'bool') +
+        this.field('Grace (seconds)', 'ReaperGraceSeconds', 'number') + this.field('Sweep every (seconds)', 'ReaperIntervalSeconds', 'number'))}</div>
+       ${this.card('Live verdicts', `<button class="btn btn-secondary" data-ops-watcher-sweep>Sweep now</button>
+         <div data-ops-watcher-log style="margin-top:10px;font-size:11.5px;line-height:1.7;color:var(--color-neutral-500)">No manual sweep yet.</div>`)}`);
+
+    this.make('macros', 'Macros', 'Anti-AFK and scheduled bot/player cycles',
+      `<div style="display:grid;grid-template-columns:minmax(260px,.8fr) minmax(360px,1.2fr);gap:10px">${this.card('Anti-AFK',
+        this.field('Enabled', 'AfkEnabled', 'bool') + this.field('Interval (seconds)', 'AfkIntervalSeconds', 'number') +
+        this.field('Key', 'AfkKey') + this.field('Delay between windows (ms)', 'AfkInterWindowDelayMs', 'number') +
+        `<button class="btn btn-secondary" data-ops-afk-pulse style="margin-top:8px">Pulse now</button>`)}${this.card('Botting schedule',
+        `<div style="display:flex;gap:8px;flex-wrap:wrap"><input class="input" data-ops-bot-place placeholder="Place ID (when not following players)" style="flex:1;min-width:180px">
+         <input class="input" data-ops-bot-interval type="number" min="10" max="480" value="30" style="width:90px" title="Minutes">
+         <button class="btn btn-primary" data-ops-bot-start>Start</button><button class="btn btn-secondary" data-ops-bot-stop>Stop</button></div>
+         <div data-ops-bot-state style="font-size:11.5px;color:var(--color-neutral-500);margin:9px 0"></div>
+         <div data-ops-roles style="display:flex;flex-direction:column;gap:4px;max-height:270px;overflow:auto"></div>`)}</div>`);
+
+    this.make('resources', 'Resources', 'Hard client limits, Roblox builds, profile cleanup and optional account generation',
+      `<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">${this.card('Per-client limits',
+        this.field('Job Object limits', 'PerfJobEnabled', 'bool') + this.field('CPU hard cap % (0 = off)', 'PerfJobCpuPercent', 'number') +
+        this.field('Working set MB (0 = off)', 'PerfJobMemoryMB', 'number') + this.field('Memory priority', 'PerfMemoryPriority') +
+        this.field('Power throttling', 'PerfPowerThrottle', 'bool'))}${this.card('Roblox profile cleanup',
+        `<div data-ops-clean-preview style="font-size:11.5px;color:var(--color-neutral-500);line-height:1.6">Run a dry-run before deleting anything.</div>
+         <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-secondary" data-ops-clean-preview-btn>Dry run</button>
+         <button class="btn btn-primary" data-ops-clean-btn disabled>Clean shown data…</button></div>`)}</div>
+       ${this.card('Roblox versions', `${this.field('Fallback to live when a pinned build is rejected', 'PinnedFallbackToLive', 'bool')}<div style="display:flex;gap:8px;align-items:center;margin-top:8px"><button class="btn btn-secondary" data-ops-versions-refresh>Refresh catalog</button>
+         <button class="btn btn-secondary" data-ops-versions-unpin>Use standard auto-updating Roblox</button><span data-ops-version-state style="font-size:11.5px;color:var(--color-neutral-500)"></span></div>
+         <div data-ops-version-progress style="font-size:11.5px;color:var(--color-neutral-500);margin:8px 0"></div>
+         <div data-ops-version-list style="display:flex;flex-direction:column;gap:4px;max-height:250px;overflow:auto"></div>`) }
+       ${this.card('BloxGen (optional paid provider)', `${this.field('Enable provider', 'BloxGenEnabled', 'bool')}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+         <input class="input" data-ops-gen-key type="password" placeholder="API key — never saved" style="flex:1;min-width:200px">
+         <select class="input" data-ops-gen-type style="width:150px"><option>alt</option><option>+30 days old</option><option>+1 year old</option><option>5+ years old</option><option>dump</option></select>
+         <input class="input" data-ops-gen-region maxlength="2" placeholder="DE" style="width:55px">
+         <button class="btn btn-secondary" data-ops-gen-balance>Balance</button><button class="btn btn-primary" data-ops-gen-generate>Generate</button></div>
+         <div data-ops-gen-state style="font-size:11.5px;color:var(--color-neutral-500);margin-top:9px">The provider key stays in memory only.</div>`)}`);
+
+    this.bind();
+    this.built = true;
+  },
+
+  async loadSettings(screen) {
+    const block = document.querySelector(`[data-ram-screen="${screen}"]`);
+    if (!block) return;
+    try {
+      const settings = await RAM.call('settings.get', { section: 'General' }) || {};
+      block.querySelectorAll('[data-ops-setting]').forEach(input => {
+        const value = settings[input.dataset.opsSetting];
+        if (input.dataset.opsKind === 'bool') input.checked = String(value).toLowerCase() === 'true';
+        else if (value != null) input.value = value;
+      });
+    } catch (error) { toast(String(error && error.message || error), 'error'); }
+  },
+
+  bind() {
+    document.querySelectorAll('[data-ops-setting]').forEach(input => input.addEventListener('change', async () => {
+      const value = input.dataset.opsKind === 'bool' ? String(input.checked) : input.value.trim();
+      try { await RAM.call('settings.set', { section: 'General', key: input.dataset.opsSetting, value }); toast(`${input.dataset.opsSetting} saved`, 'ok'); }
+      catch (error) { toast(String(error && error.message || error), 'error'); }
+    }));
+
+    document.querySelector('[data-ops-watcher-sweep]')?.addEventListener('click', () => this.sweepWatcher());
+    document.querySelector('[data-ops-afk-pulse]')?.addEventListener('click', async () => {
+      try { const r = await RAM.call('afk.pulse'); toast(`Anti-AFK sent to ${r.clients} client(s)`, 'ok'); }
+      catch (error) { toast(String(error && error.message || error), 'error'); }
+    });
+    document.querySelector('[data-ops-bot-start]')?.addEventListener('click', () => this.startBotting());
+    document.querySelector('[data-ops-bot-stop]')?.addEventListener('click', async () => { try { await RAM.call('botting.stop'); await this.openMacros(); } catch (e) { toast(e.message, 'error'); } });
+    document.querySelector('[data-ops-clean-preview-btn]')?.addEventListener('click', () => this.previewClean());
+    document.querySelector('[data-ops-clean-btn]')?.addEventListener('click', () => this.cleanProfile());
+    document.querySelector('[data-ops-versions-refresh]')?.addEventListener('click', () => this.loadVersions());
+    document.querySelector('[data-ops-versions-unpin]')?.addEventListener('click', async () => { try { await RAM.call('versions.unpin'); await this.loadVersions(); } catch (e) { toast(e.message, 'error'); } });
+    document.querySelector('[data-ops-gen-balance]')?.addEventListener('click', () => this.generator(false));
+    document.querySelector('[data-ops-gen-generate]')?.addEventListener('click', () => this.generator(true));
+    RAM.on('versions.progress', data => { const n = document.querySelector('[data-ops-version-progress]'); if (n && data) n.textContent = data.message || ''; });
+    RAM.on('versions.fallback', data => { if (data?.message) { toast(data.message, 'error'); const n=document.querySelector('[data-ops-version-progress]'); if(n)n.textContent=data.message; } });
+  },
+
+  async open(name) {
+    this.build();
+    await this.loadSettings(name);
+    if (name === 'dashboard') await this.openDashboard();
+    if (name === 'relauncher') await this.openRelauncher();
+    if (name === 'watcher') await this.openWatcher();
+    if (name === 'macros') await this.openMacros();
+    if (name === 'resources') await this.openResources();
+  },
+
+  async openDashboard() {
+    const box = document.querySelector('[data-ops-dashboard]'); if (!box) return;
+    try {
+      const s = await RAM.call('app.overview');
+      const cards = [
+        ['Accounts', `${s.valid} valid / ${s.accounts} total`], ['Clients', `${s.clients} running`], ['Presence', `${s.inGame} in game`],
+        ['Resources', `${s.ramMB} MB · ${s.cpu}% CPU`], ['Reaper', `${s.reaped} closed · ${s.freedMB} MB freed`],
+        ['Automation', s.botting && s.botting.running ? 'Botting session running' : 'No botting session']
+      ];
+      box.textContent = '';
+      cards.forEach(([title, value]) => { const n = document.createElement('div'); n.style.cssText='padding:18px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-lg);background:color-mix(in srgb,var(--color-surface) 72%,transparent)'; n.innerHTML=`<div style="font-size:10px;color:var(--color-neutral-600);text-transform:uppercase;letter-spacing:.12em">${title}</div><div style="font-size:18px;margin-top:7px;color:var(--color-neutral-200)">${value}</div>`; box.appendChild(n); });
+      I18N.apply(box);
+    } catch (e) { toast(e.message, 'error'); }
+  },
+
+  async openRelauncher() {
+    try { const s = await RAM.call('relaunch.state'); const n = document.querySelector('[data-ops-relaunch-state]'); if (n) n.textContent = `${s.launchedLastHour}/${s.maxPerHour} relaunches used in the last hour`; }
+    catch (e) { toast(e.message, 'error'); }
+  },
+
+  async openWatcher() {
+    try { const s = await RAM.call('watcher.state'); const n = document.querySelector('[data-ops-watcher-log]'); if (n) n.textContent = `Reaper: ${s.reaper.enabled ? 'on' : 'off'} · ${s.reaper.killed} closed / ${s.reaper.freedMB} MB freed · log detector: ${s.stuck.enabled ? 'on' : 'off'}`; }
+    catch (e) { toast(e.message, 'error'); }
+  },
+
+  async sweepWatcher() {
+    const n = document.querySelector('[data-ops-watcher-log]');
+    try { const rows = await RAM.call('watcher.sweep') || []; if (n) n.textContent = rows.length ? rows.map(v => `PID ${v.pid} · ${v.account || v.tracker || '?'} · ${v.state} · ${v.reason} · ${v.ramMB} MB`).join('\n') : 'No running game clients were classified.'; if (n) n.style.whiteSpace='pre-wrap'; }
+    catch (e) { toast(e.message, 'error'); }
+  },
+
+  async openMacros() {
+    const roles = document.querySelector('[data-ops-roles]');
+    try {
+      const [accounts, state] = await Promise.all([RAM.call('accounts.list'), RAM.call('botting.state')]);
+      const label = document.querySelector('[data-ops-bot-state]');
+      if (label) label.textContent = state && state.running ? `${state.bots.length} bot(s), next cycle ${state.nextCycle || ''}` : 'Stopped. Assign bot/player roles below.';
+      if (roles) {
+        roles.textContent='';
+        (accounts || []).forEach(account => {
+          const row=document.createElement('div'); row.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 7px;border-bottom:1px solid var(--color-neutral-900)';
+          const name=document.createElement('span'); name.textContent=account.username; name.style.cssText='flex:1;font-size:12px;color:var(--color-neutral-300)';
+          const select=document.createElement('select'); select.className='input'; select.style.cssText='width:110px;height:29px;min-height:29px'; ['none','bot','player'].forEach(role => { const o=document.createElement('option');o.value=role;o.textContent=role;o.selected=(account.fields && account.fields.BottingRole || 'none')===role;select.appendChild(o); });
+          select.addEventListener('change', async()=>{ try{await RAM.call('botting.setRole',{username:account.username,role:select.value});}catch(e){toast(e.message,'error');} });
+          row.append(name,select); roles.appendChild(row);
+        });
+      }
+    } catch (e) { toast(e.message, 'error'); }
+  },
+
+  async startBotting() {
+    const place = Number(document.querySelector('[data-ops-bot-place]')?.value || 0);
+    const intervalMinutes = Number(document.querySelector('[data-ops-bot-interval]')?.value || 30);
+    try { await RAM.call('botting.start', { placeId: place, intervalMinutes, closeOnStop: true }); await this.openMacros(); toast('Botting schedule started', 'ok'); }
+    catch (e) { toast(e.message, 'error'); }
+  },
+
+  async openResources() { await Promise.all([this.previewClean(false), this.loadVersions(false)]); },
+
+  async previewClean(showToast = true) {
+    const n=document.querySelector('[data-ops-clean-preview]'), button=document.querySelector('[data-ops-clean-btn]');
+    try { const p=await RAM.call('maintenance.profilePreview'); if(n)n.textContent=p.items.length?`${p.items.length} target(s) · ${p.total}`:'Nothing disposable found.'; if(button){button.disabled=!p.items.length;button.dataset.bytes=String(p.totalBytes||0);button.dataset.count=String(p.items.length||0);} if(showToast)toast('Dry run complete','ok'); return p; }
+    catch(e){if(showToast)toast(e.message,'error');return null;}
+  },
+
+  async cleanProfile() {
+    const button=document.querySelector('[data-ops-clean-btn]'); const count=Number(button?.dataset.count||0); if(!count)return;
+    if(!confirm(`Delete the ${count} targets shown by the dry run? Installed Roblox versions and Skrilya account data are excluded.`))return;
+    try{const r=await RAM.call('maintenance.profileClean',{},120000);toast(`Profile cleanup processed ${r.cleaned} target(s)`,'ok');await this.previewClean(false);}catch(e){toast(e.message,'error');}
+  },
+
+  async loadVersions(fetchCatalog = true) {
+    const list=document.querySelector('[data-ops-version-list]'), stateNode=document.querySelector('[data-ops-version-state]'); if(!list)return;
+    try {
+      const state=await RAM.call('versions.state'); if(stateNode)stateNode.textContent=state.pinned?`Pinned: ${state.pinned} (${state.channel})`:'Standard auto-updating Roblox';
+      const versions=fetchCatalog?await RAM.call('versions.catalog',{},60000):(state.installed||[]);
+      list.textContent='';
+      (versions||[]).slice(0,40).forEach(v=>{
+        const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid var(--color-neutral-900)';
+        const text=document.createElement('span');text.style.cssText='flex:1;font-size:11.5px;color:var(--color-neutral-300)';text.textContent=`${v.version} · ${v.channel}${v.installed?' · installed':''}${v.pinned?' · pinned':''}`;
+        const action=document.createElement('button');action.className='btn btn-secondary';action.style.cssText='padding:5px 10px';action.textContent=v.installed?'Pin':'Install';
+        action.addEventListener('click',async()=>{try{action.disabled=true;if(v.installed)await RAM.call('versions.pin',{version:v.version,channel:v.channel});else await RAM.call('versions.install',{version:v.version,channel:v.channel},30*60*1000);await this.loadVersions();}catch(e){toast(e.message,'error');}finally{action.disabled=false;}});
+        row.append(text,action);list.appendChild(row);
+      });
+      if(!list.childElementCount)list.textContent='No installed versions yet. Press Refresh catalog to load available builds.';
+    } catch(e){list.textContent=e.message;}
+  },
+
+  async generator(generate) {
+    const key=document.querySelector('[data-ops-gen-key]')?.value||'', type=document.querySelector('[data-ops-gen-type]')?.value||'alt', region=document.querySelector('[data-ops-gen-region]')?.value||'';
+    const state=document.querySelector('[data-ops-gen-state]');
+    try{if(state)state.textContent='Working…';const r=generate?await RAM.call('generator.generate',{apiKey:key,type,region},120000):await RAM.call('generator.balance',{apiKey:key});if(state)state.textContent=generate?`Added ${r.username} · cost $${r.cost}`:`Balance $${r.balance} · ${r.role}`;if(generate)await refresh();}
+    catch(e){if(state)state.textContent=e.message;toast(e.message,'error');}
+  },
+
+  wire() { this.build(); }
 };
 
 // ---------------------------------------------------------------- free items
@@ -2437,6 +2662,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   ProxyScreen.wire();
   ServerScreen.wire();
   FreeItemsScreen.wire();
+  OpsScreens.wire();
   GroupMenu.wire();
   Batch.wire();
   Language.wire();

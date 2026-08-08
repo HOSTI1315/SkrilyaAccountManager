@@ -43,6 +43,25 @@ namespace RBX_Alt_Manager.Classes.Bridge
                 return true;
             });
 
+            Bridge.Register("app.overview", _ =>
+            {
+                List<Account> Accounts = AccountManager.GetAccountsSnapshot();
+                Dictionary<string, ResourceManager.Stat> Stats = ResourceManager.Poll();
+                return new
+                {
+                    accounts = Accounts.Count,
+                    valid = Accounts.Count(Account => Account.Valid),
+                    inGame = Accounts.Count(Account => Account.Presence?.userPresenceType == UserPresenceType.InGame),
+                    clients = Stats.Count,
+                    ramMB = Stats.Values.Sum(Stat => Stat.RamMB),
+                    cpu = Math.Round(Stats.Values.Sum(Stat => Stat.Cpu), 0),
+                    reaped = ZombieReaper.KilledTotal,
+                    freedMB = ZombieReaper.FreedMegabytesTotal,
+                    botting = BottingSession.State(),
+                    versions = VersionManager.State()
+                };
+            });
+
             // ---------- protecting the account store ----------
             //
             // First run and unlocking used to be reachable only through the old window's stacked panels. The page
@@ -747,6 +766,7 @@ namespace RBX_Alt_Manager.Classes.Bridge
 
                 AccountManager.IniSettings.Save("RAMSettings.ini");
                 AccountProxies.LoadSettings(); // applies the client/proxy switches without a restart
+                AntiAfk.LoadSettings();
 
                 // Multi Roblox is not a value anything reads later: it decides whether the manager holds
                 // ROBLOX_singletonMutex, and that has to happen now. Roblox takes the mutex itself the moment a
@@ -762,6 +782,130 @@ namespace RBX_Alt_Manager.Classes.Bridge
                 }
 
                 return new { ok = true };
+            });
+
+            Bridge.Register("afk.pulse", async _ => new { clients = await AntiAfk.Pulse() });
+
+            Bridge.Register("maintenance.profilePreview", _ =>
+            {
+                ProfileCleanupPreview Preview = ProfileCleaner.Preview();
+                return new
+                {
+                    totalBytes = Preview.TotalBytes,
+                    total = ProfileCleaner.FormatBytes(Preview.TotalBytes),
+                    items = Preview.Items.Select(Item => new { path = Item.Path, bytes = Item.Bytes, registry = Item.Registry }).ToArray()
+                };
+            });
+
+            Bridge.Register("maintenance.profileClean", _ =>
+            {
+                ProfileCleanupPreview Done = ProfileCleaner.Clean();
+                return new { cleaned = Done.Items.Count, bytes = Done.TotalBytes };
+            });
+
+            // ---------- botting / scheduled cycles ----------
+
+            Bridge.Register("botting.state", _ => BottingSession.State());
+
+            Bridge.Register("botting.setRole", Parameters =>
+                BottingSession.SetRole(FindMany(Parameters), Parameters.Value<string>("role")));
+
+            Bridge.Register("botting.start", Parameters =>
+            {
+                string[] BotNames = (Parameters["bots"] as JArray)?.Select(Token => Token.Value<string>()).Where(Name => !string.IsNullOrEmpty(Name)).ToArray();
+                string[] PlayerNames = (Parameters["players"] as JArray)?.Select(Token => Token.Value<string>()).Where(Name => !string.IsNullOrEmpty(Name)).ToArray();
+                List<Account> Snapshot = AccountManager.GetAccountsSnapshot();
+
+                long PlaceId = Parameters.Value<long?>("placeId") ?? 0;
+                int Minutes = Parameters.Value<int?>("intervalMinutes") ?? 30;
+                bool CloseOnStop = Parameters.Value<bool?>("closeOnStop") ?? true;
+
+                // Empty arrays mean "use the saved roles". This makes a configured session one click to start
+                // after a restart, while still allowing an ad-hoc selection from the page.
+                if (BotNames == null || BotNames.Length == 0)
+                    return BottingSession.StartSaved(PlaceId, Minutes, CloseOnStop);
+
+                List<Account> Bots = Snapshot.Where(Account => BotNames.Contains(Account.Username)).ToList();
+                List<Account> Players = PlayerNames == null
+                    ? new List<Account>()
+                    : Snapshot.Where(Account => PlayerNames.Contains(Account.Username)).ToList();
+
+                return BottingSession.Start(Bots, Players, PlaceId, Minutes, CloseOnStop);
+            });
+
+            Bridge.Register("botting.stop", Parameters => BottingSession.Stop(Parameters.Value<bool?>("closeClients")));
+
+            Bridge.Register("relaunch.state", _ => new
+            {
+                enabled = Relauncher.Enabled,
+                onCrash = Relauncher.OnCrash,
+                onStuck = Relauncher.OnStuck,
+                cooldownSeconds = (int)Relauncher.Budget.Cooldown.TotalSeconds,
+                maxPerHour = Relauncher.Budget.MaxPerHour,
+                launchedLastHour = Relauncher.Budget.LaunchedLastHour(),
+                giveUpAfter = Relauncher.Budget.GiveUpAfter
+            });
+            Bridge.Register("relaunch.forgive", Parameters =>
+            {
+                List<Account> Accounts = FindMany(Parameters);
+                foreach (Account Account in Accounts) Relauncher.Budget.Forgive(Account.Username);
+                return new { forgiven = Accounts.Count };
+            });
+
+            Bridge.Register("watcher.state", _ => new
+            {
+                reaper = new { enabled = ZombieReaper.Enabled, dryRun = ZombieReaper.DryRun, graceSeconds = ZombieReaper.GraceSeconds, intervalSeconds = ZombieReaper.IntervalSeconds, killed = ZombieReaper.KilledTotal, freedMB = ZombieReaper.FreedMegabytesTotal },
+                stuck = new { enabled = StuckDetector.Enabled, killAuthErrors = StuckDetector.KillAuthErrors, killStuck = StuckDetector.KillStuck, graceSeconds = StuckDetector.LaunchGraceSeconds, stuckAfterSeconds = StuckDetector.StuckAfterSeconds, intervalSeconds = StuckDetector.IntervalSeconds }
+            });
+            Bridge.Register("watcher.sweep", _ =>
+            {
+                List<ClientVerdict> Verdicts = StuckDetector.Sweep();
+                return Verdicts.Select(Verdict => new
+                {
+                    pid = Verdict.ProcessId,
+                    account = Verdict.Account,
+                    tracker = Verdict.Tracker,
+                    state = Verdict.State.ToString(),
+                    reason = Verdict.Reason,
+                    ageSeconds = Math.Round(Verdict.AgeSeconds),
+                    ramMB = Verdict.MemoryMB
+                }).ToArray();
+            });
+
+            // ---------- Roblox versions ----------
+
+            Bridge.Register("versions.state", _ => VersionManager.State());
+            Bridge.Register("versions.catalog", async _ => (object)await VersionManager.CatalogAsync());
+            Bridge.Register("versions.install", async Parameters =>
+            {
+                string Version = Parameters.Value<string>("version");
+                string Channel = Parameters.Value<string>("channel") ?? "LIVE";
+                RobloxVersionInfo Installed = await VersionManager.InstallAsync(Version, Channel);
+                Forms.WebShell.NotifyVersions("done", Installed);
+                return Installed;
+            });
+            Bridge.Register("versions.cancel", _ => new { cancelled = VersionManager.CancelInstall() });
+            Bridge.Register("versions.pin", Parameters =>
+            {
+                VersionManager.Pin(Parameters.Value<string>("version"), Parameters.Value<string>("channel") ?? "LIVE");
+                return VersionManager.State();
+            });
+            Bridge.Register("versions.unpin", _ => { VersionManager.Unpin(); return VersionManager.State(); });
+
+            // ---------- optional third-party account generator ----------
+
+            Bridge.Register("generator.types", _ => AccountGenerator.AccountTypes);
+            Bridge.Register("generator.balance", async Parameters => (object)await AccountGenerator.GetBalanceAsync(Parameters.Value<string>("apiKey")));
+            Bridge.Register("generator.generate", async Parameters =>
+            {
+                GeneratedAccount Result = await AccountGenerator.GenerateAsync(
+                    Parameters.Value<string>("apiKey"),
+                    Parameters.Value<string>("type") ?? "alt",
+                    Parameters.Value<string>("region"));
+
+                Forms.WebShell.NotifyAccountsChanged();
+                // Never return cookie/password/provider key to the page.
+                return new { username = Result.Username, userId = Result.UserId, type = Result.Type, cost = Result.Cost, region = Result.Region };
             });
 
             // ---------- games ----------
