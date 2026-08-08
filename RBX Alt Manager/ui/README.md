@@ -110,7 +110,8 @@ running it twice is harmless. Call it after any render that inserts English text
 The chip in the title bar is the picker. It is stamped `data-ram="lang-chip"` at wire time because the obvious
 lookups stop working once the page is translated: it is found by its English `title`, and `apply()` rewrites
 titles. Choosing a language writes `General/UiLanguage` and reloads the page, so nothing is left half-rendered
-in the previous language. The old WinForms window is English only.
+in the previous language. The same `UiLanguage` setting is also applied to caption text in the legacy WinForms
+window through `LegacyI18n`; text boxes and account data are deliberately never translated.
 
 Setting descriptions come from the ini comments, so their Russian lives in the dictionary keyed by the English
 comment: change a comment in `AccountManager.cs` and the dictionary key must change with it.
@@ -122,13 +123,15 @@ were separate states of one component; here they are siblings, all but one hidde
 
 | Attribute | Goes on | What it does |
 |---|---|---|
-| `data-ram-screen="accounts\|launcher\|settings\|proxies\|watcher"` | a block | one screen; the app hides the rest |
+| `data-ram-screen="accounts\|launcher\|settings\|proxies\|watcher\|dashboard\|relauncher\|macros\|resources\|freeitems"` | a block | one screen; the app hides the rest |
 | `data-ram="tabstrip"` + `data-ram-tab="accounts\|launcher\|watcher"` | the pills | hidden while a rail-only screen is up |
 | `data-ram-rail="<title>"` | a rail icon | its destination, taken from the icon's own `title` |
 | `data-ram-on-style` / `data-ram-off-style` | tabs, rail, section rows | the design's own two states, read at import |
 
-The watcher pane has no design yet, so the app builds a one-line empty state under that hook. Rail icons with
-no screen (Dashboard, Relauncher, Free items, Macros, Resources) say so when clicked instead of doing nothing.
+The original export did not include operational layouts for Dashboard, Relauncher, Watcher, Macros, Resources
+or Free items. `app.js` now builds those screens from the existing design tokens: Dashboard shows live health,
+Relauncher/Watcher expose recovery diagnostics, Macros hosts Anti-AFK and botting, and Resources contains Job
+limits, profile cleanup, version management and the optional BloxGen client.
 
 `<template>` elements always live in `<body>`, never inside the container they fill — emptying that container
 to redraw it would take the template with it, and every redraw after the first would find nothing to clone.
