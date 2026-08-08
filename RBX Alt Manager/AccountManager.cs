@@ -183,6 +183,7 @@ namespace RBX_Alt_Manager
             General.Seed("AfkIntervalSeconds", "300", "Seconds between anti-AFK pulses. Values below 60 are clamped to 60.");
             General.Seed("AfkKey", "Space", "Virtual key sent by Anti-AFK, for example Space, W, A, S or D.");
             General.Seed("AfkInterWindowDelayMs", "150", "Delay in milliseconds between clients during one Anti-AFK pulse.");
+            General.Seed("BloxGenEnabled", "false", "Enable the optional third-party BloxGen account provider. Off by default; its API key is never saved.");
 
             // Free item collection. Defaults are deliberately slow: the catalog endpoints 429 far earlier than
             // their documented limits, and a limit earned here applies to the whole IP, including running clients.
@@ -275,6 +276,7 @@ namespace RBX_Alt_Manager
             Classes.Shell.Current = new Classes.WinFormsShell();
 
             InitializeComponent();
+            InstallGeneratorMenu();
             this.Rescale();
 
             AccountsList = new List<Account>();
