@@ -28,7 +28,7 @@ namespace RBX_Alt_Manager.Classes.Android
     {
         private static readonly string[] EmulatorProcessHints =
         {
-            "dnplayer", "ldplayer", "ldplayer9", "mumunxmain", "mumuplayer", "nemuplayer", "memu"
+            "dnplayer", "ldplayer", "ldplayer9", "mumu", "mumunxmain", "mumuplayer", "nemuplayer", "memu"
         };
 
         public async Task<IReadOnlyList<EmulatorDevice>> DiscoverAsync(
@@ -41,7 +41,11 @@ namespace RBX_Alt_Manager.Classes.Android
             if (AdbPaths.Count == 0)
                 throw new FileNotFoundException("No emulator adb.exe was found. Start LDPlayer, MuMu or MEmu, or set [Android] AdbPath.");
 
-            HashSet<string> Wanted = new HashSet<string>((serialFilter ?? Array.Empty<string>()).Where(x => !string.IsNullOrWhiteSpace(x)), StringComparer.OrdinalIgnoreCase);
+            HashSet<string> Wanted = new HashSet<string>(
+                (serialFilter ?? Array.Empty<string>())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => CanonicalTransportKey(x.Trim())),
+                StringComparer.OrdinalIgnoreCase);
             Dictionary<string, (string adb, string serial)> Seen = new Dictionary<string, (string adb, string serial)>(StringComparer.OrdinalIgnoreCase);
 
             foreach (string AdbPath in AdbPaths)
@@ -65,9 +69,8 @@ namespace RBX_Alt_Manager.Classes.Android
                     foreach ((string Serial, string State) in ParseDevices(Devices.StandardOutput))
                     {
                         if (!State.Equals("device", StringComparison.OrdinalIgnoreCase)) continue;
-                        if (Wanted.Count > 0 && !Wanted.Contains(Serial) && !Wanted.Contains(AdbClient.TcpForm(Serial) ?? string.Empty)) continue;
-
                         string Key = CanonicalTransportKey(Serial);
+                        if (Wanted.Count > 0 && !Wanted.Contains(Key)) continue;
                         if (!Seen.ContainsKey(Key)) Seen.Add(Key, (AdbPath, Serial));
                     }
                 }
@@ -94,6 +97,8 @@ namespace RBX_Alt_Manager.Classes.Android
                     RobloxPackage = Package,
                     AndroidVersion = AndroidVersion
                 });
+
+                Program.Logger.Info($"[Android] discovered {Client.Serial} via {Path.GetFileName(AdbPath)} root={Root} package={Package ?? "<none>"} android={AndroidVersion}");
             }
 
             return Result;
@@ -118,7 +123,9 @@ namespace RBX_Alt_Manager.Classes.Android
                 .Select(x => x.Trim())
                 .Where(x => x.StartsWith("package:", StringComparison.OrdinalIgnoreCase))
                 .Select(x => x.Substring("package:".Length))
-                .Where(x => x.Contains("roblox", StringComparison.OrdinalIgnoreCase) || x.Equals("com.roblox.client", StringComparison.OrdinalIgnoreCase))
+                .Where(x => x.Contains("roblox", StringComparison.OrdinalIgnoreCase) ||
+                    x.Equals("com.roblox.client", StringComparison.OrdinalIgnoreCase) ||
+                    x.Equals("free.noka9", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
 
             return Candidates.FirstOrDefault(x => x.Equals("com.roblox.client", StringComparison.OrdinalIgnoreCase)) ?? Candidates.FirstOrDefault();
