@@ -897,29 +897,59 @@ namespace RBX_Alt_Manager
         /// </summary>
         public async Task<string> JoinServerAndroid(long PlaceID, string Serial, long? FollowUserId = null)
         {
-            if (!LaunchLock.Wait(0))
-                return "ERROR: A launch for this account is already in progress. Please wait a moment.";
-
             try
             {
-                if (PlaceID <= 0) return "ERROR: A valid Android place id is required.";
+                AndroidLaunchResult Result = await JoinServerAndroidDetailed(PlaceID, Serial, FollowUserId);
 
-                LastAppLaunch = DateTime.Now;
-                LastUse = DateTime.Now;
+                if (Result.Joined)
+                    return $"Success: Android joined place {Result.PlaceId}" +
+                        (string.IsNullOrWhiteSpace(Result.JobId) ? string.Empty : $" job {Result.JobId}");
 
-                AndroidLaunchResult Result = await AndroidRuntime.LaunchAsync(this, PlaceID, Serial, FollowUserId);
-
-                Program.Logger.Info($"[Android] {Username} -> {Result.Serial} place {PlaceID}" +
-                    (FollowUserId.HasValue ? $" user {FollowUserId.Value}" : string.Empty));
-
-                return "Success";
+                return $"ERROR: Android {Result.State}: {Result.Reason ?? "launch did not resolve"}";
             }
             catch (Exception Ex)
             {
                 Program.Logger.Error($"[Android] launch failed for {Username}: {Ex.Message}");
                 return $"ERROR: Android launch failed: {Ex.Message}";
             }
+        }
+
+        /// <summary>
+        /// Structured Android launch used by the bridge and supervisor. The verdict is published only after the
+        /// per-account launch lock is released, otherwise a Relauncher subscriber could deadlock on this account.
+        /// </summary>
+        internal async Task<AndroidLaunchResult> JoinServerAndroidDetailed(long PlaceID, string Serial, long? FollowUserId = null)
+        {
+            if (!LaunchLock.Wait(0))
+                throw new InvalidOperationException("A launch for this account is already in progress. Please wait a moment.");
+
+            AndroidLaunchResult Result;
+
+            try
+            {
+                if (PlaceID <= 0) throw new ArgumentOutOfRangeException(nameof(PlaceID), "A valid Android place id is required.");
+
+                LastAppLaunch = DateTime.Now;
+                LastUse = DateTime.Now;
+                LastAuthFailure = null;
+
+                Result = await AndroidRuntime.LaunchAsync(this, PlaceID, Serial, FollowUserId);
+
+                if (string.Equals(Result.State, "captcha", StringComparison.OrdinalIgnoreCase))
+                    LastAuthFailure = "CAPTCHA";
+
+                Relauncher.RememberAndroid(this, PlaceID, Result.Serial, FollowUserId);
+
+                Program.Logger.Info($"[Android] {Username} -> {Result.Serial} place {PlaceID}: {Result.State}" +
+                    (string.IsNullOrWhiteSpace(Result.Reason) ? string.Empty : $" ({Result.Reason})"));
+
+                if (FollowUserId.HasValue)
+                    Program.Logger.Info($"[Android] {Username}: rendezvous user {FollowUserId.Value}");
+            }
             finally { LaunchLock.Release(); }
+
+            LogcatWatcher.Publish(Result.Verdict);
+            return Result;
         }
 
         public async void AdjustWindowPosition()
